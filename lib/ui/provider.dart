@@ -45,6 +45,7 @@ class _ProviderHomeState extends State<ProviderHome> {
             //case 2: //Navigator pop
               //return Container();
           }
+          return Container();
         },
       )
     );
@@ -93,14 +94,14 @@ class Sidenav extends StatelessWidget {
     );
   }
 
-  _navItem(BuildContext context, IconData icon, String text, {Text suffix, Function onTap, bool selected = false}) => Container(
+  _navItem(BuildContext context, IconData icon, String text, {Text? suffix, Function? onTap, bool selected = false}) => Container(
     color: selected ? Colors.grey.shade300 : Colors.transparent,
     child: ListTile(
       leading: Icon(icon, color: selected ? Theme.of(context).primaryColor : Colors.black),
       trailing: suffix,
       title: Text(text),
       selected: selected,
-      onTap: onTap,
+      onTap: () => {onTap!()},
     ),
   );
 
