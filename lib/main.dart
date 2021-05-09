@@ -1,6 +1,6 @@
 // @dart=2.9
-import 'package:covigenix/ui/patient_register.dart';
-import 'package:covigenix/ui/provider.dart';
+import 'package:covigenix/ui/patient/patient_register.dart';
+import 'package:covigenix/ui/provider/provider.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -29,9 +29,8 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      //home: MyHomePage(title: 'Flutter Demo Home Page'),
-      //home: ProviderHome()
-      home: RegisterPatient(),
+      home: ProviderHome()
+      //home: RegisterPatient(),
     );
   }
 }

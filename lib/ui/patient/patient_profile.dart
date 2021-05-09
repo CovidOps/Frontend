@@ -1,28 +1,33 @@
+import 'package:covigenix/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-class RegisterPatient extends StatefulWidget {
+class PatientProfile extends StatefulWidget {
   @override
-  _RegisterPatientState createState() => _RegisterPatientState();
+  _PatientProfileState createState() => _PatientProfileState();
 }
 
-class _RegisterPatientState extends State<RegisterPatient> {
-  final GlobalKey<FormState> _registerPatientKey = GlobalKey<FormState>();
+class _PatientProfileState extends State<PatientProfile> {
+  final GlobalKey<FormState> _patientKey = GlobalKey<FormState>();
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
-  late String initialPhone, getLatitude, getLongitude;
+  late String initialPhone, initialName, initialArea, initialAddress;
+  late String getLatitude, getLongitude;
   late Position _currentPosition;
-  TextEditingController name = TextEditingController(), area = TextEditingController();
+  TextEditingController area = TextEditingController(), address = TextEditingController();
 
   @override
   void initState() {
-    // TODO: initialPhone
     super.initState();
-    getLatitude = "Latitude: Not Known";
-    getLongitude = "Longitude: Not Known";
-    initialPhone = "7809601401";
-  }
+    initialPhone = Helper.getPhone();
+    initialName = Helper.getName();
+    initialArea = Helper.getArea();
+    initialAddress = Helper.getAddress();
+    area.text = initialArea;
+    address.text = initialAddress;
 
+    getLongitude = "Longitude: ${Helper.getLongitude()}";
+    getLatitude = "Latitude: ${Helper.getLatitude()}";
+  }
   void getLocation() {
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
@@ -31,54 +36,39 @@ class _RegisterPatientState extends State<RegisterPatient> {
         _currentPosition = position;
         getLatitude = "Latitude: ${_currentPosition.latitude}";
         getLongitude = "Longitude: ${_currentPosition.longitude}";
+
+        Helper.setCoordinates(_currentPosition.longitude, _currentPosition.latitude);
       });
     }).catchError((e) {
       print(e);
     });
   }
-
-  void register(BuildContext context) {
-    if (_registerPatientKey.currentState!.validate()) {
-      String message = "Got data: ${name.text} $initialPhone ${area.text}";
-      Fluttertoast.showToast(
-          msg: message,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
+  void update(BuildContext context){
+    if(_patientKey.currentState!.validate()){
+      String ar = area.text;
+      String ad = address.text;
+      Helper.updateProfile(area: ar, address: ad);
+      Helper.goodToast("Updating patient with $ar $ad ${Helper.getLongitude()} ${Helper.getLatitude()}");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Register'),
-      ),
-      body: Form(
-        key: _registerPatientKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      child: Form(
+        key: _patientKey,
+        child: ListView(
           children: <Widget>[
             Container(
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: TextFormField(
-                controller: name,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: "Name",
                   contentPadding: EdgeInsets.all(16),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter a valid name.";
-                  } else {
-                    return null;
-                  }
-                },
+                enabled: false,
+                initialValue: initialName,
               ),
             ),
             Container(
@@ -102,9 +92,29 @@ class _RegisterPatientState extends State<RegisterPatient> {
                   hintText: "Area",
                   contentPadding: EdgeInsets.all(16),
                 ),
+                //initialValue: initialArea,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Enter a valid area.";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: TextFormField(
+                controller: address,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Address",
+                  contentPadding: EdgeInsets.all(16),
+                ),
+                //initialValue: initialAddress,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Enter a valid address.";
                   } else {
                     return null;
                   }
@@ -141,13 +151,13 @@ class _RegisterPatientState extends State<RegisterPatient> {
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
               child: ElevatedButton(
-                child: Text('Register'),
+                child: Text('Update'),
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
                   padding: EdgeInsets.all(16),
                 ),
                 onPressed: () {
-                  register(context);
+                  update(context);
                 },
               ),
             ),

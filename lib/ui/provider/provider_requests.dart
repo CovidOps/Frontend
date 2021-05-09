@@ -1,4 +1,4 @@
-import 'package:covigenix/ui/provider_individual.dart';
+import 'package:covigenix/ui/provider/provider_individual.dart';
 import 'package:flutter/material.dart';
 
 class ProviderRequestsList extends StatefulWidget {
