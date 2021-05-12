@@ -51,6 +51,7 @@ class _ProviderServicesState extends State<ProviderServices> {
           BottomNavigationBarItem(
             icon: Icon(Icons.school),
             label: 'Essentials',
+            backgroundColor: Colors.black
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle_outlined),
