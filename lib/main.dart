@@ -1,3 +1,5 @@
+import 'package:covigenix/ui/essentials.dart';
+import 'package:covigenix/ui/login_screen.dart';
 import 'package:covigenix/ui/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       //home: MyHomePage(title: 'Flutter Demo Home Page'),
-      home: ProviderHome()
+      home: LoginScreen()
     );
   }
 }
