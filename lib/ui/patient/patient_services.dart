@@ -1,28 +1,29 @@
 import 'package:covigenix/ui/community/community.dart';
-import 'package:covigenix/ui/edit.dart';
+import 'package:covigenix/ui/patient/my_requests.dart';
+import 'package:covigenix/ui/patient/patient_profile.dart';
 import 'package:covigenix/ui/provider/provider_profile.dart';
-import 'package:covigenix/ui/provider/provider_requests.dart';
 import 'package:flutter/material.dart';
 
 /// This is the main application widget.
 
 /// This is the stateful widget that the main application instantiates.
-class ProviderServices extends StatefulWidget {
+class PatientServices extends StatefulWidget {
 
   @override
-  _ProviderServicesState createState() => _ProviderServicesState();
+  _PatientServicesState createState() => _PatientServicesState();
 }
 
 /// This is the private State class that goes with MyStatefulWidget.
-class _ProviderServicesState extends State<ProviderServices> {
+class _PatientServicesState extends State<PatientServices> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
-    ProviderRequestsList(),
+    //PatientEssentialsList(),
     Community(),
-    Edit(),
-    ProviderProfile(),
+    Community(),
+    MyRequests(),
+    PatientProfile(),
   ];
 
   void _onItemTapped(int index) {
@@ -42,7 +43,7 @@ class _ProviderServicesState extends State<ProviderServices> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Requests',
+            label: 'New',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.business),
@@ -50,7 +51,7 @@ class _ProviderServicesState extends State<ProviderServices> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.school),
-            label: 'Essentials',
+            label: 'My Requests',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle_outlined),

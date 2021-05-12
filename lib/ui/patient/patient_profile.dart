@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:covigenix/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 
 class PatientProfile extends StatefulWidget {
@@ -13,6 +16,9 @@ class _PatientProfileState extends State<PatientProfile> {
   late String initialPhone, initialName, initialArea, initialAddress;
   late String getLatitude, getLongitude;
   late Position _currentPosition;
+  bool _apiCall = false;
+  Future<Response>? _future = null;
+
   TextEditingController area = TextEditingController(), address = TextEditingController();
 
   @override
@@ -28,6 +34,7 @@ class _PatientProfileState extends State<PatientProfile> {
     getLongitude = "Longitude: ${Helper.getLongitude()}";
     getLatitude = "Latitude: ${Helper.getLatitude()}";
   }
+
   void getLocation() {
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
@@ -43,13 +50,40 @@ class _PatientProfileState extends State<PatientProfile> {
       print(e);
     });
   }
+
   void update(BuildContext context){
     if(_patientKey.currentState!.validate()){
       String ar = area.text;
       String ad = address.text;
       Helper.updateProfile(area: ar, address: ad);
-      Helper.goodToast("Updating patient with $ar $ad ${Helper.getLongitude()} ${Helper.getLatitude()}");
+
+      setState(() {
+        _future = updatePatient(Helper.getId(), ar, ad, Helper.getLongitude(), Helper.getLatitude());
+      });
+      //Helper.goodToast("Updating patient with $ar $ad ${Helper.getLongitude()} ${Helper.getLatitude()}");
     }
+  }
+
+  Future<Response> updatePatient(String id, String area, String address, double longi, double lati) async{
+    final response = await http.patch(
+      Uri.http(Helper.BASE_URL, "patient/$id"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'area': area,
+        'address': address,
+        'coordinates':[longi, lati]
+      }),
+    );
+
+    if(response.statusCode == 200){
+      Response res = Response.fromJson(jsonDecode(response.body));
+      Helper.goodToast(res.message!);
+      return res;
+    }
+    else
+      throw Exception('Failed to update patient');
   }
 
   @override
@@ -164,6 +198,20 @@ class _PatientProfileState extends State<PatientProfile> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class Response{
+  int code;
+  String? message;
+
+  Response({required this.code, this.message});
+
+  factory Response.fromJson(Map<String, dynamic> json){
+    return Response(
+        code: json["code"],
+        message: json["message"],
     );
   }
 }
