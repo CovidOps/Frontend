@@ -1,4 +1,4 @@
-import 'package:covigenix/ui/essential_grid.dart';
+import 'package:covigenix/helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

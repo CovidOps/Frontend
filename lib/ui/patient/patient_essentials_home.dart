@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:covigenix/ui/patient/patient_essentials_list.dart';
 import 'package:flutter/material.dart';
 
-import '../essential_grid.dart';
+import '../custom_widgets/essential_grid.dart';
 
 class PatientEssentialsHome extends StatelessWidget {
 

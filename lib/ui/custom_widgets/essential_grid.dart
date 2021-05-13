@@ -1,14 +1,10 @@
+import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/custom_widgets/essential_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EssentialGrid extends StatelessWidget {
-  final List<EssentialGridModel> list = [
-    EssentialGridModel("remdesivir", "Remdesivir", Icons.five_g),
-    EssentialGridModel("oxygen", "Medical Oxygen", Icons.five_g),
-    EssentialGridModel("plasma", "Plasma", Icons.five_g),
-    EssentialGridModel("fabiflu", "Fabiflu", Icons.five_g)
-  ];
+  final List<EssentialGridModel> list = Helper.essentialsList;
 
   final Function onTap;
   EssentialGrid(this.onTap);
@@ -28,10 +24,4 @@ class EssentialGrid extends StatelessWidget {
       ),
     );
   }
-}
-
-class EssentialGridModel{
-  final String arg, proper;
-  final IconData icon;
-  EssentialGridModel(this.arg, this.proper, this.icon);
 }
