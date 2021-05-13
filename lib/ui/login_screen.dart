@@ -1,4 +1,5 @@
 
+import 'package:covigenix/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:covigenix/ui/otp.dart';
 
@@ -51,11 +52,27 @@ class _LoginScreenState extends State<LoginScreen> {
             child: FlatButton(
               color: Colors.blue,
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => OTPScreen(_controller.text)));
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => OTPScreen(_controller.text, Helper.TYPE_PATIENT)));
               },
               child: Text(
-                'Next',
+                'Proceed as Patient',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
+            width: double.infinity,
+            // ignore: deprecated_member_use
+            child: FlatButton(
+              color: Colors.blue,
+              onPressed: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => OTPScreen(_controller.text, Helper.TYPE_PROVIDER)));
+              },
+              child: Text(
+                'Proceed as Provider',
                 style: TextStyle(color: Colors.white),
               ),
             ),

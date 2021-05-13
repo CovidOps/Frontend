@@ -1,12 +1,13 @@
 // @dart=2.9
-import 'package:covigenix/ui/patient/patient.dart';
-import 'package:covigenix/ui/patient/patient_register.dart';
-import 'package:covigenix/ui/provider/provider.dart';
+import 'package:covigenix/ui/splash.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
 void main() async{
   await GetStorage.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -32,8 +33,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: PatientHome()
-      //home: RegisterPatient(),
+      home: Splash()
     );
   }
 }

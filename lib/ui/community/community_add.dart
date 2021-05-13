@@ -32,7 +32,7 @@ class AddCommunity extends StatelessWidget {
     if(response.statusCode == 200){
       GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
       if(res.code == 200){
-        Helper.goodToast(res.message!);
+        Helper.goodToast(res.message);
         Navigator.of(context).pop();
       }
     }else{

@@ -16,7 +16,7 @@ class Helper{
   static const String LS_KEY = "Local.json", USER = "User";
 
   static int getLoginStatus(){
-    return (GetStorage().read(USER) as Map<String, dynamic>? ?? Map<String, dynamic>())[LOGIN_STATUS] ?? "";
+    return (GetStorage().read(USER) as Map<String, dynamic>? ?? Map<String, dynamic>())[LOGIN_STATUS] ?? -1;
     //return new LocalStorage(LS_KEY).getItem(LOGIN_STATUS) ?? -1;
   }
 
@@ -34,6 +34,13 @@ class Helper{
     if(lati != 0.0) map[LATITUDE] = lati;
     if(address != "") map[ADDRESS] = address;
     //localStorage.setItem(USER, map);
+    box.write(USER, map);
+  }
+
+  static void logOut(){
+    final GetStorage box = GetStorage();
+    Map<String, dynamic> map = (box.read(USER) ?? Map<String, dynamic>());
+    map[LOGIN_STATUS] = TYPE_LOGOUT;
     box.write(USER, map);
   }
 
