@@ -120,7 +120,7 @@ class Helper{
     );
   }
 
-  static final List<EssentialGridModel> essentialsList = [
+  static List<EssentialGridModel> essentialsList = [
     EssentialGridModel("remdesivir", "Remdesivir", Icons.five_g),
     EssentialGridModel("oxygen", "Medical Oxygen", Icons.five_g),
     EssentialGridModel("plasma", "Plasma", Icons.five_g),
@@ -132,5 +132,6 @@ class Helper{
 class EssentialGridModel{
   final String arg, proper;
   final IconData icon;
+  bool checked = false;
   EssentialGridModel(this.arg, this.proper, this.icon);
 }

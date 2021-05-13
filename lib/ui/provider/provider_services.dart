@@ -1,5 +1,5 @@
 import 'package:covigenix/ui/community/community.dart';
-import 'package:covigenix/ui/edit.dart';
+import 'package:covigenix/ui/provider/edit.dart';
 import 'package:covigenix/ui/provider/provider_profile.dart';
 import 'package:covigenix/ui/provider/provider_requests.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/model/generic_response.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 
 class ProviderProfile extends StatefulWidget {
   @override
@@ -13,6 +17,8 @@ class _ProviderProfileState extends State<ProviderProfile> {
   late String initialPhone, initialName, initialArea;
   late String getLatitude, getLongitude;
   late Position _currentPosition;
+  Future<GenericResponse>? _future = null;
+
   TextEditingController area = TextEditingController();
 
   @override
@@ -26,6 +32,7 @@ class _ProviderProfileState extends State<ProviderProfile> {
     getLongitude = "Longitude: ${Helper.getLongitude()}";
     getLatitude = "Latitude: ${Helper.getLatitude()}";
   }
+
   void getLocation() {
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
@@ -41,12 +48,38 @@ class _ProviderProfileState extends State<ProviderProfile> {
       print(e);
     });
   }
+
   void update(BuildContext context){
     if(_providerKey.currentState!.validate()){
       String ar = area.text;
       Helper.updateProfile(area: ar);
-      Helper.goodToast("Updating provider with $ar ${Helper.getLongitude()} ${Helper.getLatitude()}");
+
+      setState(() {
+        _future = updateProvider(Helper.getId(), ar, Helper.getLongitude(), Helper.getLatitude());
+      });
+      //Helper.goodToast("Updating provider with $ar ${Helper.getLongitude()} ${Helper.getLatitude()}");
     }
+  }
+
+  Future<GenericResponse> updateProvider(String id, String area, double longi, double lati) async{
+    final response = await http.patch(
+      Uri.https(Helper.BASE_URL, "provider/$id"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'area': area,
+        'coordinates':[longi, lati]
+      }),
+    );
+
+    if(response.statusCode == 200){
+      GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
+      Helper.goodToast(res.message);
+      return res;
+    }
+    else
+      throw Exception('Failed to update provider');
   }
 
   @override
