@@ -29,7 +29,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
     _currentPosition = null;
     getLatitude = "Latitude: Not Known";
     getLongitude = "Longitude: Not Known";
-    initialPhone = "7809601401";
+    initialPhone = Helper.getPhone();
   }
 
   void getLocation() {

@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/patient/patient.dart';
+import 'package:covigenix/ui/patient/patient_register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:covigenix/ui/login_screen.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:covigenix/ui/provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -123,8 +123,8 @@ class _OTPScreenState extends State<OTPScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    Helper.setProfile(phone: widget.phone);
     _verifyPhone();
   }
 
@@ -165,6 +165,10 @@ class _OTPScreenState extends State<OTPScreen> {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (BuildContext context) => PatientHome()),
         );
+      }else{
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (BuildContext context) => RegisterPatient()),
+        );
       }
     }else{
       Helper.goodToast("There was some error!");
@@ -196,6 +200,11 @@ class _OTPScreenState extends State<OTPScreen> {
 
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (BuildContext context) => ProviderHome()),
+        );
+      }else{
+        Navigator.of(context).pushReplacement(
+          //TODO: RegisterProvider()
+          MaterialPageRoute(builder: (BuildContext context) => RegisterPatient()),
         );
       }
     }else{
