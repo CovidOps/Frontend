@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,16 +6,17 @@ import 'package:get_storage/get_storage.dart';
 //import 'package:localstorage/localstorage.dart';
 
 class Helper{
-  static final String BASE_URL = "192.168.1.6:3000";
+  static const String BASE_URL = "covigenix-test-deploy.herokuapp.com";
 
-  static final String LOGIN_STATUS = "LoginStatus";
-  static final int TYPE_LOGOUT = -1, TYPE_PROVIDER = 0, TYPE_PATIENT = 1;
+  static const String LOGIN_STATUS = "LoginStatus";
+  static const int TYPE_LOGOUT = -1, TYPE_PROVIDER = 0, TYPE_PATIENT = 1;
+  static const int TYPE_REQUEST = 0, TYPE_AVAILABILITY = 1;
 
-  static final String ID = "id", NAME = "name", PHONE = "phone", AREA = "area", LATITUDE = "latitude", LONGITUDE = "longitude", ADDRESS = "address";
-  static final String LS_KEY = "Local.json", USER = "User";
+  static const String ID = "id", NAME = "name", PHONE = "phone", AREA = "area", LATITUDE = "latitude", LONGITUDE = "longitude", ADDRESS = "address";
+  static const String LS_KEY = "Local.json", USER = "User";
 
   static int getLoginStatus(){
-    return (GetStorage().read(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[LOGIN_STATUS] ?? "";
+    return (GetStorage().read(USER) as Map<String, dynamic>? ?? Map<String, dynamic>())[LOGIN_STATUS] ?? "";
     //return new LocalStorage(LS_KEY).getItem(LOGIN_STATUS) ?? -1;
   }
 
@@ -39,36 +39,36 @@ class Helper{
 
   static String getId(){
     //return (new LocalStorage(LS_KEY).getItem(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[ID] ?? "";
-    return (GetStorage().read(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[ID] ?? "";
+    return (GetStorage().read(USER) as Map<String, dynamic>? ?? Map<String, dynamic>())[ID] ?? "";
   }
 
   static String getName(){
-    return (GetStorage().read(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[NAME] ?? "";
+    return (GetStorage().read(USER) as Map<String, dynamic>? ?? Map<String, dynamic>())[NAME] ?? "";
   }
 
   static String getPhone(){
     //return (new LocalStorage(LS_KEY).getItem(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[PHONE] ?? "";
-    return (GetStorage().read(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[PHONE] ?? "";
+    return (GetStorage().read(USER) as Map<String, dynamic>? ?? Map<String, dynamic>())[PHONE] ?? "";
   }
 
   static String getArea(){
     //return (new LocalStorage(LS_KEY).getItem(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[AREA] ?? "";
-    return (GetStorage().read(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[AREA] ?? "";
+    return (GetStorage().read(USER) as Map<String, dynamic>? ?? Map<String, dynamic>())[AREA] ?? "";
   }
 
   static double getLatitude(){
     //return (new LocalStorage(LS_KEY).getItem(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[LATITUDE] ?? 0.0;
-    return (GetStorage().read(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[LATITUDE] ?? 0.0;
+    return (GetStorage().read(USER) as Map<String, dynamic>? ?? Map<String, dynamic>())[LATITUDE] ?? 0.0;
   }
 
   static double getLongitude() {
     //return (new LocalStorage(LS_KEY).getItem(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[LONGITUDE] ?? 0.0;
-    return (GetStorage().read(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[LONGITUDE] ?? 0.0;
+    return (GetStorage().read(USER) as Map<String, dynamic>? ?? Map<String, dynamic>())[LONGITUDE] ?? 0.0;
   }
 
   static String getAddress(){
     //return (new LocalStorage(LS_KEY).getItem(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[ADDRESS] ?? "";
-    return (GetStorage().read(USER) as Map<String, dynamic> ?? Map<String, dynamic>())[ADDRESS] ?? "";
+    return (GetStorage().read(USER) as Map<String, dynamic>? ?? Map<String, dynamic>())[ADDRESS] ?? "";
   }
 
   static void setCoordinates(double longi, double lati){

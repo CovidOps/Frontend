@@ -1,29 +1,28 @@
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/community/community_add.dart';
+import 'package:covigenix/ui/community/community_page.dart' as CommunityPage;
 import 'package:flutter/material.dart';
 
-class Community extends StatefulWidget {
+class Community extends StatefulWidget{
+
   @override
   _CommunityState createState() => _CommunityState();
 }
-
-class _CommunityState extends State<Community> with TickerProviderStateMixin{
-  //late TabController _tabController;
+class _CommunityState extends State<StatefulWidget> {
   final List<Tab> _tabs = <Tab>[
     Tab(text: "Requests"),
     Tab(text: "Availability"),
   ];
 
-  /*@override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }*/
+  void openAddCommunity(BuildContext context, int index){
+    //Helper.goodToast("Trying to open ${index==0?"Requests":"Availability"}");
 
-  void openAddCommunity(int index){
-    Helper.goodToast("Trying to open ${index==0?"Requests":"Availability"}");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddCommunity(index)),
+    );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -36,12 +35,28 @@ class _CommunityState extends State<Community> with TickerProviderStateMixin{
           ),
           body: TabBarView(
             children: [
-              Center(child: Text("Requests Tab"),),
-              Center(child: Text("Availability Tab"),),
+              CommunityPage.Page(Helper.TYPE_REQUEST),
+              CommunityPage.Page(Helper.TYPE_AVAILABILITY),
             ],
           ),
-          floatingActionButton: FloatingActionButton(onPressed: () => openAddCommunity(DefaultTabController.of(context)!.index)),
+          floatingActionButton: FAB(openAddCommunity),
         )
     );
   }
 }
+
+class FAB extends StatelessWidget {
+
+  final Function openAddCommunity;
+
+  FAB(this.openAddCommunity);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () => openAddCommunity(context, DefaultTabController.of(context)!.index),
+      child: const Icon(Icons.add),
+    );
+  }
+}
+

@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:covigenix/ui/login_screen.dart';
 import 'package:pinput/pin_put/pin_put.dart';
-import 'package:covigenix/ui/provider.dart';
+import 'package:covigenix/ui/provider/provider.dart';
 
 
 
@@ -15,7 +15,7 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends State<OTPScreen> {
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
-  String _verificationCode;
+  late String _verificationCode;
   final TextEditingController _pinPutController = TextEditingController();
   final FocusNode _pinPutFocusNode = FocusNode();
   final BoxDecoration pinPutDecoration = BoxDecoration(
@@ -71,7 +71,7 @@ class _OTPScreenState extends State<OTPScreen> {
                   });
                 } catch (e) {
                   FocusScope.of(context).unfocus();
-                  _scaffoldkey.currentState
+                  _scaffoldkey.currentState!
                       // ignore: deprecated_member_use
                       .showSnackBar(SnackBar(content: Text('invalid OTP')));
                 }

@@ -1,6 +1,7 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'dart:core';
+import 'package:covigenix/ui/custom_widgets/row_widget.dart';
+import 'package:covigenix/ui/model/generic_response.dart';
 import 'package:covigenix/ui/model/my_request_model.dart';
 import 'package:covigenix/helper.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +13,12 @@ class MyRequests extends StatefulWidget {
 }
 
 class _MyRequestsState extends State<MyRequests> {
-  late List<MyRequestModel> list;
+
   Future<List<MyRequestModel>>? _future;
 
   @override
   void initState() {
     super.initState();
-    list = List.empty();
 
     String id = Helper.getId();
     print(id);
@@ -28,8 +28,8 @@ class _MyRequestsState extends State<MyRequests> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<MyRequestModel>>(
-        future: _future,
-        builder: (context, snapshot) {
+      future: _future,
+      builder: (context, snapshot) {
           if(snapshot.hasData){
             return ListScreen(
               list: snapshot.data!,
@@ -40,13 +40,14 @@ class _MyRequestsState extends State<MyRequests> {
           return Center(
             child: CircularProgressIndicator(),
           );
-        });
+        },
+    );
   }
 
   //API Calls
   Future<List<MyRequestModel>> getMyRequests(String id) async{
     final response = await http.get(
-      Uri.http(Helper.BASE_URL, "request/patient/$id"),
+      Uri.https(Helper.BASE_URL, "request/patient/$id"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -63,14 +64,14 @@ class _MyRequestsState extends State<MyRequests> {
 
   void _shareAddress(String reqId) async{
     final response = await http.post(
-      Uri.http(Helper.BASE_URL, "request/share-address/$reqId"),
+      Uri.https(Helper.BASE_URL, "request/share-address/$reqId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
 
     if(response.statusCode == 200){
-      ShareResponse res = ShareResponse.fromJson(jsonDecode(response.body));
+      GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
       Helper.goodToast(res.message);
 
       setState(() {
@@ -81,14 +82,14 @@ class _MyRequestsState extends State<MyRequests> {
 
   void _deleteRequest(String reqId) async{
     final response = await http.delete(
-      Uri.http(Helper.BASE_URL, "request/$reqId"),
+      Uri.https(Helper.BASE_URL, "request/$reqId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
 
     if(response.statusCode == 200){
-      ShareResponse res = ShareResponse.fromJson(jsonDecode(response.body));
+      GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
       Helper.goodToast(res.message);
 
       setState(() {
@@ -99,8 +100,9 @@ class _MyRequestsState extends State<MyRequests> {
 }
 
 class ListScreen extends StatelessWidget {
-  List<MyRequestModel> list;
-  Function shareAddress, deleteRequest;
+  final List<MyRequestModel> list;
+  final Function shareAddress, deleteRequest;
+
   ListScreen({required this.list, required this.shareAddress, required this.deleteRequest});
 
   @override
@@ -132,23 +134,6 @@ class ListScreen extends StatelessWidget {
   }
 }
 
-class RowWidget extends StatelessWidget {
-  IconData icon;
-  String str;
-
-  RowWidget(this.icon, this.str);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: Row(
-        children: [Icon(icon), Text(str)],
-      ),
-    );
-  }
-}
-
 class Response {
   int code;
   String message;
@@ -162,23 +147,6 @@ class Response {
         code: json["code"],
         message: json["message"],
         requests: requests.map<MyRequestModel>((modelJson) => MyRequestModel.fromJson(modelJson)).toList()
-    );
-  }
-}
-
-class ShareResponse{
-  int code;
-  String message;
-
-  ShareResponse(
-      this.code,
-      this.message,
-  );
-
-  factory ShareResponse.fromJson(Map<String, dynamic> json){
-    return ShareResponse(
-      json["code"],
-      json["message"],
     );
   }
 }

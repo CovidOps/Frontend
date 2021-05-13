@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/model/generic_response.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
@@ -16,8 +17,7 @@ class _PatientProfileState extends State<PatientProfile> {
   late String initialPhone, initialName, initialArea, initialAddress;
   late String getLatitude, getLongitude;
   late Position _currentPosition;
-  bool _apiCall = false;
-  Future<Response>? _future = null;
+  Future<GenericResponse>? _future = null;
 
   TextEditingController area = TextEditingController(), address = TextEditingController();
 
@@ -64,9 +64,9 @@ class _PatientProfileState extends State<PatientProfile> {
     }
   }
 
-  Future<Response> updatePatient(String id, String area, String address, double longi, double lati) async{
+  Future<GenericResponse> updatePatient(String id, String area, String address, double longi, double lati) async{
     final response = await http.patch(
-      Uri.http(Helper.BASE_URL, "patient/$id"),
+      Uri.https(Helper.BASE_URL, "patient/$id"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -78,8 +78,8 @@ class _PatientProfileState extends State<PatientProfile> {
     );
 
     if(response.statusCode == 200){
-      Response res = Response.fromJson(jsonDecode(response.body));
-      Helper.goodToast(res.message!);
+      GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
+      Helper.goodToast(res.message);
       return res;
     }
     else
@@ -198,20 +198,6 @@ class _PatientProfileState extends State<PatientProfile> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class Response{
-  int code;
-  String? message;
-
-  Response({required this.code, this.message});
-
-  factory Response.fromJson(Map<String, dynamic> json){
-    return Response(
-        code: json["code"],
-        message: json["message"],
     );
   }
 }

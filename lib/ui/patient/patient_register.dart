@@ -68,7 +68,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
 
   Future<Response> createPatient(String name, String phone, String area, String address, double longi, double lati) async{
     final response = await http.post(
-      Uri.http(Helper.BASE_URL, "patient/sign-up"),
+      Uri.https(Helper.BASE_URL, "patient/sign-up"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
