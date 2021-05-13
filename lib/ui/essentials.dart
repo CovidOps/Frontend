@@ -18,7 +18,7 @@ class _EssentialsPageState extends State<EssentialsPage> {
   final List<String> _listItem = [
     'assets/images/oxy.jpg',
     'assets/images/plasma.jpg',
-    'assets/images/remdeivisir.jpg',
+    'assets/images/remdesivir.jpg',
   ];
 
   @override

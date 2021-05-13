@@ -1,14 +1,19 @@
+import 'dart:convert';
+
+import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/patient/patient.dart';
+import 'package:covigenix/ui/patient/patient_register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:covigenix/ui/login_screen.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:covigenix/ui/provider/provider.dart';
-
+import 'package:http/http.dart' as http;
 
 
 class OTPScreen extends StatefulWidget {
   final String phone;
-  OTPScreen(this.phone);
+  final int type;
+  OTPScreen(this.phone, this.type);
   @override
   _OTPScreenState createState() => _OTPScreenState();
 }
@@ -63,10 +68,11 @@ class _OTPScreenState extends State<OTPScreen> {
                       verificationId: _verificationCode, smsCode: pin))
                       .then((value) async {
                     if (value.user != null) {
-                      Navigator.pushAndRemoveUntil(
+                      _checkUserExists();
+                      /*Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) => ProviderHome()),
-                              (route) => false);
+                              (route) => false);*/
                     }
                   });
                 } catch (e) {
@@ -91,10 +97,11 @@ class _OTPScreenState extends State<OTPScreen> {
               .signInWithCredential(credential)
               .then((value) async {
             if (value.user != null) {
-              Navigator.pushAndRemoveUntil(
+              _checkUserExists();
+              /*Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => ProviderHome()),
-                      (route) => false);
+                      (route) => false);*/
             }
           });
         },
@@ -116,8 +123,113 @@ class _OTPScreenState extends State<OTPScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    Helper.setProfile(phone: widget.phone);
     _verifyPhone();
+  }
+
+  void _checkUserExists() {
+    if(widget.type == Helper.TYPE_PATIENT){
+      print("Check patient");
+      _checkPatient(widget.phone);
+    }else{
+      print("Check provider");
+      _checkProvider(widget.phone);
+    }
+  }
+
+  void _checkPatient(String phone) async{
+    final response = await http.get(
+      Uri.https(Helper.BASE_URL, "patient/$phone/exists"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if(response.statusCode == 200){
+      Response res = Response.fromJson(jsonDecode(response.body));
+      if(res.code == 200){
+        //Update Local Storage
+        print(res.message);
+        Helper.setProfile(
+          loginStatus: Helper.TYPE_PATIENT,
+          id: res.id!,
+          name: res.name!,
+          phone: phone,
+          area: res.area!,
+          address: res.address!,
+          longi: res.location![0],
+          lati: res.location![1]
+        );
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (BuildContext context) => PatientHome()),
+        );
+      }else{
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (BuildContext context) => RegisterPatient()),
+        );
+      }
+    }else{
+      Helper.goodToast("There was some error!");
+    }
+  }
+
+  void _checkProvider(String phone) async{
+    final response = await http.get(
+      Uri.https(Helper.BASE_URL, "provider/$phone/exists"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if(response.statusCode == 200){
+      Response res = Response.fromJson(jsonDecode(response.body));
+      if(res.code == 200){
+        //Update Local Storage
+        print(res.message);
+        Helper.setProfile(
+            loginStatus: Helper.TYPE_PROVIDER,
+            id: res.id!,
+            name: res.name!,
+            phone: phone,
+            area: res.area!,
+            longi: res.location![0],
+            lati: res.location![1]
+        );
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (BuildContext context) => ProviderHome()),
+        );
+      }else{
+        Navigator.of(context).pushReplacement(
+          //TODO: RegisterProvider()
+          MaterialPageRoute(builder: (BuildContext context) => RegisterPatient()),
+        );
+      }
+    }else{
+      Helper.goodToast("There was some error!");
+    }
+  }
+}
+
+class Response{
+  int code;
+  String message;
+  String? id, name, area, address;
+  List<double>? location;
+
+  Response(this.code, this.message, {this.id, this.name, this.area, this.address, this.location});
+
+  factory Response.fromJson(Map<String, dynamic> json){
+    return Response(
+      json["code"],
+      json["message"],
+      id: json["id"],
+      name: json["name"],
+      area: json["area"],
+      address: json["address"],
+      location: (json["location"] == null? null : <double>[json["location"][0], json["location"][1]]),
+    );
   }
 }

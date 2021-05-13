@@ -1,7 +1,11 @@
-import 'dart:collection';
+import 'dart:convert';
+import 'dart:core';
+import 'package:covigenix/ui/custom_widgets/row_widget.dart';
+import 'package:covigenix/ui/model/generic_response.dart';
 import 'package:covigenix/ui/model/my_request_model.dart';
 import 'package:covigenix/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class MyRequests extends StatefulWidget {
   @override
@@ -9,23 +13,97 @@ class MyRequests extends StatefulWidget {
 }
 
 class _MyRequestsState extends State<MyRequests> {
-  late List<MyRequestModel> list;
-  HashMap<int, String> map = Helper.createMap();
+
+  Future<List<MyRequestModel>>? _future;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    //list = List.filled(0, MyRequestModel());
-    list = List.empty(growable: true);
-    MyRequestModel model = MyRequestModel();
-    model.provider_name = "PAPA";
-    model.isRequested = true;
-    list.add(model);
-    model.provider_name = "CHAPPA";
-    model.provider_phone = "7809601401";
-    list.add(model);
+
+    String id = Helper.getId();
+    print(id);
+    _future = getMyRequests(id);
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<MyRequestModel>>(
+      future: _future,
+      builder: (context, snapshot) {
+          if(snapshot.hasData){
+            return ListScreen(
+              list: snapshot.data!,
+              shareAddress: _shareAddress,
+              deleteRequest: _deleteRequest,
+            );
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+    );
+  }
+
+  //API Calls
+  Future<List<MyRequestModel>> getMyRequests(String id) async{
+    final response = await http.get(
+      Uri.https(Helper.BASE_URL, "request/patient/$id"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if(response.statusCode == 200){
+      Response res = Response.fromJson(jsonDecode(response.body));
+      //Helper.goodToast(res.message!);
+      return res.requests!;
+    }
+    else
+      throw Exception('Failed to create patient');
+  }
+
+  void _shareAddress(String reqId) async{
+    final response = await http.post(
+      Uri.https(Helper.BASE_URL, "request/share-address/$reqId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if(response.statusCode == 200){
+      GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
+      Helper.goodToast(res.message);
+
+      setState(() {
+        _future = getMyRequests(Helper.getId());
+      });
+    }
+  }
+
+  void _deleteRequest(String reqId) async{
+    final response = await http.delete(
+      Uri.https(Helper.BASE_URL, "request/$reqId"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if(response.statusCode == 200){
+      GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
+      Helper.goodToast(res.message);
+
+      setState(() {
+        _future = getMyRequests(Helper.getId());
+      });
+    }
+  }
+}
+
+class ListScreen extends StatelessWidget {
+  final List<MyRequestModel> list;
+  final Function shareAddress, deleteRequest;
+
+  ListScreen({required this.list, required this.shareAddress, required this.deleteRequest});
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +118,13 @@ class _MyRequestsState extends State<MyRequests> {
               children: [
                 RowWidget(Icons.account_circle, list[index].provider_name),
                 RowWidget(Icons.account_circle, list[index].provider_phone),
-                RowWidget(Icons.account_circle, map[list[index].essentials_id]!),
-                (list[index].isRequested && (!list[index].isShared) ? ElevatedButton(onPressed: () => _shareAddress(list[index].id), child: Text("Share Address")) : Container()),
+                RowWidget(Icons.account_circle, list[index].essential),
+                IconButton(icon: Icon(Icons.delete), onPressed: () => deleteRequest(list[index].id)),
+                (list[index].sought_approval && (!list[index].approved)
+                    ? ElevatedButton(
+                    onPressed: () => shareAddress(list[index].id),
+                    child: Text("Share Address"))
+                    : Container()),
               ],
             ),
           );
@@ -49,25 +132,21 @@ class _MyRequestsState extends State<MyRequests> {
       ),
     );
   }
-
-  void _shareAddress(String reqId){
-
-  }
 }
 
-class RowWidget extends StatelessWidget {
-  IconData icon;
-  String str;
+class Response {
+  int code;
+  String message;
+  List<MyRequestModel>? requests;
 
-  RowWidget(this.icon, this.str);
+  Response({required this.code, required this.message, this.requests});
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: Row(
-        children: [Icon(icon), Text(str)],
-      ),
+  factory Response.fromJson(Map<String, dynamic> json){
+    Iterable requests = json["requests"];
+    return Response(
+        code: json["code"],
+        message: json["message"],
+        requests: requests.map<MyRequestModel>((modelJson) => MyRequestModel.fromJson(modelJson)).toList()
     );
   }
 }

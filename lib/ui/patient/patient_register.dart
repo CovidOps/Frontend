@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:covigenix/ui/patient/patient.dart';
+import 'package:covigenix/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterPatient extends StatefulWidget {
   @override
@@ -12,17 +15,21 @@ class _RegisterPatientState extends State<RegisterPatient> {
   final GlobalKey<FormState> _registerPatientKey = GlobalKey<FormState>();
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   late String initialPhone, getLatitude, getLongitude;
-  late Position _currentPosition;
+  late Position? _currentPosition;
+  Future<Response>? _futureResponse = null;
+
   TextEditingController name = TextEditingController(),
-      area = TextEditingController();
+      area = TextEditingController(),
+      address = TextEditingController();
 
   @override
   void initState() {
     // TODO: initialPhone
     super.initState();
+    _currentPosition = null;
     getLatitude = "Latitude: Not Known";
     getLongitude = "Longitude: Not Known";
-    initialPhone = "7809601401";
+    initialPhone = Helper.getPhone();
   }
 
   void getLocation() {
@@ -31,8 +38,8 @@ class _RegisterPatientState extends State<RegisterPatient> {
         .then((Position position) {
       setState(() {
         _currentPosition = position;
-        getLatitude = "Latitude: ${_currentPosition.latitude}";
-        getLongitude = "Longitude: ${_currentPosition.longitude}";
+        getLatitude = "Latitude: ${position.latitude}";
+        getLongitude = "Longitude: ${position.longitude}";
       });
     }).catchError((e) {
       print(e);
@@ -41,22 +48,44 @@ class _RegisterPatientState extends State<RegisterPatient> {
 
   void register(BuildContext context) {
     if (_registerPatientKey.currentState!.validate()) {
-      String message = "Got data: ${name.text} $initialPhone ${area.text}";
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      if(_currentPosition == null){
+        Helper.goodToast("Please obtain location.");
+        return;
+      }
 
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (BuildContext context) => PatientHome()));
+      /*String message = "Got data: ${name.text} $initialPhone ${area.text} ${address.text} [ ${_currentPosition!.longitude}, ${_currentPosition!.latitude} ]";
+      Helper.goodToast(message);
+
+      Helper.setProfile(
+
+      );*/
+
+      setState(() {
+        _futureResponse = createPatient(name.text, initialPhone, area.text, address.text, _currentPosition!.longitude, _currentPosition!.latitude);
+      });
     }
   }
 
+  Future<Response> createPatient(String name, String phone, String area, String address, double longi, double lati) async{
+    final response = await http.post(
+      Uri.https(Helper.BASE_URL, "patient/sign-up"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'name': name,
+        'phone': phone,
+        'area': area,
+        'address': address,
+        'coordinates':[longi, lati]
+      }),
+    );
+
+    if(response.statusCode == 200)
+      return Response.fromJson(jsonDecode(response.body));
+    else
+      throw Exception('Failed to create patient');
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,8 +94,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
       ),
       body: Form(
         key: _registerPatientKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: (_futureResponse == null)? ListView(
           children: <Widget>[
             Container(
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -117,6 +145,24 @@ class _RegisterPatientState extends State<RegisterPatient> {
               ),
             ),
             Container(
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: TextFormField(
+                controller: address,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Address",
+                  contentPadding: EdgeInsets.all(16),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Enter a valid address.";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+            ),
+            Container(
               child: Text(
                 getLatitude,
                 style: TextStyle(fontSize: 16),
@@ -157,10 +203,54 @@ class _RegisterPatientState extends State<RegisterPatient> {
               ),
             ),
           ],
-        ),
+        )
+            : FutureBuilder<Response>(
+          future: _futureResponse,
+          builder: (context, snapshot){
+            if(snapshot.hasData){
+              if(snapshot.data!.code == 200){
+                Helper.goodToast(snapshot.data!.message!);
+                goToPatientHome(context, snapshot);
+              }
+            }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        )
       ),
     );
   }
 
-  //TODO: Add Patient Address
+  void goToPatientHome(BuildContext context, AsyncSnapshot<Response> snapshot) {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      Helper.setProfile(
+          loginStatus: Helper.TYPE_PATIENT,
+          id: snapshot.data!.id!,
+          name: name.text,
+          phone: initialPhone,
+          area: area.text,
+          address: address.text,
+          longi: _currentPosition!.longitude,
+          lati: _currentPosition!.latitude
+      );
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => PatientHome()));
+    });
+  }
+}
+
+class Response{
+  int code;
+  String? message, id;
+
+  Response({required this.code, this.message, this.id});
+
+  factory Response.fromJson(Map<String, dynamic> json){
+    return Response(
+      code: json["code"],
+      message: json["message"],
+      id: json["id"]
+    );
+  }
 }

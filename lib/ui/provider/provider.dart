@@ -1,6 +1,9 @@
+import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/prediction.dart';
 import 'package:covigenix/ui/provider/provider_services.dart';
 import 'package:flutter/material.dart';
+
+import '../splash.dart';
 
 class ProviderHome extends StatefulWidget {
   @override
@@ -23,8 +26,11 @@ class _ProviderHomeState extends State<ProviderHome> {
                   icon: const Icon(Icons.logout),
                   tooltip: 'Log Out',
                   onPressed: () {
-                    Scaffold.of(context).showSnackBar(
-                        const SnackBar(content: Text('Log out')));
+                    Helper.logOut();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (BuildContext context) => Splash()),
+                    );
                   },
                 );
               }
