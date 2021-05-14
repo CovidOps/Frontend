@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/patient/patient.dart';
 import 'package:covigenix/ui/patient/patient_register.dart';
+import 'package:covigenix/ui/provider/provider_register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -166,6 +167,7 @@ class _OTPScreenState extends State<OTPScreen> {
           MaterialPageRoute(builder: (BuildContext context) => PatientHome()),
         );
       }else{
+        print("Patient does not exist.");
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (BuildContext context) => RegisterPatient()),
         );
@@ -202,9 +204,9 @@ class _OTPScreenState extends State<OTPScreen> {
           MaterialPageRoute(builder: (BuildContext context) => ProviderHome()),
         );
       }else{
+        print("Provider does not exist.");
         Navigator.of(context).pushReplacement(
-          //TODO: RegisterProvider()
-          MaterialPageRoute(builder: (BuildContext context) => RegisterPatient()),
+          MaterialPageRoute(builder: (BuildContext context) => RegisterProvider()),
         );
       }
     }else{

@@ -38,15 +38,6 @@ class _EditState extends State<Edit> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    /*List<EssentialGridModel> list = Helper.essentialsList;
-    for(EssentialGridModel e in list){
-      status[e.arg] = false;
-    }*/
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Column(
         children: [

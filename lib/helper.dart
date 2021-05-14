@@ -120,7 +120,7 @@ class Helper{
     );
   }
 
-  static List<EssentialGridModel> essentialsList = [
+  static final List<EssentialGridModel> essentialsList = [
     EssentialGridModel("remdesivir", "Remdesivir", Icons.five_g),
     EssentialGridModel("oxygen", "Medical Oxygen", Icons.five_g),
     EssentialGridModel("plasma", "Plasma", Icons.five_g),

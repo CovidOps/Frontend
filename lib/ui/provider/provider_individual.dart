@@ -11,13 +11,16 @@ class ProviderRequestsIndiv extends StatefulWidget {
 class _ProviderRequestsIndivState extends State<ProviderRequestsIndiv> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        child: Text('Go Back'),
-        onPressed: () {
-          //Get back when tapped
-          Navigator.pop(context);
-        },
+    return Scaffold(
+      appBar: AppBar(title: Text(widget.arg),),
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go Back'),
+          onPressed: () {
+            //Get back when tapped
+            Navigator.pop(context);
+          },
+        ),
       ),
     );
   }

@@ -8,12 +8,22 @@ class EssentialChecklist extends StatefulWidget{
 
   @override
   _EssentialChecklistState createState() => _EssentialChecklistState();
+
 }
 class _EssentialChecklistState extends State<EssentialChecklist> {
 
-  final List<EssentialGridModel> list = Helper.essentialsList;
+  late List<EssentialGridModel> list;
 
   _EssentialChecklistState();
+
+  @override
+  void initState() {
+    super.initState();
+    list = Helper.essentialsList;
+    for(EssentialGridModel e in list){
+      widget.status[e.arg] = e.checked;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +31,9 @@ class _EssentialChecklistState extends State<EssentialChecklist> {
       itemCount: list.length,
       itemBuilder: (context, index){
         return CheckboxListTile(
-          value: list[index].checked,
+          value: widget.status[list[index].arg]!,
           title: Text(list[index].proper),
           onChanged: (bool? val) => setState(() {
-            list[index].checked = val!;
             widget.status[list[index].arg] = val!;
           }),
         );
