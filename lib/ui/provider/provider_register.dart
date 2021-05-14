@@ -14,7 +14,7 @@ class RegisterProvider extends StatefulWidget {
 
 class _RegisterProviderState extends State<RegisterProvider> {
   final GlobalKey<FormState> _registerProviderKey = GlobalKey<FormState>();
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  //final Geolocator geolocator = Geolocator();
   late String initialPhone, getLatitude, getLongitude;
   late Position? _currentPosition;
   Future<Response>? _futureResponse = null;
@@ -33,7 +33,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
   }
 
   void getLocation() {
-    geolocator
+    Geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
       setState(() {

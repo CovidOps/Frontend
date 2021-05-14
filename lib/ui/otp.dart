@@ -109,7 +109,7 @@ class _OTPScreenState extends State<OTPScreen> {
         verificationFailed: (FirebaseAuthException e) {
           print(e.message);
         },
-        codeSent: (String verficationID, int resendToken) {
+        codeSent: (String verficationID, int? resendToken) {
           setState(() {
             _verificationCode = verficationID;
           });

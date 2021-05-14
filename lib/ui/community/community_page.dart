@@ -72,7 +72,7 @@ class _PageState extends State<Page> {
         if(snapshot.hasData){
           return ListScreen(
             //TODO: Sort
-            list: snapshot.data!,
+            list: Helper.sortCommunityPosts(snapshot.data!),
             deletePost: _deleteRequest,
           );
         }

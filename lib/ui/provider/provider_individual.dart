@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import '../../helper.dart';
 
 class ProviderRequestsIndiv extends StatefulWidget {
-  String arg;
+  final String arg;
   ProviderRequestsIndiv(this.arg);
 
   @override
@@ -64,7 +64,7 @@ class _ProviderRequestsIndivState extends State<ProviderRequestsIndiv> {
           builder: (context, snapshot){
             if(snapshot.hasData){
               return ListScreen(
-                list: snapshot.data!,
+                list: Helper.sortListPatient(snapshot.data!),
                 getApproval: _getApproval,
               );
             }

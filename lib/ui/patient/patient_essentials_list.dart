@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:map_launcher/map_launcher.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
 import 'package:covigenix/ui/model/provider_model.dart';
@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import '../../helper.dart';
 
 class PatientEssentialsList extends StatefulWidget {
-  String arg;
+  final String arg;
   PatientEssentialsList(this.arg);
 
   @override
@@ -65,6 +65,15 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
     }
   }
 
+  //Show in map
+  void _showMap(List<double> coordinates) async{
+    final availableMaps = await MapLauncher.installedMaps;
+    await availableMaps.first.showMarker(
+      coords: Coords(coordinates[1], coordinates[0]),
+      title: "Provider",
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -82,8 +91,9 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
         builder: (context, snapshot){
           if(snapshot.hasData){
             return ListScreen(
-              list: snapshot.data!,
+              list: Helper.sortListProvider(snapshot.data!),
               createRequest: _createRequest,
+              showMap: _showMap,
             );
           }
           return Center(
@@ -97,9 +107,9 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
 
 class ListScreen extends StatelessWidget {
   final List<Provider> list;
-  final Function createRequest;
+  final Function createRequest, showMap;
 
-  ListScreen({required this.list, required this.createRequest});
+  ListScreen({required this.list, required this.createRequest, required this.showMap});
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +125,7 @@ class ListScreen extends StatelessWidget {
                 RowWidget(Icons.account_circle, list[index].name),
                 RowWidget(Icons.account_circle, list[index].area),
                 RowWidget(Icons.account_circle, list[index].phone),
+                ElevatedButton(onPressed: () => showMap(list[index].coordinates), child: Text('Open in Maps')),
                 IconButton(
                   icon: Icon(Icons.open_in_new),
                   onPressed: () => createRequest(

@@ -13,7 +13,7 @@ class RegisterPatient extends StatefulWidget {
 
 class _RegisterPatientState extends State<RegisterPatient> {
   final GlobalKey<FormState> _registerPatientKey = GlobalKey<FormState>();
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  //final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   late String initialPhone, getLatitude, getLongitude;
   late Position? _currentPosition;
   Future<Response>? _futureResponse = null;
@@ -33,7 +33,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
   }
 
   void getLocation() {
-    geolocator
+    Geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
       setState(() {

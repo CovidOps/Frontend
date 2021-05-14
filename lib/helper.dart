@@ -1,9 +1,11 @@
 import 'dart:collection';
-
+import 'package:covigenix/ui/model/community_post_model.dart';
+import 'package:covigenix/ui/model/patient_model.dart';
+import 'package:covigenix/ui/model/provider_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
-//import 'package:localstorage/localstorage.dart';
 
 class Helper{
   static const String BASE_URL = "covigenix-test-deploy.herokuapp.com";
@@ -126,6 +128,36 @@ class Helper{
     EssentialGridModel("plasma", "Plasma", Icons.five_g),
     EssentialGridModel("fabiflu", "Fabiflu", Icons.five_g)
   ];
+
+  static List<Patient> sortListPatient(List<Patient> arg){
+    double startLat = getLatitude(), startLong = getLongitude();
+    arg.sort((a, b) {
+      double dist1 = Geolocator.distanceBetween(startLat, startLong, a.location[1], a.location[0]);
+      double dist2 = Geolocator.distanceBetween(startLat, startLong, b.location[1], b.location[0]);
+      return dist1.compareTo(dist2);
+    });
+    return arg;
+  }
+
+  static List<Provider> sortListProvider(List<Provider> arg){
+    double startLat = getLatitude(), startLong = getLongitude();
+    arg.sort((a, b) {
+      double dist1 = Geolocator.distanceBetween(startLat, startLong, a.coordinates[1], a.coordinates[0]);
+      double dist2 = Geolocator.distanceBetween(startLat, startLong, b.coordinates[1], b.coordinates[0]);
+      return dist1.compareTo(dist2);
+    });
+    return arg;
+  }
+
+  static List<CommunityPost> sortCommunityPosts(List<CommunityPost> arg){
+    double startLat = getLatitude(), startLong = getLongitude();
+    arg.sort((a, b) {
+      double dist1 = Geolocator.distanceBetween(startLat, startLong, a.coordinates[1], a.coordinates[0]);
+      double dist2 = Geolocator.distanceBetween(startLat, startLong, b.coordinates[1], b.coordinates[0]);
+      return dist1.compareTo(dist2);
+    });
+    return arg;
+  }
 }
 
 

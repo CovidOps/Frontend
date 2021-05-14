@@ -13,7 +13,7 @@ class ProviderProfile extends StatefulWidget {
 
 class _ProviderProfileState extends State<ProviderProfile> {
   final GlobalKey<FormState> _providerKey = GlobalKey<FormState>();
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  //final GeolocatorPlatform geolocator;
   late String initialPhone, initialName, initialArea;
   late String getLatitude, getLongitude;
   late Position _currentPosition;
@@ -34,7 +34,7 @@ class _ProviderProfileState extends State<ProviderProfile> {
   }
 
   void getLocation() {
-    geolocator
+    Geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
       setState(() {
