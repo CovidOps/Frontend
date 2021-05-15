@@ -25,7 +25,7 @@ class _PredictionState extends State<Prediction> {
           ),
           body: TabBarView(
             children: [
-              ImagePage.Image(),
+              ImagePage.ImagePage(),
               AudioPage.Audio(),
             ],
           ),

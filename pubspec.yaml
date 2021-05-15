@@ -37,6 +37,7 @@ dependencies:
   firebase_auth: ^1.1.4
   firebase_core: ^1.1.1
   pinput: ^0.2.6
+  image_picker: ^0.7.5
 
 dev_dependencies:
   flutter_test:
