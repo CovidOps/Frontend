@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:covigenix/ui/provider/provider.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class OTPScreen extends StatefulWidget {
   final String phone;
@@ -31,6 +31,8 @@ class _OTPScreenState extends State<OTPScreen> {
       color: const Color.fromRGBO(126, 203, 224, 1),
     ),
   );
+  ConfirmationResult? confirmationResult = null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,19 +66,24 @@ class _OTPScreenState extends State<OTPScreen> {
               pinAnimationType: PinAnimationType.fade,
               onSubmit: (pin) async {
                 try {
-                  await FirebaseAuth.instance
-                      .signInWithCredential(PhoneAuthProvider.credential(
-                      verificationId: _verificationCode, smsCode: pin))
-                      .then((value) async {
+                  if(kIsWeb){
+                    await confirmationResult!.confirm(pin).then((value)  {
                     if (value.user != null) {
-                      _checkUserExists();
-                      /*Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => ProviderHome()),
-                              (route) => false);*/
-                    }
-                  });
+                        _checkUserExists();
+                      }
+                    });
+                  }else{
+                    await FirebaseAuth.instance
+                        .signInWithCredential(PhoneAuthProvider.credential(
+                        verificationId: _verificationCode, smsCode: pin))
+                        .then((value) async {
+                      if (value.user != null) {
+                        _checkUserExists();
+                      }
+                    });
+                  }
                 } catch (e) {
+                  print(e);
                   FocusScope.of(context).unfocus();
                   _scaffoldkey.currentState!
                       // ignore: deprecated_member_use
@@ -122,11 +129,18 @@ class _OTPScreenState extends State<OTPScreen> {
         timeout: Duration(seconds: 120));
   }
 
+  void _verifyPhoneWeb() async{
+    confirmationResult = await FirebaseAuth.instance.signInWithPhoneNumber('+91${widget.phone}');
+  }
   @override
   void initState() {
     super.initState();
     Helper.setProfile(phone: widget.phone);
-    _verifyPhone();
+    if(kIsWeb){
+      _verifyPhoneWeb();
+    }else{
+      _verifyPhone();
+    }
   }
 
   void _checkUserExists() {

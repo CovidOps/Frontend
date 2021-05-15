@@ -1,5 +1,5 @@
 import 'package:covigenix/helper.dart';
-import 'package:covigenix/ui/prediction.dart';
+import 'package:covigenix/ui/prediction/prediction.dart';
 import 'package:covigenix/ui/provider/provider_services.dart';
 import 'package:flutter/material.dart';
 

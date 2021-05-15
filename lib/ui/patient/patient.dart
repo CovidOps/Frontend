@@ -1,6 +1,6 @@
 import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/patient/patient_services.dart';
-import 'package:covigenix/ui/prediction.dart';
+import 'package:covigenix/ui/prediction/prediction.dart';
 import 'package:covigenix/ui/splash.dart';
 import 'package:flutter/material.dart';
 
