@@ -131,7 +131,7 @@ class _ProviderProfileState extends State<ProviderProfile> {
                 },
               ),
             ),
-            Container(
+            /*Container(
               child: Text(
                 getLatitude,
                 style: TextStyle(fontSize: 16),
@@ -144,7 +144,7 @@ class _ProviderProfileState extends State<ProviderProfile> {
                 style: TextStyle(fontSize: 16),
               ),
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            ),
+            ),*/
             Container(
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),

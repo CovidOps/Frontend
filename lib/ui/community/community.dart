@@ -15,8 +15,6 @@ class _CommunityState extends State<StatefulWidget> {
   ];
 
   void openAddCommunity(BuildContext context, int index){
-    //Helper.goodToast("Trying to open ${index==0?"Requests":"Availability"}");
-
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => AddCommunity(index)),

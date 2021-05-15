@@ -73,7 +73,7 @@ class Sidenav extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.all(16.0),
-            child: Text('CoviGenix', style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 21),)
+            child: Text(Helper.appName, style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 21),)
           ),
 
           //Divider(color: Colors.grey.shade400,),

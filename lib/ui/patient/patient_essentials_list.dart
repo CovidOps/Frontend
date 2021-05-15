@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import '../../helper.dart';
 
 class PatientEssentialsList extends StatefulWidget {
-  final String arg;
+  final EssentialGridModel arg;
   PatientEssentialsList(this.arg);
 
   @override
@@ -40,7 +40,7 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
 
   void _createRequest({required String providerId, required String providerName, required String providerPhone}) async{
     final response = await http.post(
-      Uri.https(Helper.BASE_URL, "request/${widget.arg}"),
+      Uri.https(Helper.BASE_URL, "request/${widget.arg.arg}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -51,7 +51,7 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
         'patientAddress': Helper.getAddress(),
         'area': Helper.getArea(),
 
-        'essential': widget.arg,
+        'essential': widget.arg.arg,
         'coordinates': [Helper.getLongitude(), Helper.getLatitude()],
 
         'providerName': providerName,
@@ -77,14 +77,14 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
   @override
   void initState() {
     super.initState();
-    _future = _fetchList(widget.arg);
+    _future = _fetchList(widget.arg.arg);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.arg),
+        title: Text(widget.arg.proper),
       ),
       body: FutureBuilder<List<Provider>>(
         future: _future,
@@ -123,15 +123,30 @@ class ListScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 RowWidget(Icons.account_circle, list[index].name),
-                RowWidget(Icons.account_circle, list[index].area),
-                RowWidget(Icons.account_circle, list[index].phone),
-                ElevatedButton(onPressed: () => showMap(list[index].coordinates), child: Text('Open in Maps')),
-                IconButton(
-                  icon: Icon(Icons.open_in_new),
-                  onPressed: () => createRequest(
-                    providerId: list[index].providerId,
-                    providerPhone: list[index].phone,
-                    providerName: list[index].name,
+                RowWidget(Icons.business_outlined, list[index].area),
+                RowWidget(Icons.phone, list[index].phone),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('Create Request'),
+                        Icon(Icons.open_in_new),
+                      ],
+                    ),
+                    onPressed: () => createRequest(
+                      providerId: list[index].providerId,
+                      providerPhone: list[index].phone,
+                      providerName: list[index].name,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () => showMap(list[index].coordinates),
+                    child: Text('Open in Maps'),
                   ),
                 ),
               ],

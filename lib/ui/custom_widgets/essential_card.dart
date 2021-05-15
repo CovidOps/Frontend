@@ -19,7 +19,7 @@ class EssentialCard extends StatelessWidget {
           ],
         ),),
       ),
-      onTap: () => onTap(context, model.arg),
+      onTap: () => onTap(context, model),
     );
   }
 }

@@ -18,6 +18,7 @@ class _PatientProfileState extends State<PatientProfile> {
   late String getLatitude, getLongitude;
   late Position _currentPosition;
   Future<GenericResponse>? _future = null;
+  bool isLoading = false;
 
   TextEditingController area = TextEditingController(), address = TextEditingController();
 
@@ -53,6 +54,10 @@ class _PatientProfileState extends State<PatientProfile> {
 
   void update(BuildContext context){
     if(_patientKey.currentState!.validate()){
+      setState(() {
+        isLoading = true;
+      });
+
       String ar = area.text;
       String ad = address.text;
       Helper.updateProfile(area: ar, address: ad);
@@ -60,7 +65,6 @@ class _PatientProfileState extends State<PatientProfile> {
       setState(() {
         _future = updatePatient(Helper.getId(), ar, ad, Helper.getLongitude(), Helper.getLatitude());
       });
-      //Helper.goodToast("Updating patient with $ar $ad ${Helper.getLongitude()} ${Helper.getLatitude()}");
     }
   }
 
@@ -77,6 +81,9 @@ class _PatientProfileState extends State<PatientProfile> {
       }),
     );
 
+    setState(() {
+      isLoading = false;
+    });
     if(response.statusCode == 200){
       GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
       Helper.goodToast(res.message);
@@ -88,116 +95,124 @@ class _PatientProfileState extends State<PatientProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Form(
-        key: _patientKey,
-        child: ListView(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Name",
-                  contentPadding: EdgeInsets.all(16),
+    return Stack(
+      children: [
+        Container(
+          child: Form(
+            key: _patientKey,
+            child: ListView(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Name",
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                    enabled: false,
+                    initialValue: initialName,
+                  ),
                 ),
-                enabled: false,
-                initialValue: initialName,
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Phone",
-                  contentPadding: EdgeInsets.all(16),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Phone",
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                    enabled: false,
+                    initialValue: initialPhone,
+                  ),
                 ),
-                enabled: false,
-                initialValue: initialPhone,
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: TextFormField(
-                controller: area,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Area",
-                  contentPadding: EdgeInsets.all(16),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: TextFormField(
+                    controller: area,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Area",
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                    //initialValue: initialArea,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Enter a valid area.";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
                 ),
-                //initialValue: initialArea,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter a valid area.";
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: TextFormField(
-                controller: address,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Address",
-                  contentPadding: EdgeInsets.all(16),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: TextFormField(
+                    controller: address,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Address",
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                    //initialValue: initialAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Enter a valid address.";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
                 ),
-                //initialValue: initialAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter a valid address.";
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-            ),
-            Container(
-              child: Text(
-                getLatitude,
-                style: TextStyle(fontSize: 16),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            ),
-            Container(
-              child: Text(
-                getLongitude,
-                style: TextStyle(fontSize: 16),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-              child: ElevatedButton(
-                child: Text('Get Location'),
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  padding: EdgeInsets.all(16),
+                /*Container(
+                  child: Text(
+                    getLatitude,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 ),
-                onPressed: getLocation,
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-              child: ElevatedButton(
-                child: Text('Update'),
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  padding: EdgeInsets.all(16),
+                Container(
+                  child: Text(
+                    getLongitude,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                ),*/
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
+                  child: ElevatedButton(
+                    child: Text('Get Location'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).primaryColor,
+                      padding: EdgeInsets.all(16),
+                    ),
+                    onPressed: getLocation,
+                  ),
                 ),
-                onPressed: () {
-                  update(context);
-                },
-              ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
+                  child: ElevatedButton(
+                    child: Text('Update'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).primaryColor,
+                      padding: EdgeInsets.all(16),
+                    ),
+                    onPressed: () {
+                      update(context);
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+        (isLoading ?
+          Center(child: CircularProgressIndicator(),)
+            : Container()
+        )
+      ],
     );
   }
 }

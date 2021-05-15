@@ -103,14 +103,14 @@ class ListScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                RowWidget(Icons.account_circle, list[index].item),
-                RowWidget(Icons.account_circle, list[index].details),
-                RowWidget(Icons.account_circle, list[index].name),
-                RowWidget(Icons.account_circle, list[index].area),
-                RowWidget(Icons.account_circle, list[index].phone),
+                RowWidget(Icons.account_circle, "Name: ${list[index].name}"),
+                RowWidget(Icons.eco, "Item: ${list[index].item}"),
+                RowWidget(Icons.business, "Area: ${list[index].area}"),
+                RowWidget(Icons.description, list[index].details),
+                RowWidget(Icons.phone, "Phone: ${list[index].phone}"),
                 (list[index].personId == ownId ?
                 IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: Icon(Icons.delete, color: Colors.red),
                   onPressed: () => deletePost(list[index].postId),
                 )
                     : Container()

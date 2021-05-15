@@ -15,14 +15,12 @@ class MyRequests extends StatefulWidget {
 class _MyRequestsState extends State<MyRequests> {
 
   Future<List<MyRequestModel>>? _future;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-
-    String id = Helper.getId();
-    print(id);
-    _future = getMyRequests(id);
+    _future = getMyRequests(Helper.getId());
   }
 
   @override
@@ -31,10 +29,18 @@ class _MyRequestsState extends State<MyRequests> {
       future: _future,
       builder: (context, snapshot) {
           if(snapshot.hasData){
-            return ListScreen(
-              list: snapshot.data!,
-              shareAddress: _shareAddress,
-              deleteRequest: _deleteRequest,
+            return Stack(
+              children: [
+                ListScreen(
+                  list: snapshot.data!,
+                  shareAddress: _shareAddress,
+                  deleteRequest: _showMyDialog,
+                ),
+                (isLoading ?
+                Center(child: CircularProgressIndicator(),)
+                    : Container()
+                )
+              ],
             );
           }
           return Center(
@@ -46,12 +52,20 @@ class _MyRequestsState extends State<MyRequests> {
 
   //API Calls
   Future<List<MyRequestModel>> getMyRequests(String id) async{
+    setState(() {
+      isLoading = true;
+    });
+
     final response = await http.get(
       Uri.https(Helper.BASE_URL, "request/patient/$id"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
+
+    setState(() {
+      isLoading = false;
+    });
 
     if(response.statusCode == 200){
       Response res = Response.fromJson(jsonDecode(response.body));
@@ -63,12 +77,20 @@ class _MyRequestsState extends State<MyRequests> {
   }
 
   void _shareAddress(String reqId) async{
+    setState(() {
+      isLoading = true;
+    });
+
     final response = await http.post(
       Uri.https(Helper.BASE_URL, "request/share-address/$reqId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
+
+    setState(() {
+      isLoading = false;
+    });
 
     if(response.statusCode == 200){
       GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
@@ -80,13 +102,55 @@ class _MyRequestsState extends State<MyRequests> {
     }
   }
 
+  Future<void> _showMyDialog(String reqId) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure you want to delete this?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteRequest(reqId);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _deleteRequest(String reqId) async{
+    setState(() {
+      isLoading = true;
+    });
+
     final response = await http.delete(
       Uri.https(Helper.BASE_URL, "request/$reqId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
+
+    setState(() {
+      isLoading = false;
+    });
 
     if(response.statusCode == 200){
       GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
@@ -116,10 +180,10 @@ class ListScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                RowWidget(Icons.account_circle, list[index].provider_name),
-                RowWidget(Icons.account_circle, list[index].provider_phone),
-                RowWidget(Icons.account_circle, list[index].essential),
-                IconButton(icon: Icon(Icons.delete), onPressed: () => deleteRequest(list[index].id)),
+                RowWidget(Icons.account_balance_rounded, "Provider: ${list[index].provider_name}"),
+                RowWidget(Icons.phone, "Phone: ${list[index].provider_phone}"),
+                RowWidget(Icons.eco, "Essential: ${list[index].essential}"),
+                IconButton(icon: Icon(Icons.delete, color: Colors.red,), onPressed: () => deleteRequest(list[index].id)),
                 (list[index].sought_approval && (!list[index].approved)
                     ? ElevatedButton(
                     onPressed: () => shareAddress(list[index].id),

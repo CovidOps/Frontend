@@ -8,7 +8,7 @@ class RowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(3),
       child: Row(
         children: [Icon(icon), Text(str)],
       ),

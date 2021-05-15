@@ -15,36 +15,38 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Phone Auth'),
+        title: Text('Verification'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(children: [
-            Container(
-              margin: EdgeInsets.only(top: 60),
-              child: Center(
-                child: Text(
-                  'Login With your Phone Number',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 40, right: 10, left: 10),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Phone Number',
-                  prefix: Padding(
-                    padding: EdgeInsets.all(4),
+          Expanded(
+            child: Column(children: [
+              Container(
+                margin: EdgeInsets.only(top: 60),
+                child: Center(
+                  child: Text(
+                    'Please provide your phone number',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
                 ),
-                maxLength: 10,
-                keyboardType: TextInputType.number,
-                controller: _controller,
               ),
-            )
-          ]),
+              Container(
+                margin: EdgeInsets.only(top: 40, right: 10, left: 10),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Phone Number',
+                    prefix: Padding(
+                      padding: EdgeInsets.all(4),
+                    ),
+                  ),
+                  maxLength: 10,
+                  keyboardType: TextInputType.number,
+                  controller: _controller,
+                ),
+              )
+            ]),
+          ),
           Container(
             margin: EdgeInsets.all(10),
             width: double.infinity,
