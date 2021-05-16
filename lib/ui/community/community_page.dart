@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
 import 'package:covigenix/ui/model/community_post_model.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
@@ -77,9 +78,7 @@ class _PageState extends State<Page> {
           );
         }
 
-        return Center(
-          child: CircularProgressIndicator(),
-        );
+        return CustomProgressIndicator();
       },
     );
   }

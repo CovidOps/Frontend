@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -209,7 +210,7 @@ class _PatientProfileState extends State<PatientProfile> {
           ),
         ),
         (isLoading ?
-          Center(child: CircularProgressIndicator(),)
+          CustomProgressIndicator()
             : Container()
         )
       ],

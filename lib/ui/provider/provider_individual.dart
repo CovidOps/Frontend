@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
 import 'package:covigenix/ui/model/patient_model.dart';
@@ -68,9 +69,7 @@ class _ProviderRequestsIndivState extends State<ProviderRequestsIndiv> {
                 getApproval: _getApproval,
               );
             }
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return CustomProgressIndicator();
           },
         )
     );

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/custom_widgets/essential_checklist.dart';
+import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -200,9 +201,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
                 goToProviderHome(context, snapshot);
               }
             }
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return CustomProgressIndicator();
           },
         )
       ),

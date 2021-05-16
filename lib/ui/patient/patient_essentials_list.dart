@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
@@ -96,9 +97,7 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
               showMap: _showMap,
             );
           }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return CustomProgressIndicator();
         },
       )
     );

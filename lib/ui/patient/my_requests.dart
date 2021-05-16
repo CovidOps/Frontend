@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
+import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
 import 'package:covigenix/ui/model/my_request_model.dart';
@@ -37,15 +38,13 @@ class _MyRequestsState extends State<MyRequests> {
                   deleteRequest: _showMyDialog,
                 ),
                 (isLoading ?
-                Center(child: CircularProgressIndicator(),)
+                CustomProgressIndicator()
                     : Container()
                 )
               ],
             );
           }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return CustomProgressIndicator();
         },
     );
   }

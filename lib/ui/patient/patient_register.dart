@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/patient/patient.dart';
 import 'package:covigenix/helper.dart';
 import 'package:flutter/material.dart';
@@ -213,9 +214,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
                 goToPatientHome(context, snapshot);
               }
             }
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return CustomProgressIndicator();
           },
         )
       ),
