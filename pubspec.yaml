@@ -60,7 +60,9 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/images/
+    - assets/images/Oxygen.jpg
+    - assets/images/Plasma.jpg
+    - assets/images/Remdevisir.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

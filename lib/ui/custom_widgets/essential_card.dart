@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:covigenix/helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +13,15 @@ class EssentialCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Card(
+
         color: Colors.black26,
         child: Center(child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+
           children: [
-            Icon(model.icon),
+
+            Image.asset( model.path, fit:BoxFit.fill),
+
             Text(model.proper)
           ],
         ),),

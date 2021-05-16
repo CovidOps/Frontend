@@ -94,9 +94,9 @@ class ListScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 RowWidget(Icons.account_circle, list[index].name),
-                RowWidget(Icons.account_circle, list[index].area),
-                RowWidget(Icons.account_circle, list[index].phone),
-                RowWidget(Icons.account_circle, list[index].address),
+                RowWidget(Icons.business_outlined, list[index].area),
+                RowWidget(Icons.phone, list[index].phone),
+                RowWidget(Icons.api_rounded, list[index].address),
                 (list[index].address == "Not available"
                     ? IconButton(
                         icon: Icon(Icons.open_in_new),

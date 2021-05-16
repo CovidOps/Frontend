@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:html';
 import 'package:covigenix/ui/model/community_post_model.dart';
 import 'package:covigenix/ui/model/patient_model.dart';
 import 'package:covigenix/ui/model/provider_model.dart';
@@ -125,10 +126,10 @@ class Helper{
   }
 
   static final List<EssentialGridModel> essentialsList = [
-    EssentialGridModel("remdesivir", "Remdesivir", Icons.five_g),
-    EssentialGridModel("oxygen", "Medical Oxygen", Icons.five_g),
-    EssentialGridModel("plasma", "Plasma", Icons.five_g),
-    EssentialGridModel("fabiflu", "Fabiflu", Icons.five_g)
+    EssentialGridModel("remdesivir", "Remdesivir",Image.asset("assets/images/Remdevisir.jpg"),"assets/images/Remdevisir.jpg"),
+    EssentialGridModel("oxygen", "Medical Oxygen",Image.asset("assets/images/Oxygen.jpg"),"assets/images/Oxygen.jpg"),
+    EssentialGridModel("plasma", "Plasma",Image.asset("assets/images/PLasma.jpg"),"assets/images/PLasma.jpg"),
+    EssentialGridModel("fabiflu","Fabiflu",Image.asset("assets/images/Remdevisir.jpg"),"assets/images/Remdevisir.jpg")
   ];
 
   static List<Patient> sortListPatient(List<Patient> arg){
@@ -164,8 +165,8 @@ class Helper{
 
 
 class EssentialGridModel{
-  final String arg, proper;
-  final IconData icon;
+  final String arg, proper,path;
+  final Image image;
   bool checked = false;
-  EssentialGridModel(this.arg, this.proper, this.icon);
+  EssentialGridModel(this.arg, this.proper, this.image,this.path);
 }
