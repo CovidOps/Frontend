@@ -7,10 +7,10 @@ import '../custom_widgets/essential_grid.dart';
 
 class PatientEssentialsHome extends StatelessWidget {
 
-  void _onEssentialClick(BuildContext context, EssentialGridModel arg){
+  void _onEssentialClick(BuildContext context, EssentialGridModel model){
     Future.delayed(const Duration(milliseconds: 500), () {
       Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => PatientEssentialsList(arg))
+          MaterialPageRoute(builder: (context) => PatientEssentialsList(model))
       );
     });
   }

@@ -10,8 +10,8 @@ import 'package:http/http.dart' as http;
 import '../../helper.dart';
 
 class ProviderRequestsIndiv extends StatefulWidget {
-  final String arg;
-  ProviderRequestsIndiv(this.arg);
+  final EssentialGridModel model;
+  ProviderRequestsIndiv(this.model);
 
   @override
   _ProviderRequestsIndivState createState() => _ProviderRequestsIndivState();
@@ -21,9 +21,9 @@ class _ProviderRequestsIndivState extends State<ProviderRequestsIndiv> {
   Future<List<Patient>>? _future;
 
   //API Calls
-  Future<List<Patient>> _fetchList(String arg) async{
+  Future<List<Patient>> _fetchList() async{
     final response = await http.get(
-      Uri.https(Helper.BASE_URL, "request/provider/${Helper.getId()}/$arg"),
+      Uri.https(Helper.BASE_URL, "request/provider/${Helper.getId()}/${widget.model.arg}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -53,13 +53,13 @@ class _ProviderRequestsIndivState extends State<ProviderRequestsIndiv> {
   @override
   void initState() {
     super.initState();
-    _future = _fetchList(widget.arg);
+    _future = _fetchList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.arg),),
+      appBar: AppBar(title: Text(widget.model.proper),),
         body: FutureBuilder<List<Patient>>(
           future: _future,
           builder: (context, snapshot){

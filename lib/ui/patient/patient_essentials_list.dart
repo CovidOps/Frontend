@@ -10,8 +10,8 @@ import 'package:http/http.dart' as http;
 import '../../helper.dart';
 
 class PatientEssentialsList extends StatefulWidget {
-  final EssentialGridModel arg;
-  PatientEssentialsList(this.arg);
+  final EssentialGridModel model;
+  PatientEssentialsList(this.model);
 
   @override
   _PatientEssentialsListState createState() => _PatientEssentialsListState();
@@ -41,7 +41,7 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
 
   void _createRequest({required String providerId, required String providerName, required String providerPhone}) async{
     final response = await http.post(
-      Uri.https(Helper.BASE_URL, "request/${widget.arg.arg}"),
+      Uri.https(Helper.BASE_URL, "request/${widget.model.arg}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -52,7 +52,7 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
         'patientAddress': Helper.getAddress(),
         'area': Helper.getArea(),
 
-        'essential': widget.arg.arg,
+        'essential': widget.model.arg,
         'coordinates': [Helper.getLongitude(), Helper.getLatitude()],
 
         'providerName': providerName,
@@ -78,14 +78,14 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
   @override
   void initState() {
     super.initState();
-    _future = _fetchList(widget.arg.arg);
+    _future = _fetchList(widget.model.arg);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.arg.proper),
+        title: Text(widget.model.proper),
       ),
       body: FutureBuilder<List<Provider>>(
         future: _future,

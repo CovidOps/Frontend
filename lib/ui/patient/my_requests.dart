@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
+import 'package:covigenix/ui/custom_widgets/dialog.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
@@ -106,30 +107,11 @@ class _MyRequestsState extends State<MyRequests> {
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Confirm Delete'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Are you sure you want to delete this?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Delete'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _deleteRequest(reqId);
-              },
-            ),
-          ],
+        return CustomDialog(
+          title: "Confirm Delete",
+          body: "Are you sure you want to delete this request?",
+          yesTitle: "Delete",
+          yesFunction: () => _deleteRequest(reqId),
         );
       },
     );
