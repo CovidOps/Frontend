@@ -110,6 +110,8 @@ class _AudioState extends State<Audio> {
   void predictAudio() async{
     var tempDir = await getTemporaryDirectory();
     var fout = File('${tempDir.path}/${Helper.getId()}.wav');
+    var len = await fout.length();
+    print(len);
 
     Uri uri = Uri.https(Helper.MODEL_BASE_URL, "audio");
     final request = http.MultipartRequest('POST', uri)
