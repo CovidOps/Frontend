@@ -43,6 +43,7 @@ import 'package:flutter/material.dart';
                     Container(
                       margin: EdgeInsets.all(20.0),
                       padding: EdgeInsets.all(12.0),
+
                       child: Text("अस्वीकरण",style: TextStyle(color:Colors.black,fontSize:34,fontWeight:FontWeight.bold),),
                     ),
                     Container(
