@@ -125,10 +125,10 @@ class Helper{
   }
 
   static final List<EssentialGridModel> essentialsList = [
-    EssentialGridModel("remdesivir", "Remdesivir",Image.asset("assets/images/Remdevisir.jpg"),"assets/images/Remdevisir.jpg"),
-    EssentialGridModel("oxygen", "Medical Oxygen",Image.asset("assets/images/Oxygen.jpg"),"assets/images/Oxygen.jpg"),
+    EssentialGridModel("remdesivir", "Remdesivir",Image.asset("assets/images/remedivir.jpg"),"assets/images/remedivir.jpg"),
+    EssentialGridModel("oxygen", "Medical Oxygen",Image.asset("assets/images/oxygen_tank.jpg"),"assets/images/oxygen_tank.jpg"),
     EssentialGridModel("plasma", "Plasma",Image.asset("assets/images/PLasma.jpg"),"assets/images/PLasma.jpg"),
-    EssentialGridModel("fabiflu","Fabiflu",Image.asset("assets/images/Remdevisir.jpg"),"assets/images/Remdevisir.jpg")
+    EssentialGridModel("fabiflu","Fabiflu",Image.asset("assets/images/fabliflu.png"),"assets/images/fabiflu.jpg")
   ];
 
   static List<Patient> sortListPatient(List<Patient> arg){

@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   geolocator: ^7.0.3
+  ticket_card:
   fluttertoast: ^8.0.6
   # shared_preferences: ^2.0.5
   # localstorage: 3.0.1+4
@@ -63,8 +64,15 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/Oxygen.jpg
+    - assets/images/cough.png
+    - assets/images/remedivir.jpg
+    - assets/images/oxygen_tank.jpg
+    - assets/images/fabiflu.jpg
+    - assets/images/xray.jpg
     - assets/images/Plasma.jpg
     - assets/images/Remdevisir.jpg
+    - assets/images/logo.png
+    - assets/images/fabiflu.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

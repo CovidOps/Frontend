@@ -25,8 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 margin: EdgeInsets.only(top: 60),
                 child: Center(
+
                   child: Text(
-                    'Please provide your phone number',
+                    'Please provide your Phone Number',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
                 ),
