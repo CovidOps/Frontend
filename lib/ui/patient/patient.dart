@@ -17,12 +17,13 @@ class PatientHome extends StatefulWidget {
 class _PatientHomeState extends State<PatientHome> {
 
   int navIndex = 0;
+  String titleArg = "Prediction";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('Patient'),
+          title: Center(child: Text(titleArg, style: TextStyle(fontSize: 24),)),
           actions: <Widget>[
             Builder(
               builder: (BuildContext context) {
@@ -46,6 +47,18 @@ class _PatientHomeState extends State<PatientHome> {
       drawer: Sidenav(navIndex, (int index) {
         setState(() {
           navIndex = index;
+          switch(index){
+            case 0: titleArg = "Prediction";
+            break;
+            case 1: titleArg = "Provider";
+            break;
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6: titleArg = "CovidOps";
+            break;
+          }
         });
       }),
 
