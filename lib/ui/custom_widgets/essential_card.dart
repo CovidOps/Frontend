@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:covigenix/helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class EssentialCard extends StatelessWidget {
   final EssentialGridModel model;
@@ -15,14 +16,14 @@ class EssentialCard extends StatelessWidget {
       child: Card(
 
         color: Colors.black26,
+
         child: Center(child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+
+          crossAxisAlignment:CrossAxisAlignment.center,
 
           children: [
 
-            Image.asset( model.path, fit:BoxFit.fill),
-
-            Text(model.proper)
+            Image.asset( model.path, fit:BoxFit.fitHeight),
           ],
         ),),
       ),

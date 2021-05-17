@@ -49,6 +49,7 @@ class _PatientHomeState extends State<PatientHome> {
           switch (navIndex) {
             case 0: return Prediction();
             case 1: return PatientServices();
+
             //case 2: //Navigator pop
               //return Container();
           }
@@ -78,6 +79,7 @@ class Sidenav extends StatelessWidget {
 
           //Divider(color: Colors.grey.shade400,),
 
+
           _navItem(context, Icons.add_alert, 'Prediction',
             onTap: () {_navItemClicked(context, 0);},
             selected: selectedIndex==0
@@ -88,6 +90,26 @@ class Sidenav extends StatelessWidget {
           _navItem(context, Icons.apps, 'Services',
               onTap: () {_navItemClicked(context, 1);},
               selected: selectedIndex==1
+          ),
+          _navItem(context, Icons.app_settings_alt_rounded, 'Disclaimer',
+              onTap: () {_navItemClicked(context, 2);},
+              selected: selectedIndex==2
+          ),
+          _navItem(context, Icons.article_outlined, 'Acceptable Use of Policy',
+              onTap: () {_navItemClicked(context, 3);},
+              selected: selectedIndex==3
+          ),
+          _navItem(context, Icons.assignment_outlined, 'Terms and Conditions',
+              onTap: () {_navItemClicked(context, 4);},
+              selected: selectedIndex==4
+          ),
+          _navItem(context, Icons.lock, 'Privacy Policy',
+              onTap: () {_navItemClicked(context, 5);},
+              selected: selectedIndex==5
+          ),
+          _navItem(context, Icons.perm_phone_msg_rounded, 'Contact Us',
+              onTap: () {_navItemClicked(context, 6);},
+              selected: selectedIndex==6
           ),
 
           //Divider(color: Colors.grey.shade400,),

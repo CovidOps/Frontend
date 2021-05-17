@@ -29,10 +29,12 @@ class _ImagePageState extends State<ImagePage> {
     });
   }
 
-  void _upload() async{
+
+  void _upload() async {
     Uri uri = Uri.http(Helper.MODEL_BASE_URL, "upload");
     final request = http.MultipartRequest('POST', uri)
-    ..files.add(await http.MultipartFile.fromPath('image', _image!.path, filename: Helper.getId()));
+      ..files.add(await http.MultipartFile.fromPath(
+          'image', _image!.path, filename: Helper.getId()));
 
     final response = await request.send();
 
@@ -41,28 +43,42 @@ class _ImagePageState extends State<ImagePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Expanded(
-            child: _image == null
-                ? Text('No image selected.')
-                : (kIsWeb) ? Image.network(_image!.path)
-                : Image.file(File(_image!.path))
+    return new Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/xray.jpg"),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.6), BlendMode.dstATop),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-                onPressed: _pickImage,
-                child: Text('Select Image'),
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  padding: EdgeInsets.all(16),
-                ),
-            ),
-          ),
-        ],
-      ),
-    );
+
+        ),
+    //     child: Column(
+    //       children: [
+    //         Expanded(
+    //             child: _image == null
+    //                 ? Text('No image selected.')
+    //                 : (kIsWeb) ? Image.network(_image!.path)
+    //                 : Image.file(File(_image!.path))
+    //         ),
+    //         Padding(
+    //           padding: const EdgeInsets.all(16.0),
+    //           child: ElevatedButton(
+    //             onPressed: _pickImage,
+    //             child: Text('Select Image'),
+    //             style: ElevatedButton.styleFrom(
+    //               primary: Theme
+    //                   .of(context)
+    //                   .primaryColor,
+    //               padding: EdgeInsets.all(16),
+    //             ),
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+        ),
+     );
   }
 }
+
