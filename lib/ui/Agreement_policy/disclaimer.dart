@@ -22,7 +22,8 @@ import 'package:flutter/material.dart';
                       title:Text("CovidOps",style : TextStyle(fontSize:45.0)),
 
                ),
-              body: Column(
+              body: SingleChildScrollView(
+                child:Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children:<Widget>[
                     Container(
@@ -71,6 +72,7 @@ import 'package:flutter/material.dart';
                   ]
               ),
 
+            )
             );
         }
      }
