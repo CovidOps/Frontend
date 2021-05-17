@@ -35,7 +35,7 @@ class MyTextPage extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.all(20.0),
                   padding: EdgeInsets.all(12.0),
-                  child: Text('''This acceptable use policy "("Policy") sets forth the general guidelines and acceptable and prohibited uses of the "CovidOps" mobile application ("Mobile Application" or "Service") and any of its related products and services (collectively, "Services"). This Policy is a legally binding agreement between you ("User", "you" or "your") and this Mobile Application developer ("Operator", "we", "us" or "our").By accessing and using the Mobile Application and Services, you acknowledge that you have read, understood, and agree to be bound by the terms of this Agreement. If you are entering into this Agreement on behalf of a business or other legal entity, you represent that you have the authority to bind such entity to this Agreement, in which case the terms "User", "you" or "your" shall refer to such entity. If you do not have such authority, or if you do not agree with the terms of this Agreement, you must not accept this Agreement and may not access and use the Mobile Application and Services. You acknowledge that this Agreement is a contract between you and the Operator, even though it is electronic and is not physically signed by you, and it governs your use of the Mobile Application and Services.''',
+                  child: Text('''This privacy policy ("Policy") describes how the personally identifiable information ("Personal Information") you may provide in the "CovidOps" mobile application ("Mobile Application" or "Service") and any of its related products and services (collectively, "Services") is collected, protected and used. It also describes the choices available to you regarding our use of your Personal Information and how you can access and update this information. This Policy is a legally binding agreement between you ("User", "you" or "your") and this Mobile Application developer ("Operator", "we", "us" or "our"). By accessing and using the Mobile Application and Services, you acknowledge that you have read, understood, and agree to be bound by the terms of this Policy. This Policy does not apply to the practices of companies that we do not own or control, or to individuals that we do not employ or manage''',
                     maxLines: 20,
                     textAlign: TextAlign.left,
                     style: TextStyle(color:Colors.black,fontSize:26),),
@@ -170,21 +170,7 @@ class MyTextPage extends StatelessWidget {
                     textAlign:TextAlign.left,
                     style: TextStyle(color:Colors.black,fontSize:26),),
                 ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.all(20.0),
-                  padding: EdgeInsets.all(12.0),
-                  child: Text("Retention of information",style: TextStyle(color:Colors.black,fontSize:34,fontWeight:FontWeight.bold),textAlign:TextAlign.left),
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.all(20.0),
-                  padding: EdgeInsets.all(12.0),
-                  child: Text("We will retain and use your Personal Information for the period necessary to comply with our legal obligations, resolve disputes, and enforce our agreements unless a longer retention period is required or permitted by law. We may use any aggregated data derived from or incorporating your Personal Information after you update or delete it, but not in a manner that would identify you personally. Once the retention period expires, Personal Information shall be deleted. Therefore, the right to access, the right to erasure, the right to rectification and the right to data portability cannot be enforced after the expiration of the retention period.",
-                    maxLines: 20,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color:Colors.black,fontSize:26),),
-                ),
+
 
                 Container(
                   alignment: Alignment.centerLeft,
@@ -201,6 +187,22 @@ class MyTextPage extends StatelessWidget {
                     textAlign: TextAlign.left,
                     style: TextStyle(color:Colors.black,fontSize:26),),
                 ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(12.0),
+                  child: Text("Transfer of information",style: TextStyle(color:Colors.black,fontSize:34,fontWeight:FontWeight.bold),textAlign:TextAlign.left),
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(12.0),
+                  child: Text('''Depending on your location, data transfers may involve transferring and storing your information in a country other than your own. You are entitled to learn about the legal basis of information transfers to a country outside the European Union or to any international organization governed by public international law or set up by two or more countries, such as the UN, and about the security measures taken by us to safeguard your information. If any such transfer takes place, you can find out more by checking the relevant sections of this Policy or inquire with us using the information provided in the contact section.''',
+                    maxLines: 20,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(color:Colors.black,fontSize:26),),
+                ),
+
                 Container(
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.all(20.0),
@@ -231,6 +233,20 @@ class MyTextPage extends StatelessWidget {
                     textAlign: TextAlign.left,
                     style: TextStyle(color:Colors.black,fontSize:26),),
                 ),
+                Container(
+
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.all(18.0),
+                  child: Text('''  1.  You have the right to request access to your Personal Information that we store and have the ability to access your Personal Information.
+  2.  You have the right to request that we correct any Personal Information you believe is inaccurate. You also have the right to request us to complete the Personal Information you believe is incomplete.
+  3.  You have the right to request the erase your Personal Information under certain conditions of this Policy. You have the right to object to our processing of your Personal Information
+  4.  You have the right to seek restrictions on the processing of your Personal Information. When you restrict the processing of your Personal Information, we may store it but will not process it further.
+  5.  You have the right to be provided with a copy of the information we have on you in a structured, machine- readable and commonly used format.
+  6.  You also have the right to withdraw your consent at any time where the Operator relied on your consent to process your Personal Information.''',
+                    maxLines: 20,
+                    textAlign:TextAlign.left,
+                    style: TextStyle(color:Colors.black,fontSize:26),),
+                ),
 
                 // Extra
                 Container(
@@ -258,15 +274,6 @@ class MyTextPage extends StatelessWidget {
                   margin: EdgeInsets.all(20.0),
                   padding: EdgeInsets.all(12.0),
                   child: Text('''In addition to the rights as explained in this Policy, California residents who provide Personal Information (as defined in the statute) to obtain products or services for personal, family, or household use are entitled to request and obtain from us, once a calendar year, information about the Personal Information we shared, if any, with other businesses for marketing uses. If applicable, this information would include the categories of Personal Information and the names and addresses of those businesses with which we shared such personal information for the immediately prior calendar year (e.g., requests made in the current year will receive information about the prior year). To obtain this information please contact us''',
-                    maxLines: 20,
-                    textAlign: TextAlign.left,
-                    style: TextStyle(color:Colors.black,fontSize:26),),
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.all(20.0),
-                  padding: EdgeInsets.all(12.0),
-                  child: Text('''You acknowledge that you have read this Policy and agree to all its terms and conditions. By accessing and using the Mobile Application and Services you agree to be bound by this Policy. If you do not agree to abide by the terms of this Policy, you are not authorized to access or use the Mobile Application and Services. This acceptable use policy was created with the acceptable use policy generator.''',
                     maxLines: 20,
                     textAlign: TextAlign.left,
                     style: TextStyle(color:Colors.black,fontSize:26),),
