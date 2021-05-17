@@ -19,6 +19,8 @@ class Helper{
   static const String ID = "id", NAME = "name", PHONE = "phone", AREA = "area", LATITUDE = "latitude", LONGITUDE = "longitude", ADDRESS = "address";
   static const String LS_KEY = "Local.json", USER = "User";
 
+  static const double textSize = 16, headSize = 24;
+
   static int getLoginStatus(){
     return (GetStorage().read(USER) as Map<String, dynamic>? ?? Map<String, dynamic>())[LOGIN_STATUS] ?? -1;
     //return new LocalStorage(LS_KEY).getItem(LOGIN_STATUS) ?? -1;

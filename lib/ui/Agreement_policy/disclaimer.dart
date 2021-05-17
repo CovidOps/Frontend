@@ -1,28 +1,21 @@
 
+import 'package:covigenix/ui/Agreement_policy/acc_use_policy.dart';
 import 'package:flutter/material.dart';
+
+import '../../helper.dart';
 
 
   class disclaimer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-  return MaterialApp(
-         theme: ThemeData(
-              primarySwatch: Colors.green,
-          ),
-             home: MyTextPage()
-            );
-          }
-     }
+    @override
+    Widget build(BuildContext context) {
+      return MyTextPage();
+    }
+  }
+
   class MyTextPage extends StatelessWidget {
   @override
      Widget build(BuildContext context) {
-            return Scaffold(
-                  appBar: AppBar(
-                      centerTitle: true,
-                      title:Text("CovidOps",style : TextStyle(fontSize:45.0)),
-
-               ),
-              body: SingleChildScrollView(
+            return SingleChildScrollView(
                 child:Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children:<Widget>[
@@ -30,7 +23,7 @@ import 'package:flutter/material.dart';
                       margin: EdgeInsets.all(20.0),
                       padding: EdgeInsets.all(12.0),
 
-                      child: Text("Disclaimer",style: TextStyle(color:Colors.black,fontSize:34,fontWeight:FontWeight.bold),),
+                      child: Text("Disclaimer",style: TextStyle(color:Colors.black,fontSize:Helper.headSize,fontWeight:FontWeight.bold),),
                     ),
                     Container(
                       margin: EdgeInsets.all(20.0),
@@ -39,13 +32,13 @@ import 'package:flutter/material.dart';
                           "Persons using the data within for medical purposes should not rely solely on the accuracy of the data herein. While the data may be updated periodically, users should talk to their healthcare professional for the latest information."
                           "Any and all liability arising directly or indirectly from the use of this application is hereby disclaimed. The information herein is provided “as is” and without any warranty expressed or implied. All direct, indirect, special, incidental, consequential or punitive damages arising from any use of this application or data contained herein is disclaimed or excluded.",
                            maxLines: 20,
-                          style: TextStyle(color:Colors.black,fontSize:26),),
+                          style: TextStyle(color:Colors.black,fontSize:Helper.textSize),),
                     ),
                     Container(
                       margin: EdgeInsets.all(20.0),
                       padding: EdgeInsets.all(12.0),
 
-                      child: Text("अस्वीकरण",style: TextStyle(color:Colors.black,fontSize:34,fontWeight:FontWeight.bold),),
+                      child: Text("अस्वीकरण",style: TextStyle(color:Colors.black,fontSize:Helper.headSize,fontWeight:FontWeight.bold),),
                     ),
                     Container(
                       margin: EdgeInsets.all(20.0),
@@ -54,7 +47,7 @@ import 'package:flutter/material.dart';
                           "चिकित्सा प्रयोजनों के लिए भीतर डेटा का उपयोग करने वाले व्यक्तियों को केवल यहां डेटा की सटीकता पर भरोसा नहीं करना चाहिए। हालांकि डेटा को समय-समय पर अपडेट किया जा सकता है, लेकिन उपयोगकर्ताओं को नवीनतम जानकारी के लिए अपने हेल्थकेयर पेशेवर से बात करनी चाहिए। "
                           "इस एप्लिकेशन के उपयोग से प्रत्यक्ष या अप्रत्यक्ष रूप से उत्पन्न होने वाली कोई भी और सभी देयता इसके द्वारा अस्वीकार कर दी गई है। यहां दी गई जानकारी जैसा है और बिना किसी वारंटी के व्यक्त या निहित है। इस आवेदन या यहां निहित डेटा के किसी भी उपयोग से उत्पन्न होने वाले सभी प्रत्यक्ष, अप्रत्यक्ष, विशेष, आकस्मिक, परिणामी या दंडात्मक क्षति को अस्वीकार या बाहर रखा गया है",
                         maxLines: 20,
-                        style: TextStyle(color:Colors.black,fontSize:26),),
+                        style: TextStyle(color:Colors.black,fontSize:Helper.textSize),),
                     ),
                     Container(
                       margin: EdgeInsets.all(20.0),
@@ -72,7 +65,6 @@ import 'package:flutter/material.dart';
                   ]
               ),
 
-            )
             );
         }
      }

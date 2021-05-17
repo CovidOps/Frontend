@@ -9,8 +9,7 @@ class contact_us extends StatefulWidget {
 class _contact_usState extends State<contact_us> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      body: Container(
+    return  Container(
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/contact.jpg"),
@@ -20,7 +19,6 @@ class _contact_usState extends State<contact_us> {
 
           ),
           child: null
-      ),
-    );
+      );
   }
 }

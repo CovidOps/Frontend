@@ -12,18 +12,16 @@ class EssentialCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Card(
-
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
         color: Colors.black26,
 
-        child: Center(child: Column(
-
-          crossAxisAlignment:CrossAxisAlignment.center,
-
-          children: [
-
-            Image.asset( model.path, fit:BoxFit.fitHeight),
-          ],
-        ),),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: Image.asset(model.path, fit:BoxFit.cover),
+        )
       ),
       onTap: () => onTap(context, model),
     );
