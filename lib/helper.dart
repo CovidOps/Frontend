@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:html';
 import 'package:covigenix/ui/model/community_post_model.dart';
 import 'package:covigenix/ui/model/patient_model.dart';
 import 'package:covigenix/ui/model/provider_model.dart';
