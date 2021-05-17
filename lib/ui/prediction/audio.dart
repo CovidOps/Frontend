@@ -1,9 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/model/prediction_response.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:http/http.dart' as http;
 
 typedef _Fn = void Function();
 
@@ -101,7 +106,26 @@ class _AudioState extends State<Audio> {
       setState(() {});
     });
   }
+//-----------------------------API----------------------------------------------
+  void predictAudio() async{
+    var tempDir = await getTemporaryDirectory();
+    var fout = File('${tempDir.path}/${Helper.getId()}.wav');
 
+    Uri uri = Uri.https(Helper.MODEL_BASE_URL, "audio");
+    final request = http.MultipartRequest('POST', uri)
+      ..files.add(await http.MultipartFile.fromPath(
+          'file', fout.path, filename: "${Helper.getId()}.wav"));
+
+    http.Response response = await http.Response.fromStream(await request.send());
+    print("response code ${response.statusCode}");
+    try{
+      print(response.body);
+      PredictionResponse res = PredictionResponse.fromJson(jsonDecode(response.body));
+      print('your prediction is ${res.prediction}');
+    }catch(Exception){
+
+    }
+  }
 // ----------------------------- UI --------------------------------------------
 
   _Fn? getRecorderFn() {
@@ -116,6 +140,14 @@ class _AudioState extends State<Audio> {
       return null;
     }
     return _mPlayer!.isStopped ? play : stopPlayer;
+  }
+
+  _Fn? submitFn(){
+    if (!_mPlayerIsInited || !_mplaybackReady || !_mRecorder!.isStopped || !_mPlayer!.isStopped) {
+      return null;
+    }
+
+    return (_mRecorder!.isStopped && _mPlayer!.isStopped)? predictAudio : () => {};
   }
 
   @override
@@ -176,6 +208,34 @@ class _AudioState extends State<Audio> {
             Text(_mPlayer!.isPlaying
                 ? 'Playback in progress'
                 : 'Player is stopped'),
+          ]),
+        ),
+        Container(
+          margin: const EdgeInsets.all(3),
+          padding: const EdgeInsets.all(3),
+          height: 80,
+          width: double.infinity,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Color(0xFFFAF0E6),
+            border: Border.all(
+              color: Colors.indigo,
+              width: 3,
+            ),
+          ),
+          child: Row(children: [
+            ElevatedButton(
+              onPressed: submitFn(),
+              //color: Colors.white,
+              //disabledColor: Colors.grey,
+              child: Text(_mPlayer!.isPlaying ? 'Wait' : 'Submit'),
+            ),
+            /*SizedBox(
+              width: 20,
+            ),
+            Text(_mPlayer!.isPlaying
+                ? 'Playback in progress'
+                : 'Player is stopped'),*/
           ]),
         ),
       ],
