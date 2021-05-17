@@ -23,6 +23,7 @@ environment:
 dependencies:
   geolocator: ^7.0.3
   ticket_card:
+  simple_animations: ^1.3.3
   fluttertoast: ^8.0.6
   # shared_preferences: ^2.0.5
   # localstorage: 3.0.1+4
@@ -45,8 +46,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  #flutter_launcher_icons: "^0.8.0"
+  # flutter_launcher_icons: ^0.8.0
 
 #flutter_icons:
 #    android: "launcher_icon"
@@ -70,6 +70,7 @@ flutter:
     - assets/images/fabiflu.jpg
     - assets/images/contact.jpg
     - assets/images/xray.jpg
+    - assets/images/otp.png
     - assets/images/PLasma.jpg
     - assets/images/Remdevisir.jpg
     - assets/images/logo.png

@@ -5,6 +5,7 @@ import 'package:covigenix/ui/patient/patient.dart';
 import 'package:covigenix/ui/patient/patient_register.dart';
 import 'package:covigenix/ui/provider/provider_register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:covigenix/ui/provider/provider.dart';
@@ -41,16 +42,31 @@ class _OTPScreenState extends State<OTPScreen> {
         title: Text('OTP Verification'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Container(
+            margin: EdgeInsets.all(20.0),
+            padding: EdgeInsets.all(12.0),
+
+            decoration: BoxDecoration(
+              image:DecorationImage(
+                image:AssetImage("assets/images/otp.png"),
+
+              ),
+            ),
+          ),
           Container(
             margin: EdgeInsets.only(top: 40),
             child: Center(
               child: Text(
-                'Verify +91-${widget.phone}',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+                ' Please Enter the 6 digit OTP sent to +91-${widget.phone}',
+                style: TextStyle(fontSize: 20),
+                textAlign: TextAlign.center,
               ),
             ),
           ),
+
           Padding(
             padding: const EdgeInsets.all(30.0),
             child: PinPut(

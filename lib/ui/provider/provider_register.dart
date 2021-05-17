@@ -87,7 +87,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
     if(response.statusCode == 200)
       return Response.fromJson(jsonDecode(response.body));
     else
-      throw Exception('Failed to create provider');
+      throw Exception('Failed to create Service provider');
   }
   @override
   Widget build(BuildContext context) {

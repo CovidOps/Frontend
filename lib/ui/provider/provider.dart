@@ -24,7 +24,7 @@ class _ProviderHomeState extends State<ProviderHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('Provider'),
+          title: Text('Service Provider'),
           actions: <Widget>[
             Builder(
               builder: (BuildContext context) {
