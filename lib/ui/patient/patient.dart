@@ -1,4 +1,9 @@
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/Agreement_policy/acc_use_policy.dart';
+import 'package:covigenix/ui/Agreement_policy/contact_us.dart';
+import 'package:covigenix/ui/Agreement_policy/disclaimer.dart';
+import 'package:covigenix/ui/Agreement_policy/privacy_policy%20.dart';
+import 'package:covigenix/ui/Agreement_policy/t%20_and_c.dart';
 import 'package:covigenix/ui/patient/patient_services.dart';
 import 'package:covigenix/ui/prediction/prediction.dart';
 import 'package:covigenix/ui/splash.dart';
@@ -49,6 +54,11 @@ class _PatientHomeState extends State<PatientHome> {
           switch (navIndex) {
             case 0: return Prediction();
             case 1: return PatientServices();
+            case 2: return disclaimer();
+            case 3: return acc_use_policy();
+            case 4: return t_and_c();
+            case 5: return privacy_policy();
+            case 6: return contact_us();
 
             //case 2: //Navigator pop
               //return Container();
@@ -76,9 +86,19 @@ class Sidenav extends StatelessWidget {
             padding: EdgeInsets.all(16.0),
             child: Text(Helper.appName, style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 21),)
           ),
+          DrawerHeader(
+              decoration: BoxDecoration(
+
+                  image: DecorationImage(
+                    scale:0.3,
+                    image: ExactAssetImage("assets/images/logo.png"),
+                    fit:BoxFit.fill,
+                  )
+              ),
+              child: null
+          ),
 
           //Divider(color: Colors.grey.shade400,),
-
 
           _navItem(context, Icons.add_alert, 'Prediction',
             onTap: () {_navItemClicked(context, 0);},
