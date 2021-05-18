@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="covigenix"
+        android:label="CovidOps"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/launcher_icon">
