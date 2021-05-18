@@ -53,7 +53,7 @@ class _OTPScreenState extends State<OTPScreen> {
             children: [
               Container(
                 height:170,
-                margin: EdgeInsets.all(20.0),
+                margin: EdgeInsets.all(10.0),
                 padding: EdgeInsets.all(12.0),
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -63,7 +63,7 @@ class _OTPScreenState extends State<OTPScreen> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 40),
+                margin: EdgeInsets.only(top: 25),
                 child: Center(
                   child: Text(
                     ' Please Enter the 6 digit OTP sent to +91-${widget.phone}',

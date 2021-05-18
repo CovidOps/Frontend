@@ -53,6 +53,17 @@ class _EditState extends State<Edit> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        Align(
+          alignment: Alignment.center,
+          child: Opacity(
+              opacity: 0.2,
+              child: Padding(
+                padding: const EdgeInsets.all(50.0),
+                child: ClipRRect(
+                    //borderRadius: BorderRadius.circular(30.0),
+                    child: Image.asset("assets/images/back2.png", fit: BoxFit.cover,)),
+              )),
+        ),
         Column(
             children: [
               Expanded(

@@ -19,7 +19,7 @@ class _AddCommunityState extends State<AddCommunity> {
 
   TextEditingController item = TextEditingController(), description = TextEditingController();
 
-  bool isLoading = true;
+  bool isLoading = false;
 
   void createPost(BuildContext context, String item, String details) async{
     setState(() {
@@ -129,6 +129,7 @@ class _AddCommunityState extends State<AddCommunity> {
                       hintText: "Description of item: place, amount, cost etc.",
                       contentPadding: EdgeInsets.all(16),
                     ),
+                    maxLength: 50,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Enter a valid description.";

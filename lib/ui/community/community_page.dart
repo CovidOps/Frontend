@@ -89,23 +89,38 @@ class _PageState extends State<Page> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<CommunityPost>>(
-      future: _futureList,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Stack(
-            children: [
-              ListScreen(
-                //TODO: Sort
-                list: Helper.sortCommunityPosts(snapshot.data!),
-                deletePost: _deleteRequest,
-              ),
-              (isLoading ? CustomProgressIndicator() : Container()),
-            ],
-          );
-        }
-        return CustomProgressIndicator();
-      },
+    return Stack(
+      children: [
+        Align(
+          alignment: Alignment.center,
+          child: Opacity(
+              opacity: 0.2,
+              child: Padding(
+                padding: const EdgeInsets.all(50.0),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30.0),
+                    child: Image.asset("assets/images/back3.png", fit: BoxFit.cover,)),
+              )),
+        ),
+        FutureBuilder<List<CommunityPost>>(
+          future: _futureList,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Stack(
+                children: [
+                  ListScreen(
+                    //TODO: Sort
+                    list: Helper.sortCommunityPosts(snapshot.data!),
+                    deletePost: _deleteRequest,
+                  ),
+                  (isLoading ? CustomProgressIndicator() : Container()),
+                ],
+              );
+            }
+            return CustomProgressIndicator();
+          },
+        ),
+      ],
     );
   }
 }
@@ -138,13 +153,18 @@ class ListScreen extends StatelessWidget {
                       RowWidget(Icons.business, "Area: ${list[index].area}"),
                       RowWidget(Icons.description, list[index].details),
                       //RowWidget(Icons.phone, "Phone: ${list[index].phone}"),
-                      (list[index].personId == ownId
-                          ? DeleteIcon(() => deletePost(list[index].postId))
-                          : Container()),
                     ],
                   ),
                 ),
-                CallIcon(list[index].phone),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CallIcon(list[index].phone),
+                    (list[index].personId == ownId
+                        ? DeleteIcon(() => deletePost(list[index].postId))
+                        : Container()),
+                  ],
+                ),
               ],
             ),
           );

@@ -64,7 +64,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
         return;
       }
       if(_checkbox==false){
-        Helper.goodToast("Please accept to Terms and Conditions");
+        Helper.goodToast("Please accept the Terms and Conditions");
         return;
       }
       createPatient(name.text, initialPhone, area.text, address.text, _currentPosition!.longitude, _currentPosition!.latitude);
@@ -211,7 +211,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
                 Container(
                   child: CheckboxListTile(
                     controlAffinity: ListTileControlAffinity.leading,
-                    title: Text('By Clicking, I accept all Terms and Conditions, Privacy Policies and Disclaimer'),
+                    title: Text('By clicking, I accept the Terms and Conditions, Privacy Policy and Disclaimer.'),
                     value: timeDilation != 1.0,
                     onChanged: (bool? value) {
                       _checkbox = !_checkbox;
