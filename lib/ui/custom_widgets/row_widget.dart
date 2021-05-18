@@ -10,7 +10,7 @@ class RowWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(3),
       child: Row(
-        children: [Icon(icon), Text(str)],
+        children: [Icon(icon), Expanded(child: Text(str))],
       ),
     );
   }

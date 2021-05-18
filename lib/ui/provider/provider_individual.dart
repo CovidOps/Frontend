@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:covigenix/ui/custom_widgets/call.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
@@ -96,21 +97,28 @@ class ListScreen extends StatelessWidget {
         itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            child: Row(
               children: [
-                RowWidget(Icons.account_circle, list[index].name),
-                RowWidget(Icons.business_outlined, list[index].area),
-                RowWidget(Icons.phone, list[index].phone),
-                RowWidget(Icons.api_rounded, list[index].address),
-                (list[index].address == "Not available"
-                    ? IconButton(
-                        icon: Icon(Icons.open_in_new),
-                        onPressed: () => getApproval(
-                          requestId: list[index].requestId,
-                        ),
-                    ) : Container()
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      RowWidget(Icons.account_circle, list[index].name),
+                      RowWidget(Icons.business_outlined, list[index].area),
+                      //RowWidget(Icons.phone, list[index].phone),
+                      RowWidget(Icons.api_rounded, list[index].address),
+                      (list[index].address == "Not available"
+                          ? IconButton(
+                              icon: Icon(Icons.open_in_new),
+                              onPressed: () => getApproval(
+                                requestId: list[index].requestId,
+                              ),
+                          ) : Container()
+                      ),
+                    ],
+                  ),
                 ),
+                CallIcon(list[index].phone),
               ],
             ),
           );

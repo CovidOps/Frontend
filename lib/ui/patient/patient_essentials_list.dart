@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:covigenix/ui/custom_widgets/call.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
@@ -140,36 +141,43 @@ class ListScreen extends StatelessWidget {
         itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            child: Row(
               children: [
-                RowWidget(Icons.account_circle, list[index].name),
-                RowWidget(Icons.business_outlined, list[index].area),
-                RowWidget(Icons.phone, list[index].phone),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Create Request'),
-                        Icon(Icons.open_in_new),
-                      ],
-                    ),
-                    onPressed: () => createRequest(
-                      providerId: list[index].providerId,
-                      providerPhone: list[index].phone,
-                      providerName: list[index].name,
-                    ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      RowWidget(Icons.account_circle, list[index].name),
+                      RowWidget(Icons.business_outlined, list[index].area),
+                      //RowWidget(Icons.phone, list[index].phone),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Create Request'),
+                              Icon(Icons.open_in_new),
+                            ],
+                          ),
+                          onPressed: () => createRequest(
+                            providerId: list[index].providerId,
+                            providerPhone: list[index].phone,
+                            providerName: list[index].name,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          onPressed: () => showMap(list[index].coordinates),
+                          child: Text('Open in Maps'),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () => showMap(list[index].coordinates),
-                    child: Text('Open in Maps'),
-                  ),
-                ),
+                CallIcon(list[index].phone),
               ],
             ),
           );

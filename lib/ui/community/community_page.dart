@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/custom_widgets/call.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
 import 'package:covigenix/ui/model/community_post_model.dart';
@@ -9,6 +10,7 @@ import 'package:http/http.dart' as http;
 
 class Page extends StatefulWidget {
   final int type;
+
   Page(this.type);
 
   @override
@@ -17,13 +19,14 @@ class Page extends StatefulWidget {
 
 class _PageState extends State<Page> {
   int type;
+
   _PageState(this.type);
 
   Future<List<CommunityPost>>? _futureList;
   bool isLoading = false;
 
   //API calls
-  Future<List<CommunityPost>> fetchList() async{
+  Future<List<CommunityPost>> fetchList() async {
     setState(() {
       isLoading = true;
     });
@@ -42,15 +45,15 @@ class _PageState extends State<Page> {
       isLoading = false;
     });
 
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       return ListResponse.fromJson(jsonDecode(response.body)).posts;
-    }else{
+    } else {
       Helper.goodToast('There was an error');
       throw Exception("Failed to fetch list");
     }
   }
 
-  void _deleteRequest(String reqId) async{
+  void _deleteRequest(String reqId) async {
     setState(() {
       isLoading = true;
     });
@@ -66,14 +69,14 @@ class _PageState extends State<Page> {
       isLoading = false;
     });
 
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
       Helper.goodToast(res.message);
 
       setState(() {
         _futureList = fetchList();
       });
-    }else{
+    } else {
       Helper.goodToast('There was an error');
     }
   }
@@ -88,8 +91,8 @@ class _PageState extends State<Page> {
   Widget build(BuildContext context) {
     return FutureBuilder<List<CommunityPost>>(
       future: _futureList,
-      builder: (context, snapshot){
-        if(snapshot.hasData){
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
           return Stack(
             children: [
               ListScreen(
@@ -97,7 +100,7 @@ class _PageState extends State<Page> {
                 list: Helper.sortCommunityPosts(snapshot.data!),
                 deletePost: _deleteRequest,
               ),
-              (isLoading?CustomProgressIndicator():Container()),
+              (isLoading ? CustomProgressIndicator() : Container()),
             ],
           );
         }
@@ -122,21 +125,29 @@ class ListScreen extends StatelessWidget {
         itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            child: Row(
               children: [
-                RowWidget(Icons.account_circle, "Name: ${list[index].name}"),
-                RowWidget(Icons.eco, "Item: ${list[index].item}"),
-                RowWidget(Icons.business, "Area: ${list[index].area}"),
-                RowWidget(Icons.description, list[index].details),
-                RowWidget(Icons.phone, "Phone: ${list[index].phone}"),
-                (list[index].personId == ownId ?
-                IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
-                  onPressed: () => deletePost(list[index].postId),
-                )
-                    : Container()
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      RowWidget(
+                          Icons.account_circle, "Name: ${list[index].name}"),
+                      RowWidget(Icons.eco, "Item: ${list[index].item}"),
+                      RowWidget(Icons.business, "Area: ${list[index].area}"),
+                      RowWidget(Icons.description, list[index].details),
+                      //RowWidget(Icons.phone, "Phone: ${list[index].phone}"),
+                      (list[index].personId == ownId
+                          ? IconButton(
+                              icon: Icon(Icons.delete, color: Colors.red),
+                              onPressed: () => deletePost(list[index].postId),
+                            )
+                          : Container()),
+                    ],
+                  ),
                 ),
+                CallIcon(list[index].phone),
               ],
             ),
           );
@@ -146,21 +157,22 @@ class ListScreen extends StatelessWidget {
   }
 }
 
-class ListResponse{
+class ListResponse {
   int code;
   String message;
   List<CommunityPost> posts;
 
-  ListResponse({required this.code, required this.message, required this.posts});
+  ListResponse(
+      {required this.code, required this.message, required this.posts});
 
-  factory ListResponse.fromJson(Map<String, dynamic> json){
+  factory ListResponse.fromJson(Map<String, dynamic> json) {
     Iterable posts = json["posts"];
     return ListResponse(
       code: json["code"],
       message: json["message"],
-      posts: posts.map<CommunityPost>((modelJson) => CommunityPost.fromJson(modelJson)).toList(),
+      posts: posts
+          .map<CommunityPost>((modelJson) => CommunityPost.fromJson(modelJson))
+          .toList(),
     );
   }
 }
-
-

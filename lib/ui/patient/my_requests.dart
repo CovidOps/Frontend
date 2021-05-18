@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
+import 'package:covigenix/ui/custom_widgets/call.dart';
 import 'package:covigenix/ui/custom_widgets/dialog.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
@@ -158,18 +159,26 @@ class ListScreen extends StatelessWidget {
         itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            child: Row(
               children: [
-                RowWidget(Icons.account_balance_rounded, "Provider: ${list[index].provider_name}"),
-                RowWidget(Icons.phone, "Phone: ${list[index].provider_phone}"),
-                RowWidget(Icons.eco, "Essential: ${list[index].essential}"),
-                IconButton(icon: Icon(Icons.delete, color: Colors.red,), onPressed: () => deleteRequest(list[index].id)),
-                (list[index].sought_approval && (!list[index].approved)
-                    ? ElevatedButton(
-                    onPressed: () => shareAddress(list[index].id),
-                    child: Text("Share Address"))
-                    : Container()),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      RowWidget(Icons.account_balance_rounded, "Provider: ${list[index].provider_name}"),
+                      //RowWidget(Icons.phone, "Phone: ${list[index].provider_phone}"),
+                      RowWidget(Icons.eco, "Essential: ${list[index].essential}"),
+                      IconButton(icon: Icon(Icons.delete, color: Colors.red,), onPressed: () => deleteRequest(list[index].id)),
+                      (list[index].sought_approval && (!list[index].approved)
+                          ? ElevatedButton(
+                          onPressed: () => shareAddress(list[index].id),
+                          child: Text("Share Address"))
+                          : Container()),
+                    ],
+                  ),
+                ),
+                CallIcon(list[index].provider_phone),
               ],
             ),
           );
