@@ -13,8 +13,8 @@ class _contact_usState extends State<contact_us> {
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage("assets/images/contact_us.png"),
-              fit: BoxFit.fill,
-              colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.6),BlendMode.dstATop),
+              fit: BoxFit.fitWidth,
+              //colorFilter: ColorFilter.mode(Colors.white.withOpacity(0),BlendMode.dstATop),
             ),
 
           ),

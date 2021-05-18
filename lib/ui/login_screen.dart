@@ -129,11 +129,11 @@ class _LoginScreenState extends State<LoginScreen>{
                         Container(
                           margin: EdgeInsets.all(20.0),
                           padding: EdgeInsets.all(12.0),
-
+                          height: 70,
                           decoration: BoxDecoration(
                             image:DecorationImage(
                               image:AssetImage("assets/images/logo.png",),
-
+                              fit: BoxFit.fitHeight
                             ),
                           ),
                         ),
