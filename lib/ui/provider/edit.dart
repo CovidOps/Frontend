@@ -65,12 +65,15 @@ class _EditState extends State<Edit> {
                     child: Image.asset("assets/images/back2.png", fit: BoxFit.cover,)),
               )),
         ),
+
         Column(
             children: [
               Expanded(
                 child: screen,
               ),
+
               CustomButton('Update', () => _editEssentials(context)),
+              SizedBox(height:50),
             ],
         ),
         (isLoading?CustomProgressIndicator():Container()),

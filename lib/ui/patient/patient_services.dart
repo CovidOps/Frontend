@@ -3,6 +3,7 @@ import 'package:covigenix/ui/patient/my_requests.dart';
 import 'package:covigenix/ui/patient/patient_essentials_home.dart';
 import 'package:covigenix/ui/patient/patient_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:motion_tab_bar/motiontabbar.dart';
 
 class PatientServices extends StatefulWidget {
 
@@ -33,29 +34,20 @@ class _PatientServicesState extends State<PatientServices> {
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'New',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Community',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'My Requests',
-          ),
-          /*BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle_outlined),
-            label: 'Profile',
-          ),*/
+      bottomNavigationBar: MotionTabBar(
+        labels: [
+          "Home","Community","My Requests"
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
+        initialSelectedTab: "Home",
+        tabIconColor: Colors.blue,
+        tabSelectedColor: Colors.yellow,
+        onTabItemSelected: (int value){
+          _onItemTapped(value);
+        },
+        icons: [
+          Icons.home,Icons.business,Icons.school
+        ],
+        textStyle: TextStyle(color: Colors.red),
       ),
     );
   }

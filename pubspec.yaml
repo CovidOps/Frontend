@@ -23,6 +23,7 @@ environment:
 dependencies:
   geolocator: ^7.0.3
   ticket_card:
+  motion_tab_bar: ^0.1.5
   simple_animations: ^1.3.3
   fluttertoast: ^8.0.6
   # shared_preferences: ^2.0.5
