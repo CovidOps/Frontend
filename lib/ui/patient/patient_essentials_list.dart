@@ -19,9 +19,13 @@ class PatientEssentialsList extends StatefulWidget {
 
 class _PatientEssentialsListState extends State<PatientEssentialsList> {
   Future<List<Provider>>? _future;
+  bool isLoading = false;
 
   //API Calls
   Future<List<Provider>> _fetchList(String arg) async{
+    setState(() {
+      isLoading = true;
+    });
     final response = await http.post(
       Uri.https(Helper.BASE_URL, "request/$arg/nearby"),
       headers: <String, String>{
@@ -32,6 +36,10 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
       }),
     );
 
+    setState(() {
+      isLoading = false;
+    });
+
     if(response.statusCode == 200){
       return ListResponse.fromJson(jsonDecode(response.body)).providers;
     }else{
@@ -40,6 +48,10 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
   }
 
   void _createRequest({required String providerId, required String providerName, required String providerPhone}) async{
+    setState(() {
+      isLoading = true;
+    });
+
     final response = await http.post(
       Uri.https(Helper.BASE_URL, "request/${widget.model.arg}"),
       headers: <String, String>{
@@ -61,8 +73,13 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
       }),
     );
 
+    setState(() {
+      isLoading = false;
+    });
     if(response.statusCode == 200){
       Helper.goodToast(GenericResponse.fromJson(jsonDecode(response.body)).message);
+    }else{
+      Helper.goodToast('There was an error');
     }
   }
 
@@ -91,10 +108,15 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
         future: _future,
         builder: (context, snapshot){
           if(snapshot.hasData){
-            return ListScreen(
-              list: Helper.sortListProvider(snapshot.data!),
-              createRequest: _createRequest,
-              showMap: _showMap,
+            return Stack(
+              children: [
+                ListScreen(
+                  list: Helper.sortListProvider(snapshot.data!),
+                  createRequest: _createRequest,
+                  showMap: _showMap,
+                ),
+                (isLoading?CustomProgressIndicator():Container()),
+              ],
             );
           }
           return CustomProgressIndicator();

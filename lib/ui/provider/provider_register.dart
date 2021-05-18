@@ -15,6 +15,7 @@ class RegisterProvider extends StatefulWidget {
 
 class _RegisterProviderState extends State<RegisterProvider> {
   final GlobalKey<FormState> _registerProviderKey = GlobalKey<FormState>();
+
   //final Geolocator geolocator = Geolocator();
   late String initialPhone, getLatitude, getLongitude;
   late Position? _currentPosition;
@@ -60,28 +61,35 @@ class _RegisterProviderState extends State<RegisterProvider> {
 
   void register(BuildContext context) {
     if (_registerProviderKey.currentState!.validate()) {
-      if(_currentPosition == null){
+      if (_currentPosition == null) {
         Helper.goodToast("Please obtain location.");
         return;
       }
       List<String> essentials = List<String>.empty(growable: true);
-      screen.status.forEach((key, value) {if(value == true) essentials.add(key);});
-      if(essentials.isEmpty){
+      screen.status.forEach((key, value) {
+        if (value == true) essentials.add(key);
+      });
+      if (essentials.isEmpty) {
         Helper.goodToast("Please select at least one essential.");
         return;
       }
 
-      createProvider(name.text, initialPhone, area.text, _currentPosition!.longitude, _currentPosition!.latitude);
+      createProvider(
+          name.text, initialPhone, area.text, _currentPosition!.longitude,
+          _currentPosition!.latitude);
     }
   }
 
-  void createProvider(String name, String phone, String area, double longi, double lati) async{
+  void createProvider(String name, String phone, String area, double longi,
+      double lati) async {
     setState(() {
       isLoading = true;
     });
 
     List<String> essentials = List<String>.empty(growable: true);
-    screen.status.forEach((key, value) {if(value == true) essentials.add(key);});
+    screen.status.forEach((key, value) {
+      if (value == true) essentials.add(key);
+    });
 
     final response = await http.post(
       Uri.https(Helper.BASE_URL, "provider/sign-up"),
@@ -92,7 +100,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
         'name': name,
         'phone': phone,
         'area': area,
-        'coordinates':[longi, lati],
+        'coordinates': [longi, lati],
         'essentials': essentials
       }),
     );
@@ -101,125 +109,136 @@ class _RegisterProviderState extends State<RegisterProvider> {
       isLoading = false;
     });
 
-    if(response.statusCode == 200) {
+    if (response.statusCode == 200) {
       Response res = Response.fromJson(jsonDecode(response.body));
       Helper.goodToast(res.message!);
-      if(res.code == 200){
+      if (res.code == 200) {
         goToProviderHome(context, res.id!);
       }
-    }else {
+    } else {
       throw Exception('Failed to create Service provider');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Register'),
-      ),
-      body: Form(
-        key: _registerProviderKey,
-        child: Stack(
+        appBar: AppBar(
+          title: Text('Register'),
+        ),
+        body: Stack(
           children: [
-            Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: TextFormField(
-                    controller: name,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "Name",
-                      contentPadding: EdgeInsets.all(16),
+            Form(
+              key: _registerProviderKey,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: TextFormField(
+                      controller: name,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "Name",
+                        contentPadding: EdgeInsets.all(16),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter a valid name.";
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Enter a valid name.";
-                      } else {
-                        return null;
-                      }
-                    },
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "Phone",
-                      contentPadding: EdgeInsets.all(16),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "Phone",
+                        contentPadding: EdgeInsets.all(16),
+                      ),
+                      enabled: false,
+                      initialValue: initialPhone,
                     ),
-                    enabled: false,
-                    initialValue: initialPhone,
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: TextFormField(
-                    controller: area,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "Area",
-                      contentPadding: EdgeInsets.all(16),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: TextFormField(
+                      controller: area,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "Area",
+                        contentPadding: EdgeInsets.all(16),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter a valid area.";
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Enter a valid area.";
-                      } else {
-                        return null;
-                      }
-                    },
                   ),
-                ),
-                Expanded(
-                  child: screen,
-                ),
-                Container(
-                  child: Text(
-                    getLatitude,
-                    style: TextStyle(fontSize: 16),
+                  Expanded(
+                    child: screen,
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                ),
-                Container(
-                  child: Text(
-                    getLongitude,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-                  child: ElevatedButton(
-                    child: Text('Get Location'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColor,
-                      padding: EdgeInsets.all(16),
+                  Container(
+                    child: Text(
+                      getLatitude,
+                      style: TextStyle(fontSize: 16),
                     ),
-                    onPressed: getLocation,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-                  child: ElevatedButton(
-                    child: Text('Register'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColor,
-                      padding: EdgeInsets.all(16),
+                  Container(
+                    child: Text(
+                      getLongitude,
+                      style: TextStyle(fontSize: 16),
                     ),
-                    onPressed: () {
-                      register(context);
-                    },
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   ),
-                ),
-              ],
+                  Container(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
+                    child: ElevatedButton(
+                      child: Text('Get Location'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Theme
+                            .of(context)
+                            .primaryColor,
+                        padding: EdgeInsets.all(16),
+                      ),
+                      onPressed: getLocation,
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
+                    child: ElevatedButton(
+                      child: Text('Register'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Theme
+                            .of(context)
+                            .primaryColor,
+                        padding: EdgeInsets.all(16),
+                      ),
+                      onPressed: () {
+                        register(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-            (isLoading?CustomProgressIndicator():Container()),
+            (isLoading ? CustomProgressIndicator() : Container()),
           ],
-        )
-      ),
+        ),
     );
   }
 
@@ -240,7 +259,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
   }
 }
 
-class Response{
+class Response {
   int code;
   String? message, id;
 
@@ -248,9 +267,9 @@ class Response{
 
   factory Response.fromJson(Map<String, dynamic> json){
     return Response(
-      code: json["code"],
-      message: json["message"],
-      id: json["id"]
+        code: json["code"],
+        message: json["message"],
+        id: json["id"]
     );
   }
 }

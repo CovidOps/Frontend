@@ -18,7 +18,6 @@ class _PatientProfileState extends State<PatientProfile> {
   late String initialPhone, initialName, initialArea, initialAddress;
   late String getLatitude, getLongitude;
   late Position _currentPosition;
-  Future<GenericResponse>? _future = null;
   bool isLoading = false;
 
   TextEditingController area = TextEditingController(), address = TextEditingController();
@@ -55,21 +54,19 @@ class _PatientProfileState extends State<PatientProfile> {
 
   void update(BuildContext context){
     if(_patientKey.currentState!.validate()){
-      setState(() {
-        isLoading = true;
-      });
-
       String ar = area.text;
       String ad = address.text;
       Helper.updateProfile(area: ar, address: ad);
 
-      setState(() {
-        _future = updatePatient(Helper.getId(), ar, ad, Helper.getLongitude(), Helper.getLatitude());
-      });
+      updatePatient(Helper.getId(), ar, ad, Helper.getLongitude(), Helper.getLatitude());
     }
   }
 
-  Future<GenericResponse> updatePatient(String id, String area, String address, double longi, double lati) async{
+  void updatePatient(String id, String area, String address, double longi, double lati) async{
+    setState(() {
+      isLoading = true;
+    });
+
     final response = await http.patch(
       Uri.https(Helper.BASE_URL, "patient/$id"),
       headers: <String, String>{
@@ -88,10 +85,11 @@ class _PatientProfileState extends State<PatientProfile> {
     if(response.statusCode == 200){
       GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
       Helper.goodToast(res.message);
-      return res;
     }
-    else
-      throw Exception('Failed to update patient');
+    else {
+      //throw Exception('Failed to update patient');
+      Helper.goodToast('There was an error');
+    }
   }
 
   @override

@@ -17,7 +17,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
   //final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   late String initialPhone, getLatitude, getLongitude;
   late Position? _currentPosition;
-  Future<Response>? _futureResponse = null;
+  bool isLoading = false;
 
   TextEditingController name = TextEditingController(),
       area = TextEditingController(),
@@ -34,6 +34,9 @@ class _RegisterPatientState extends State<RegisterPatient> {
   }
 
   void getLocation() {
+    setState(() {
+      isLoading = true;
+    });
     Geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
@@ -41,8 +44,13 @@ class _RegisterPatientState extends State<RegisterPatient> {
         _currentPosition = position;
         getLatitude = "Latitude: ${position.latitude}";
         getLongitude = "Longitude: ${position.longitude}";
+        isLoading = false;
       });
     }).catchError((e) {
+      setState(() {
+        isLoading = false;
+      });
+
       print(e);
     });
   }
@@ -53,21 +61,14 @@ class _RegisterPatientState extends State<RegisterPatient> {
         Helper.goodToast("Please obtain location.");
         return;
       }
-
-      /*String message = "Got data: ${name.text} $initialPhone ${area.text} ${address.text} [ ${_currentPosition!.longitude}, ${_currentPosition!.latitude} ]";
-      Helper.goodToast(message);
-
-      Helper.setProfile(
-
-      );*/
-
-      setState(() {
-        _futureResponse = createPatient(name.text, initialPhone, area.text, address.text, _currentPosition!.longitude, _currentPosition!.latitude);
-      });
+      createPatient(name.text, initialPhone, area.text, address.text, _currentPosition!.longitude, _currentPosition!.latitude);
     }
   }
 
-  Future<Response> createPatient(String name, String phone, String area, String address, double longi, double lati) async{
+  void createPatient(String name, String phone, String area, String address, double longi, double lati) async{
+    setState(() {
+      isLoading = true;
+    });
     final response = await http.post(
       Uri.https(Helper.BASE_URL, "patient/sign-up"),
       headers: <String, String>{
@@ -82,150 +83,152 @@ class _RegisterPatientState extends State<RegisterPatient> {
       }),
     );
 
-    if(response.statusCode == 200)
-      return Response.fromJson(jsonDecode(response.body));
-    else
+    setState(() {
+      isLoading = false;
+    });
+    if(response.statusCode == 200) {
+      Response res = Response.fromJson(jsonDecode(response.body));
+      Helper.goodToast(res.message!);
+      if(res.code == 200){
+        goToPatientHome(context, res.id!);
+      }
+    }else {
       throw Exception('Failed to create patient');
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Register'),
       ),
-      body: Form(
-        key: _registerPatientKey,
-        child: (_futureResponse == null)? ListView(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: TextFormField(
-                controller: name,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Name",
-                  contentPadding: EdgeInsets.all(16),
+      body: Stack(
+        children: [
+          Form(
+            key: _registerPatientKey,
+            child: ListView(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: TextFormField(
+                    controller: name,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Name",
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Enter a valid name.";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter a valid name.";
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Phone",
-                  contentPadding: EdgeInsets.all(16),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Phone",
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                    enabled: false,
+                    initialValue: initialPhone,
+                  ),
                 ),
-                enabled: false,
-                initialValue: initialPhone,
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: TextFormField(
-                controller: area,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Area",
-                  contentPadding: EdgeInsets.all(16),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: TextFormField(
+                    controller: area,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Area",
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Enter a valid area.";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter a valid area.";
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: TextFormField(
-                controller: address,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Address",
-                  contentPadding: EdgeInsets.all(16),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: TextFormField(
+                    controller: address,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Address",
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Enter a valid address.";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter a valid address.";
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-            ),
-            Container(
-              child: Text(
-                getLatitude,
-                style: TextStyle(fontSize: 16),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            ),
-            Container(
-              child: Text(
-                getLongitude,
-                style: TextStyle(fontSize: 16),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-              child: ElevatedButton(
-                child: Text('Get Location'),
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  padding: EdgeInsets.all(16),
+                Container(
+                  child: Text(
+                    getLatitude,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 ),
-                onPressed: getLocation,
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-              child: ElevatedButton(
-                child: Text('Register'),
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  padding: EdgeInsets.all(16),
+                Container(
+                  child: Text(
+                    getLongitude,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 ),
-                onPressed: () {
-                  register(context);
-                },
-              ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
+                  child: ElevatedButton(
+                    child: Text('Get Location'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).primaryColor,
+                      padding: EdgeInsets.all(16),
+                    ),
+                    onPressed: getLocation,
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
+                  child: ElevatedButton(
+                    child: Text('Register'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).primaryColor,
+                      padding: EdgeInsets.all(16),
+                    ),
+                    onPressed: () {
+                      register(context);
+                    },
+                  ),
+                ),
+              ],
             ),
-          ],
-        )
-            : FutureBuilder<Response>(
-          future: _futureResponse,
-          builder: (context, snapshot){
-            if(snapshot.hasData){
-              if(snapshot.data!.code == 200){
-                Helper.goodToast(snapshot.data!.message!);
-                goToPatientHome(context, snapshot);
-              }
-            }
-            return CustomProgressIndicator();
-          },
-        )
+          ),
+          (isLoading?CustomProgressIndicator():Container()),
+        ],
       ),
     );
   }
 
-  void goToPatientHome(BuildContext context, AsyncSnapshot<Response> snapshot) {
+  void goToPatientHome(BuildContext context, String id) {
     Future.delayed(const Duration(milliseconds: 500), () {
       Helper.setProfile(
           loginStatus: Helper.TYPE_PATIENT,
-          id: snapshot.data!.id!,
+          id: id,
           name: name.text,
           phone: initialPhone,
           area: area.text,

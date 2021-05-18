@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/model/prediction_response.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -23,6 +24,7 @@ class _AudioState extends State<Audio> {
   bool _mPlayerIsInited = false;
   bool _mRecorderIsInited = false;
   bool _mplaybackReady = false;
+  bool isLoading = false;
   String _mPath = '${Helper.getId()}.wav';
 
   @override
@@ -108,6 +110,9 @@ class _AudioState extends State<Audio> {
   }
 //-----------------------------API----------------------------------------------
   void predictAudio() async{
+    setState(() {
+      isLoading = true;
+    });
     var tempDir = await getTemporaryDirectory();
     var fout = File('${tempDir.path}/${Helper.getId()}.wav');
     var len = await fout.length();
@@ -120,12 +125,21 @@ class _AudioState extends State<Audio> {
 
     http.Response response = await http.Response.fromStream(await request.send());
     print("response code ${response.statusCode}");
+
+    setState(() {
+      isLoading = false;
+    });
+
     try{
       print(response.body);
       PredictionResponse res = PredictionResponse.fromJson(jsonDecode(response.body));
-      print('your prediction is ${res.prediction}');
+      if(res.status == 500){
+        Helper.goodToast('There was some error in prediction. Please try again later.');
+      }else{
+        Helper.goodToast('Your prediction: ${res.prediction}');
+      }
     }catch(Exception){
-
+      Helper.goodToast('There was an error');
     }
   }
 // ----------------------------- UI --------------------------------------------
@@ -154,92 +168,97 @@ class _AudioState extends State<Audio> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        Container(
-          margin: const EdgeInsets.all(3),
-          padding: const EdgeInsets.all(3),
-          height: 80,
-          width: double.infinity,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Color(0xFFFAF0E6),
-            border: Border.all(
-              color: Colors.indigo,
-              width: 3,
+        Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.all(3),
+              padding: const EdgeInsets.all(3),
+              height: 80,
+              width: double.infinity,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Color(0xFFFAF0E6),
+                border: Border.all(
+                  color: Colors.indigo,
+                  width: 3,
+                ),
+              ),
+              child: Row(children: [
+                ElevatedButton(
+                  onPressed: getRecorderFn(),
+                  //color: Colors.white,
+                  //disabledColor: Colors.grey,
+                  child: Text(_mRecorder!.isRecording ? 'Stop' : 'Record'),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(_mRecorder!.isRecording
+                    ? 'Recording in progress'
+                    : 'Recorder is stopped'),
+              ]),
             ),
-          ),
-          child: Row(children: [
-            ElevatedButton(
-              onPressed: getRecorderFn(),
-              //color: Colors.white,
-              //disabledColor: Colors.grey,
-              child: Text(_mRecorder!.isRecording ? 'Stop' : 'Record'),
+            Container(
+              margin: const EdgeInsets.all(3),
+              padding: const EdgeInsets.all(3),
+              height: 80,
+              width: double.infinity,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Color(0xFFFAF0E6),
+                border: Border.all(
+                  color: Colors.indigo,
+                  width: 3,
+                ),
+              ),
+              child: Row(children: [
+                ElevatedButton(
+                  onPressed: getPlaybackFn(),
+                  //color: Colors.white,
+                  //disabledColor: Colors.grey,
+                  child: Text(_mPlayer!.isPlaying ? 'Stop' : 'Play'),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(_mPlayer!.isPlaying
+                    ? 'Playback in progress'
+                    : 'Player is stopped'),
+              ]),
             ),
-            SizedBox(
-              width: 20,
+            Container(
+              margin: const EdgeInsets.all(3),
+              padding: const EdgeInsets.all(3),
+              height: 80,
+              width: double.infinity,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Color(0xFFFAF0E6),
+                border: Border.all(
+                  color: Colors.indigo,
+                  width: 3,
+                ),
+              ),
+              child: Row(children: [
+                ElevatedButton(
+                  onPressed: submitFn(),
+                  //color: Colors.white,
+                  //disabledColor: Colors.grey,
+                  child: Text(_mPlayer!.isPlaying ? 'Wait' : 'Submit'),
+                ),
+                /*SizedBox(
+                  width: 20,
+                ),
+                Text(_mPlayer!.isPlaying
+                    ? 'Playback in progress'
+                    : 'Player is stopped'),*/
+              ]),
             ),
-            Text(_mRecorder!.isRecording
-                ? 'Recording in progress'
-                : 'Recorder is stopped'),
-          ]),
+          ],
         ),
-        Container(
-          margin: const EdgeInsets.all(3),
-          padding: const EdgeInsets.all(3),
-          height: 80,
-          width: double.infinity,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Color(0xFFFAF0E6),
-            border: Border.all(
-              color: Colors.indigo,
-              width: 3,
-            ),
-          ),
-          child: Row(children: [
-            ElevatedButton(
-              onPressed: getPlaybackFn(),
-              //color: Colors.white,
-              //disabledColor: Colors.grey,
-              child: Text(_mPlayer!.isPlaying ? 'Stop' : 'Play'),
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            Text(_mPlayer!.isPlaying
-                ? 'Playback in progress'
-                : 'Player is stopped'),
-          ]),
-        ),
-        Container(
-          margin: const EdgeInsets.all(3),
-          padding: const EdgeInsets.all(3),
-          height: 80,
-          width: double.infinity,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Color(0xFFFAF0E6),
-            border: Border.all(
-              color: Colors.indigo,
-              width: 3,
-            ),
-          ),
-          child: Row(children: [
-            ElevatedButton(
-              onPressed: submitFn(),
-              //color: Colors.white,
-              //disabledColor: Colors.grey,
-              child: Text(_mPlayer!.isPlaying ? 'Wait' : 'Submit'),
-            ),
-            /*SizedBox(
-              width: 20,
-            ),
-            Text(_mPlayer!.isPlaying
-                ? 'Playback in progress'
-                : 'Player is stopped'),*/
-          ]),
-        ),
+        (isLoading?CustomProgressIndicator():Container()),
       ],
     );
   }

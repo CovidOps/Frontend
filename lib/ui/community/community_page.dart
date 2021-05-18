@@ -20,9 +20,13 @@ class _PageState extends State<Page> {
   _PageState(this.type);
 
   Future<List<CommunityPost>>? _futureList;
+  bool isLoading = false;
 
   //API calls
   Future<List<CommunityPost>> fetchList() async{
+    setState(() {
+      isLoading = true;
+    });
 
     final response = await http.post(
       Uri.https(Helper.BASE_URL, "community/$type/nearby"),
@@ -34,20 +38,33 @@ class _PageState extends State<Page> {
       }),
     );
 
+    setState(() {
+      isLoading = false;
+    });
+
     if(response.statusCode == 200){
       return ListResponse.fromJson(jsonDecode(response.body)).posts;
     }else{
+      Helper.goodToast('There was an error');
       throw Exception("Failed to fetch list");
     }
   }
 
   void _deleteRequest(String reqId) async{
+    setState(() {
+      isLoading = true;
+    });
+
     final response = await http.delete(
       Uri.https(Helper.BASE_URL, "community/$reqId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
+
+    setState(() {
+      isLoading = false;
+    });
 
     if(response.statusCode == 200){
       GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
@@ -56,6 +73,8 @@ class _PageState extends State<Page> {
       setState(() {
         _futureList = fetchList();
       });
+    }else{
+      Helper.goodToast('There was an error');
     }
   }
 
@@ -71,13 +90,17 @@ class _PageState extends State<Page> {
       future: _futureList,
       builder: (context, snapshot){
         if(snapshot.hasData){
-          return ListScreen(
-            //TODO: Sort
-            list: Helper.sortCommunityPosts(snapshot.data!),
-            deletePost: _deleteRequest,
+          return Stack(
+            children: [
+              ListScreen(
+                //TODO: Sort
+                list: Helper.sortCommunityPosts(snapshot.data!),
+                deletePost: _deleteRequest,
+              ),
+              (isLoading?CustomProgressIndicator():Container()),
+            ],
           );
         }
-
         return CustomProgressIndicator();
       },
     );
