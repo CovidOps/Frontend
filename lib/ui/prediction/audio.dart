@@ -170,93 +170,83 @@ class _AudioState extends State<Audio> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.all(3),
-              padding: const EdgeInsets.all(3),
-              height: 80,
-              width: double.infinity,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Color(0xFFFAF0E6),
-                border: Border.all(
-                  color: Colors.indigo,
-                  width: 3,
-                ),
-              ),
-              child: Row(children: [
-                ElevatedButton(
-                  onPressed: getRecorderFn(),
-                  //color: Colors.white,
-                  //disabledColor: Colors.grey,
-                  child: Text(_mRecorder!.isRecording ? 'Stop' : 'Record'),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Text(_mRecorder!.isRecording
-                    ? 'Recording in progress'
-                    : 'Recorder is stopped'),
-              ]),
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/cough.png"),
+              fit: BoxFit.fill,
+              colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4),BlendMode.dstATop),
             ),
-            Container(
-              margin: const EdgeInsets.all(3),
-              padding: const EdgeInsets.all(3),
-              height: 80,
-              width: double.infinity,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Color(0xFFFAF0E6),
-                border: Border.all(
-                  color: Colors.indigo,
-                  width: 3,
-                ),
+          ),
+          child: Column(
+            children: [
+              Expanded(child: Container(), flex: 1,),
+              Row(
+                children: [
+                  Expanded(child: Container(), flex: 1,),
+                  Container(
+                    margin: const EdgeInsets.all(3),
+                    padding: const EdgeInsets.all(3),
+                    height: 80,
+                    alignment: Alignment.center,
+                    /*decoration: BoxDecoration(
+                      color: Color(0xFFFAF0E6),
+                      border: Border.all(
+                        color: Colors.indigo,
+                        width: 3,
+                      ),
+                    ),*/
+                    child:ElevatedButton(
+                        onPressed: getRecorderFn(),
+                        //color: Colors.white,
+                        //disabledColor: Colors.grey,
+                        child: Text(_mRecorder!.isRecording ? 'Stop' : 'Record'),
+                      ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(3),
+                    padding: const EdgeInsets.all(3),
+                    height: 80,
+                    alignment: Alignment.center,
+                    /*decoration: BoxDecoration(
+                      color: Color(0xFFFAF0E6),
+                      border: Border.all(
+                        color: Colors.indigo,
+                        width: 3,
+                      ),
+                    ),*/
+                    child: ElevatedButton(
+                        onPressed: getPlaybackFn(),
+                        //color: Colors.white,
+                        //disabledColor: Colors.grey,
+                        child: Text(_mPlayer!.isPlaying ? 'Stop' : 'Play'),
+                      ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(3),
+                    padding: const EdgeInsets.all(3),
+                    height: 80,
+                    alignment: Alignment.center,
+                    /*decoration: BoxDecoration(
+                      color: Color(0xFFFAF0E6),
+                      border: Border.all(
+                        color: Colors.indigo,
+                        width: 3,
+                      ),
+                    ),*/
+                    child: ElevatedButton(
+                        onPressed: submitFn(),
+                        //color: Colors.white,
+                        //disabledColor: Colors.grey,
+                        child: Text(_mPlayer!.isPlaying ? 'Wait' : 'Submit'),
+                      ),
+                  ),
+                  Expanded(child: Container(), flex: 1,)
+                ],
               ),
-              child: Row(children: [
-                ElevatedButton(
-                  onPressed: getPlaybackFn(),
-                  //color: Colors.white,
-                  //disabledColor: Colors.grey,
-                  child: Text(_mPlayer!.isPlaying ? 'Stop' : 'Play'),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Text(_mPlayer!.isPlaying
-                    ? 'Playback in progress'
-                    : 'Player is stopped'),
-              ]),
-            ),
-            Container(
-              margin: const EdgeInsets.all(3),
-              padding: const EdgeInsets.all(3),
-              height: 80,
-              width: double.infinity,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Color(0xFFFAF0E6),
-                border: Border.all(
-                  color: Colors.indigo,
-                  width: 3,
-                ),
-              ),
-              child: Row(children: [
-                ElevatedButton(
-                  onPressed: submitFn(),
-                  //color: Colors.white,
-                  //disabledColor: Colors.grey,
-                  child: Text(_mPlayer!.isPlaying ? 'Wait' : 'Submit'),
-                ),
-                /*SizedBox(
-                  width: 20,
-                ),
-                Text(_mPlayer!.isPlaying
-                    ? 'Playback in progress'
-                    : 'Player is stopped'),*/
-              ]),
-            ),
-          ],
+              Expanded(child: Container(), flex: 1,)
+            ],
+          ),
         ),
         (isLoading?CustomProgressIndicator():Container()),
       ],

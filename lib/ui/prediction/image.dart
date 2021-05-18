@@ -71,8 +71,8 @@ class _ImagePageState extends State<ImagePage> {
         Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/xray.jpg"),
-                fit: BoxFit.cover,
+                image: AssetImage("assets/images/imagepred.jpg"),
+                fit: BoxFit.fill,
                 colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.6), BlendMode.dstATop),
               ),
