@@ -215,6 +215,18 @@ class _RegisterPatientState extends State<RegisterPatient> {
                     },
                   ),
                 ),
+                Container(
+                  height:70,
+                  margin: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(12.0),
+                  decoration: BoxDecoration(
+                    image:DecorationImage(
+                        image:AssetImage("assets/images/logo.png",),
+                        fit:BoxFit.fitHeight
+
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

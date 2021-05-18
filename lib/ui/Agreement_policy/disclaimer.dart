@@ -50,12 +50,14 @@ import '../../helper.dart';
                         style: TextStyle(color:Colors.black,fontSize:Helper.textSize),),
                     ),
                     Container(
+                      height:50,
                       margin: EdgeInsets.all(20.0),
                       padding: EdgeInsets.all(12.0),
 
                       decoration: BoxDecoration(
                            image:DecorationImage(
                            image:AssetImage("assets/images/logo.png"),
+                             fit:BoxFit.fitHeight
 
                     ),
                       ),
