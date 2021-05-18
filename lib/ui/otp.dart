@@ -52,6 +52,7 @@ class _OTPScreenState extends State<OTPScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
+
                 margin: EdgeInsets.all(20.0),
                 padding: EdgeInsets.all(12.0),
                 decoration: BoxDecoration(

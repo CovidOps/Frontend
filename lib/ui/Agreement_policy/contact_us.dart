@@ -12,9 +12,9 @@ class _contact_usState extends State<contact_us> {
     return  Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/contact.jpg"),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.6),BlendMode.dstATop),
+              image: AssetImage("assets/images/contact_us.png"),
+              fit: BoxFit.fill,
+              colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.6),BlendMode.dstATop),
             ),
 
           ),
