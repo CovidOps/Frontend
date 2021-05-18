@@ -1,3 +1,4 @@
+import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/login_screen.dart';
 import 'package:covigenix/ui/patient/patient.dart';
 import 'package:covigenix/ui/provider/provider.dart';
@@ -12,7 +13,7 @@ class Splash extends StatelessWidget {
         builder: (context, snapshot){
           int status = Helper.getLoginStatus();
 
-          Future.delayed(const Duration(milliseconds: 2000), () {
+          Future.delayed(const Duration(milliseconds: 500), () {
             if(status == Helper.TYPE_LOGOUT){
               //Go to login
               Navigator.of(context).pushReplacement(
@@ -30,9 +31,8 @@ class Splash extends StatelessWidget {
               );
             }
           });
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          //return CustomProgressIndicator();
+          return Container();
         }
       ),
     );
