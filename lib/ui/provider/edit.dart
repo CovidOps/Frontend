@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/custom_widgets/essential_checklist.dart';
+import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -14,8 +15,13 @@ class Edit extends StatefulWidget {
 class _EditState extends State<Edit> {
 
   EssentialChecklist screen = EssentialChecklist();
+  bool isLoading = false;
 
   void _editEssentials(BuildContext context) async{
+    setState(() {
+      isLoading = true;
+    });
+
     List<String> essentials = List<String>.empty(growable: true);
     screen.status.forEach((key, value) {if(value == true) essentials.add(key);});
 
@@ -29,36 +35,47 @@ class _EditState extends State<Edit> {
       }),
     );
 
+    setState(() {
+      isLoading = false;
+    });
+
     if(response.statusCode == 200){
       GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
       Helper.goodToast(res.message);
     }
-    else
-      throw Exception('Failed to update provider');
+    else {
+      //throw Exception('Failed to update provider');
+      Helper.goodToast('There was some error');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: [
-          Expanded(
-            child: screen,
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-            child: ElevatedButton(
-              child: Text('Update'),
-              style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).primaryColor,
-                padding: EdgeInsets.all(16),
+    return Stack(
+      children: [
+        Column(
+            children: [
+              Expanded(
+                child: screen,
               ),
-              onPressed: () {
-                _editEssentials(context);
-              },
-            ),
-          ),
-        ],
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
+                child: ElevatedButton(
+                  child: Text('Update'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColor,
+                    padding: EdgeInsets.all(16),
+                  ),
+                  onPressed: () {
+                    _editEssentials(context);
+                  },
+                ),
+              ),
+            ],
+        ),
+        (isLoading?CustomProgressIndicator():Container()),
+      ],
     );
   }
 }

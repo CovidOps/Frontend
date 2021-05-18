@@ -19,6 +19,7 @@ class ProviderRequestsIndiv extends StatefulWidget {
 
 class _ProviderRequestsIndivState extends State<ProviderRequestsIndiv> {
   Future<List<Patient>>? _future;
+  bool isLoading = false;
 
   //API Calls
   Future<List<Patient>> _fetchList() async{
@@ -64,9 +65,14 @@ class _ProviderRequestsIndivState extends State<ProviderRequestsIndiv> {
           future: _future,
           builder: (context, snapshot){
             if(snapshot.hasData){
-              return ListScreen(
-                list: Helper.sortListPatient(snapshot.data!),
-                getApproval: _getApproval,
+              return Stack(
+                children: [
+                  ListScreen(
+                    list: Helper.sortListPatient(snapshot.data!),
+                    getApproval: _getApproval,
+                  ),
+                  (isLoading?CustomProgressIndicator():Container()),
+                ],
               );
             }
             return CustomProgressIndicator();

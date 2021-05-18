@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen>{
                         child:TextButton(
                           onPressed: (){
                                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                   builder: (context) => OTPScreen(_controller.text, Helper.TYPE_PATIENT)));
+                                   builder: (context) => OTPScreen(_controller.text, Helper.TYPE_PROVIDER)));
                           },
                           child: Text("Login as a Service Provider", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                         )

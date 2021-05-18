@@ -18,7 +18,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
   //final Geolocator geolocator = Geolocator();
   late String initialPhone, getLatitude, getLongitude;
   late Position? _currentPosition;
-  Future<Response>? _futureResponse = null;
+  bool isLoading = false;
   EssentialChecklist screen = EssentialChecklist();
 
   TextEditingController name = TextEditingController(),
@@ -34,6 +34,10 @@ class _RegisterProviderState extends State<RegisterProvider> {
   }
 
   void getLocation() {
+    setState(() {
+      isLoading = true;
+    });
+
     Geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
@@ -41,8 +45,15 @@ class _RegisterProviderState extends State<RegisterProvider> {
         _currentPosition = position;
         getLatitude = "Latitude: ${position.latitude}";
         getLongitude = "Longitude: ${position.longitude}";
+
+        setState(() {
+          isLoading = false;
+        });
       });
     }).catchError((e) {
+      setState(() {
+        isLoading = false;
+      });
       print(e);
     });
   }
@@ -60,13 +71,15 @@ class _RegisterProviderState extends State<RegisterProvider> {
         return;
       }
 
-      setState(() {
-        _futureResponse = createProvider(name.text, initialPhone, area.text, _currentPosition!.longitude, _currentPosition!.latitude);
-      });
+      createProvider(name.text, initialPhone, area.text, _currentPosition!.longitude, _currentPosition!.latitude);
     }
   }
 
-  Future<Response> createProvider(String name, String phone, String area, double longi, double lati) async{
+  void createProvider(String name, String phone, String area, double longi, double lati) async{
+    setState(() {
+      isLoading = true;
+    });
+
     List<String> essentials = List<String>.empty(growable: true);
     screen.status.forEach((key, value) {if(value == true) essentials.add(key);});
 
@@ -84,10 +97,19 @@ class _RegisterProviderState extends State<RegisterProvider> {
       }),
     );
 
-    if(response.statusCode == 200)
-      return Response.fromJson(jsonDecode(response.body));
-    else
+    setState(() {
+      isLoading = false;
+    });
+
+    if(response.statusCode == 200) {
+      Response res = Response.fromJson(jsonDecode(response.body));
+      Helper.goodToast(res.message!);
+      if(res.code == 200){
+        goToProviderHome(context, res.id!);
+      }
+    }else {
       throw Exception('Failed to create Service provider');
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -97,122 +119,115 @@ class _RegisterProviderState extends State<RegisterProvider> {
       ),
       body: Form(
         key: _registerProviderKey,
-        child: (_futureResponse == null)? Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: TextFormField(
-                controller: name,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Name",
-                  contentPadding: EdgeInsets.all(16),
+        child: Stack(
+          children: [
+            Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: TextFormField(
+                    controller: name,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Name",
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Enter a valid name.";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter a valid name.";
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Phone",
-                  contentPadding: EdgeInsets.all(16),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Phone",
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                    enabled: false,
+                    initialValue: initialPhone,
+                  ),
                 ),
-                enabled: false,
-                initialValue: initialPhone,
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: TextFormField(
-                controller: area,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Area",
-                  contentPadding: EdgeInsets.all(16),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: TextFormField(
+                    controller: area,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Area",
+                      contentPadding: EdgeInsets.all(16),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Enter a valid area.";
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Enter a valid area.";
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-            ),
-            Expanded(
-              child: screen,
-            ),
-            Container(
-              child: Text(
-                getLatitude,
-                style: TextStyle(fontSize: 16),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            ),
-            Container(
-              child: Text(
-                getLongitude,
-                style: TextStyle(fontSize: 16),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-              child: ElevatedButton(
-                child: Text('Get Location'),
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  padding: EdgeInsets.all(16),
+                Expanded(
+                  child: screen,
                 ),
-                onPressed: getLocation,
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-              child: ElevatedButton(
-                child: Text('Register'),
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  padding: EdgeInsets.all(16),
+                Container(
+                  child: Text(
+                    getLatitude,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 ),
-                onPressed: () {
-                  register(context);
-                },
-              ),
+                Container(
+                  child: Text(
+                    getLongitude,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
+                  child: ElevatedButton(
+                    child: Text('Get Location'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).primaryColor,
+                      padding: EdgeInsets.all(16),
+                    ),
+                    onPressed: getLocation,
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
+                  child: ElevatedButton(
+                    child: Text('Register'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).primaryColor,
+                      padding: EdgeInsets.all(16),
+                    ),
+                    onPressed: () {
+                      register(context);
+                    },
+                  ),
+                ),
+              ],
             ),
+            (isLoading?CustomProgressIndicator():Container()),
           ],
-        )
-            : FutureBuilder<Response>(
-          future: _futureResponse,
-          builder: (context, snapshot){
-            if(snapshot.hasData){
-              if(snapshot.data!.code == 200){
-                Helper.goodToast(snapshot.data!.message!);
-                goToProviderHome(context, snapshot);
-              }
-            }
-            return CustomProgressIndicator();
-          },
         )
       ),
     );
   }
 
-  void goToProviderHome(BuildContext context, AsyncSnapshot<Response> snapshot) {
+  void goToProviderHome(BuildContext context, String id) {
     Future.delayed(const Duration(milliseconds: 500), () {
       Helper.setProfile(
           loginStatus: Helper.TYPE_PATIENT,
-          id: snapshot.data!.id!,
+          id: id,
           name: name.text,
           phone: initialPhone,
           area: area.text,
