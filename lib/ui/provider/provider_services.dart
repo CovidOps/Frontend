@@ -74,16 +74,16 @@ class _ProviderServicesState extends State<ProviderServices> {
       // ),
       bottomNavigationBar: MotionTabBar(
         labels: [
-          "Home","Community","My Requests"
+          "My Requests","Community","Essentials"
         ],
-        initialSelectedTab: "Home",
+        initialSelectedTab: "My Requests",
         tabIconColor: Colors.blue,
         tabSelectedColor: Colors.yellow,
         onTabItemSelected: (int value){
                _onItemTapped(value);
         },
         icons: [
-          Icons.home,Icons.business,Icons.school
+          Icons.request_page,Icons.people,Icons.local_hospital
         ],
         textStyle: TextStyle(color: Colors.red),
       ),
