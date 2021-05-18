@@ -9,8 +9,8 @@ class Prediction extends StatefulWidget {
 
 class _PredictionState extends State<Prediction> {
   final List<Tab> _tabs = <Tab>[
-    Tab(text: "Image"),
-    Tab(text: "Audio"),
+    Tab(text: "X-Ray Image"),
+    Tab(text: "Cough Audio"),
   ];
 
   @override

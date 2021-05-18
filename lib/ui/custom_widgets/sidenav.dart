@@ -59,7 +59,10 @@ class SideNav extends StatelessWidget {
               onTap: () {_navItemClicked(context, 6);},
               selected: selectedIndex==6
           ),
-
+          _navItem(context, Icons.person_outline, 'My Profile',
+              onTap: () {_navItemClicked(context, 7);},
+              selected: selectedIndex==7
+          ),
           //Divider(color: Colors.grey.shade400,),
 
           /*_navItem(context, Icons.logout, 'Log Out',

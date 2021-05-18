@@ -93,11 +93,11 @@ class _AudioState extends State<Audio> {
         _mPlayer!.isStopped);
     _mPlayer!
         .startPlayer(
-        fromURI: _mPath,
-        //codec: kIsWeb ? Codec.opusWebM : Codec.aacADTS,
-        whenFinished: () {
-          setState(() {});
-        })
+            fromURI: _mPath,
+            //codec: kIsWeb ? Codec.opusWebM : Codec.aacADTS,
+            whenFinished: () {
+              setState(() {});
+            })
         .then((value) {
       setState(() {});
     });
@@ -108,8 +108,9 @@ class _AudioState extends State<Audio> {
       setState(() {});
     });
   }
+
 //-----------------------------API----------------------------------------------
-  void predictAudio() async{
+  void predictAudio() async {
     setState(() {
       isLoading = true;
     });
@@ -120,28 +121,32 @@ class _AudioState extends State<Audio> {
 
     Uri uri = Uri.https(Helper.MODEL_BASE_URL, "audio");
     final request = http.MultipartRequest('POST', uri)
-      ..files.add(await http.MultipartFile.fromPath(
-          'file', fout.path, filename: "${Helper.getId()}.wav"));
+      ..files.add(await http.MultipartFile.fromPath('file', fout.path,
+          filename: "${Helper.getId()}.wav"));
 
-    http.Response response = await http.Response.fromStream(await request.send());
+    http.Response response =
+        await http.Response.fromStream(await request.send());
     print("response code ${response.statusCode}");
 
     setState(() {
       isLoading = false;
     });
 
-    try{
+    try {
       print(response.body);
-      PredictionResponse res = PredictionResponse.fromJson(jsonDecode(response.body));
-      if(res.status == 500){
-        Helper.goodToast('There was some error in prediction. Please try again later.');
-      }else{
+      PredictionResponse res =
+          PredictionResponse.fromJson(jsonDecode(response.body));
+      if (res.status == 500) {
+        Helper.goodToast(
+            'There was some error in prediction. Please try again later.');
+      } else {
         Helper.goodToast('Your prediction: ${res.prediction}');
       }
-    }catch(Exception){
+    } catch (Exception) {
       Helper.goodToast('There was an error');
     }
   }
+
 // ----------------------------- UI --------------------------------------------
 
   _Fn? getRecorderFn() {
@@ -158,19 +163,27 @@ class _AudioState extends State<Audio> {
     return _mPlayer!.isStopped ? play : stopPlayer;
   }
 
-  _Fn? submitFn(){
-    if (!_mPlayerIsInited || !_mplaybackReady || !_mRecorder!.isStopped || !_mPlayer!.isStopped) {
+  _Fn? submitFn() {
+    if (!_mPlayerIsInited ||
+        !_mplaybackReady ||
+        !_mRecorder!.isStopped ||
+        !_mPlayer!.isStopped) {
       return null;
     }
 
-    return (_mRecorder!.isStopped && _mPlayer!.isStopped)? predictAudio : () => {};
+    return (_mRecorder!.isStopped && _mPlayer!.isStopped)
+        ? predictAudio
+        : () => {};
   }
 
   @override
   Widget build(BuildContext context) {
     Widget buttonGroup = Row(
       children: [
-        Expanded(child: Container(), flex: 1,),
+        Expanded(
+          child: Container(),
+          flex: 1,
+        ),
         Container(
           margin: const EdgeInsets.all(3),
           padding: const EdgeInsets.all(3),
@@ -183,7 +196,7 @@ class _AudioState extends State<Audio> {
                         width: 3,
                       ),
                     ),*/
-          child:ElevatedButton(
+          child: ElevatedButton(
             onPressed: getRecorderFn(),
             //color: Colors.white,
             //disabledColor: Colors.grey,
@@ -228,7 +241,10 @@ class _AudioState extends State<Audio> {
             child: Text(_mPlayer!.isPlaying ? 'Wait' : 'Submit'),
           ),
         ),
-        Expanded(child: Container(), flex: 1,)
+        Expanded(
+          child: Container(),
+          flex: 1,
+        )
       ],
     );
     return Stack(
@@ -238,18 +254,31 @@ class _AudioState extends State<Audio> {
             image: DecorationImage(
               image: AssetImage("assets/images/audio.png"),
               fit: BoxFit.fill,
-              colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4),BlendMode.dstATop),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.4), BlendMode.dstATop),
             ),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Opacity(opacity: 0.0, child: buttonGroup),
-              Opacity(opacity: 1.0, child: buttonGroup),
+              Opacity(opacity: 0.0, child: Container()),
+              Opacity(
+                  opacity: 1.0,
+                  child: Column(
+                    children: [
+                      buttonGroup,
+                      Container(
+                        width: 270,
+                          child: Text(
+                              "Instructions:\n1. Upload your cough audio for a minimum duration of 3 seconds.\n2. Please ensure you are in a quiet surrounding.\n3. DON'T upload ambiguous audio as it may produce wrong results.",
+                            style: TextStyle(fontSize: 12),
+                          ))
+                    ],
+                  )),
             ],
           ),
         ),
-        (isLoading?CustomProgressIndicator():Container()),
+        (isLoading ? CustomProgressIndicator() : Container()),
       ],
     );
   }

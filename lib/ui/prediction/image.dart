@@ -20,6 +20,34 @@ class _ImagePageState extends State<ImagePage> {
   final picker = ImagePicker();
   bool isLoading = false;
 
+  void showInstructions() async{
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Instructions"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text("1. Please ensure high image quality.\n2. Have a plain background behind the image.\n3. Capture/Upload photo without flashlight"),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _pickImage();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future _pickImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     print("Picked a file!");
@@ -89,7 +117,7 @@ class _ImagePageState extends State<ImagePage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: CustomButton('Select Image', _pickImage),
+                  child: CustomButton('Select Image', showInstructions),
                   ),
               ],
             ),

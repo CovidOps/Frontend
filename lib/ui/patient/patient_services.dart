@@ -18,7 +18,7 @@ class _PatientServicesState extends State<PatientServices> {
     PatientEssentialsHome(),
     Community(),
     MyRequests(),
-    PatientProfile(),
+    //PatientProfile(),
   ];
 
   void _onItemTapped(int index) {
@@ -48,10 +48,10 @@ class _PatientServicesState extends State<PatientServices> {
             icon: Icon(Icons.school),
             label: 'My Requests',
           ),
-          BottomNavigationBarItem(
+          /*BottomNavigationBarItem(
             icon: Icon(Icons.account_circle_outlined),
             label: 'Profile',
-          ),
+          ),*/
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],

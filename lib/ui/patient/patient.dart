@@ -5,6 +5,7 @@ import 'package:covigenix/ui/Agreement_policy/disclaimer.dart';
 import 'package:covigenix/ui/Agreement_policy/privacy_policy%20.dart';
 import 'package:covigenix/ui/Agreement_policy/t%20_and_c.dart';
 import 'package:covigenix/ui/custom_widgets/sidenav.dart';
+import 'package:covigenix/ui/patient/patient_profile.dart';
 import 'package:covigenix/ui/patient/patient_services.dart';
 import 'package:covigenix/ui/prediction/prediction.dart';
 import 'package:covigenix/ui/splash.dart';
@@ -59,6 +60,8 @@ class _PatientHomeState extends State<PatientHome> {
             case 5:
             case 6: titleArg = "CovidOps";
             break;
+            case 7: titleArg = "My Profile";
+            break;
           }
         });
       }),
@@ -73,9 +76,7 @@ class _PatientHomeState extends State<PatientHome> {
             case 4: return t_and_c();
             case 5: return privacy_policy();
             case 6: return contact_us();
-
-            //case 2: //Navigator pop
-              //return Container();
+            case 7: return PatientProfile();
           }
           return Container();
         },

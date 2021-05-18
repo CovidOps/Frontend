@@ -38,6 +38,10 @@ class _PatientProfileState extends State<PatientProfile> {
   }
 
   void getLocation() {
+    setState(() {
+      isLoading = true;
+    });
+
     Geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
@@ -47,9 +51,16 @@ class _PatientProfileState extends State<PatientProfile> {
         getLongitude = "Longitude: ${_currentPosition.longitude}";
 
         Helper.setCoordinates(_currentPosition.longitude, _currentPosition.latitude);
+
+        setState(() {
+          isLoading = false;
+        });
       });
     }).catchError((e) {
       print(e);
+      setState(() {
+        isLoading = false;
+      });
     });
   }
 

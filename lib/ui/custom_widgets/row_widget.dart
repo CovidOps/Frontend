@@ -11,14 +11,8 @@ class RowWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(3),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /*Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(icon),
-              Expanded(child: Container(), flex: 1,)
-            ],
-          ),*/
           Icon(icon),
           Expanded(child: Text(str))
         ],

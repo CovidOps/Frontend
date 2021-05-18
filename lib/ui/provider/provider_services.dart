@@ -22,7 +22,7 @@ class _ProviderServicesState extends State<ProviderServices> {
     ProviderRequestsList(),
     Community(),
     Edit(),
-    ProviderProfile(),
+    //ProviderProfile(),
   ];
 
   void _onItemTapped(int index) {
@@ -53,10 +53,10 @@ class _ProviderServicesState extends State<ProviderServices> {
             label: 'Essentials',
             backgroundColor: Colors.black
           ),
-          BottomNavigationBarItem(
+          /*BottomNavigationBarItem(
             icon: Icon(Icons.account_circle_outlined),
             label: 'Profile',
-          ),
+          ),*/
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
