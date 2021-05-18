@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
-import 'package:covigenix/ui/custom_widgets/call.dart';
 import 'package:covigenix/ui/custom_widgets/dialog.dart';
+import 'package:covigenix/ui/custom_widgets/icons.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
@@ -169,7 +169,7 @@ class ListScreen extends StatelessWidget {
                       RowWidget(Icons.account_balance_rounded, "Provider: ${list[index].provider_name}"),
                       //RowWidget(Icons.phone, "Phone: ${list[index].provider_phone}"),
                       RowWidget(Icons.eco, "Essential: ${list[index].essential}"),
-                      IconButton(icon: Icon(Icons.delete, color: Colors.red,), onPressed: () => deleteRequest(list[index].id)),
+                      DeleteIcon(() => deleteRequest(list[index].id)),
                       (list[index].sought_approval && (!list[index].approved)
                           ? ElevatedButton(
                           onPressed: () => shareAddress(list[index].id),

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:covigenix/ui/custom_widgets/call.dart';
+import 'package:covigenix/ui/custom_widgets/icons.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:covigenix/ui/model/generic_response.dart';

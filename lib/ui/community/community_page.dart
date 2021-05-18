@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:covigenix/helper.dart';
-import 'package:covigenix/ui/custom_widgets/call.dart';
+import 'package:covigenix/ui/custom_widgets/icons.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
 import 'package:covigenix/ui/model/community_post_model.dart';
@@ -139,10 +139,7 @@ class ListScreen extends StatelessWidget {
                       RowWidget(Icons.description, list[index].details),
                       //RowWidget(Icons.phone, "Phone: ${list[index].phone}"),
                       (list[index].personId == ownId
-                          ? IconButton(
-                              icon: Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => deletePost(list[index].postId),
-                            )
+                          ? DeleteIcon(() => deletePost(list[index].postId))
                           : Container()),
                     ],
                   ),

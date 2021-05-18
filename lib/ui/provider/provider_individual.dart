@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:covigenix/ui/custom_widgets/call.dart';
+import 'package:covigenix/ui/custom_widgets/icons.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
