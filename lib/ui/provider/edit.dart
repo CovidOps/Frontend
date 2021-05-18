@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/custom_widgets/button.dart';
 import 'package:covigenix/ui/custom_widgets/essential_checklist.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
@@ -69,7 +70,8 @@ class _EditState extends State<Edit> {
               Expanded(
                 child: screen,
               ),
-              Container(
+              CustomButton('Update', () => _editEssentials(context)),
+              /*Container(
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
                 child: ElevatedButton(
@@ -82,7 +84,7 @@ class _EditState extends State<Edit> {
                     _editEssentials(context);
                   },
                 ),
-              ),
+              ),*/
             ],
         ),
         (isLoading?CustomProgressIndicator():Container()),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:covigenix/ui/custom_widgets/button.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/patient/patient.dart';
 import 'package:covigenix/helper.dart';
@@ -182,32 +183,8 @@ class _RegisterPatientState extends State<RegisterPatient> {
                     },
                   ),
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-                  child: ElevatedButton(
-                    child: Text('Get Location'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColor,
-                      padding: EdgeInsets.all(16),
-                    ),
-                    onPressed: getLocation,
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-                  child: ElevatedButton(
-                    child: Text('Register'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColor,
-                      padding: EdgeInsets.all(16),
-                    ),
-                    onPressed: () {
-                      register(context);
-                    },
-                  ),
-                ),
+                CustomButton('Get Location', getLocation),
+                CustomButton('Register', () => register(context)),
                 Container(
                   child: CheckboxListTile(
                     controlAffinity: ListTileControlAffinity.leading,
@@ -217,7 +194,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
                       _checkbox = !_checkbox;
                       setState(() { timeDilation = value! ? 10.0 : 1.0; });
                     },
-                    secondary: const Icon(Icons.hourglass_empty),
+                    //secondary: const Icon(Icons.hourglass_empty),
                   ),
                 ),
 

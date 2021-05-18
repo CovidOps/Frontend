@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/custom_widgets/button.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
 import 'package:flutter/material.dart';
@@ -162,32 +163,8 @@ class _ProviderProfileState extends State<ProviderProfile> {
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 ),*/
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-                  child: ElevatedButton(
-                    child: Text('Get Location'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColor,
-                      padding: EdgeInsets.all(16),
-                    ),
-                    onPressed: getLocation,
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-                  child: ElevatedButton(
-                    child: Text('Update'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColor,
-                      padding: EdgeInsets.all(16),
-                    ),
-                    onPressed: () {
-                      update(context);
-                    },
-                  ),
-                ),
+                CustomButton('Get Location', getLocation),
+                CustomButton('Update', () => update(context)),
                 Container(
                   height:70,
                   margin: EdgeInsets.all(20.0),

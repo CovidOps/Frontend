@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/custom_widgets/button.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/model/prediction_response.dart';
 import 'package:flutter/material.dart';
@@ -88,17 +89,8 @@ class _ImagePageState extends State<ImagePage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: ElevatedButton(
-                    onPressed: _pickImage,
-                    child: Text('Select Image'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme
-                          .of(context)
-                          .primaryColor,
-                      padding: EdgeInsets.all(16),
-                    ),
+                  child: CustomButton('Select Image', _pickImage),
                   ),
-                ),
               ],
             ),
          ),

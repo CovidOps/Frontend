@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/custom_widgets/button.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
 import 'package:flutter/material.dart';
@@ -139,26 +140,15 @@ class _AddCommunityState extends State<AddCommunity> {
                     },
                   ),
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-                  child: ElevatedButton(
-                    child: Text('Create Post'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColor,
-                      padding: EdgeInsets.all(16),
-                    ),
-                    onPressed: () {
-                      if(_patientKey.currentState!.validate()){
-                        createPost(
-                          context,
-                          item.text,
-                          description.text,
-                        );
-                      }
-                    },
-                  ),
-                ),
+                CustomButton('Create Post', () {
+                  if(_patientKey.currentState!.validate()){
+                    createPost(
+                      context,
+                      item.text,
+                      description.text,
+                    );
+                  }
+                }),
               ],
             ),
           ),

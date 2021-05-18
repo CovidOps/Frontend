@@ -184,7 +184,7 @@ class ListScreen extends StatelessWidget {
                       RowWidget(Icons.account_balance_rounded, "Provider: ${list[index].provider_name}"),
                       //RowWidget(Icons.phone, "Phone: ${list[index].provider_phone}"),
                       RowWidget(Icons.eco, "Essential: ${list[index].essential}"),
-                      DeleteIcon(() => deleteRequest(list[index].id)),
+
                       (list[index].sought_approval && (!list[index].approved)
                           ? ElevatedButton(
                           onPressed: () => shareAddress(list[index].id),
@@ -193,7 +193,13 @@ class ListScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                CallIcon(list[index].provider_phone),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CallIcon(list[index].provider_phone),
+                    DeleteIcon(() => deleteRequest(list[index].id)),
+                  ],
+                ),
               ],
             ),
           );

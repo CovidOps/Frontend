@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/custom_widgets/button.dart';
 import 'package:covigenix/ui/custom_widgets/essential_checklist.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/provider/provider.dart';
@@ -138,7 +139,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
           children: [
             Form(
               key: _registerProviderKey,
-              child: Column(
+              child: ListView(
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -188,17 +189,18 @@ class _RegisterProviderState extends State<RegisterProvider> {
                       },
                     ),
                   ),
-                  Expanded(
+                  Container(
                     child: screen,
                   ),
-                  Container(
+                  CustomButton('Get Location', getLocation),
+                  /*Container(
                     width: MediaQuery
                         .of(context)
                         .size
                         .width,
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
                     child: ElevatedButton(
-                      child: Text('Get Location'),
+                      child: Text('Get Location', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                       style: ElevatedButton.styleFrom(
                         primary: Theme
                             .of(context)
@@ -207,8 +209,9 @@ class _RegisterProviderState extends State<RegisterProvider> {
                       ),
                       onPressed: getLocation,
                     ),
-                  ),
-                  Container(
+                  ),*/
+                  CustomButton('Register', () => register(context)),
+                  /*Container(
                     width: MediaQuery
                         .of(context)
                         .size
@@ -226,7 +229,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
                         register(context);
                       },
                     ),
-                  ),
+                  ),*/
                   Container(
                     child: CheckboxListTile(
                       controlAffinity: ListTileControlAffinity.leading,
@@ -236,7 +239,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
                         _checkbox = !_checkbox;
                         setState(() { timeDilation = value! ? 10.0 : 1.0; });
                       },
-                      secondary: const Icon(Icons.hourglass_empty),
+                      //secondary: const Icon(Icons.hourglass_empty),
                     ),
                   ),
                   Container(

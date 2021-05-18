@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class RowWidget extends StatelessWidget {
   final IconData icon;
   final String str;
@@ -10,7 +11,17 @@ class RowWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(3),
       child: Row(
-        children: [Icon(icon), Expanded(child: Text(str))],
+        children: [
+          /*Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(icon),
+              Expanded(child: Container(), flex: 1,)
+            ],
+          ),*/
+          Icon(icon),
+          Expanded(child: Text(str))
+        ],
       ),
     );
   }

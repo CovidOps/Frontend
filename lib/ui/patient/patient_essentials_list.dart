@@ -168,13 +168,7 @@ class ListScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('Create Request'),
-                              Icon(Icons.open_in_new),
-                            ],
-                          ),
+                          child: Text('Create Request'),
                           onPressed: () => createRequest(
                             providerId: list[index].providerId,
                             providerPhone: list[index].phone,
@@ -186,7 +180,14 @@ class ListScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
                           onPressed: () => showMap(list[index].coordinates),
-                          child: Text('Open in Maps'),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Open in Maps'),
+                              SizedBox(width: 4,),
+                              Icon(Icons.open_in_new),
+                            ],
+                          ),
                         ),
                       ),
                     ],

@@ -51,7 +51,7 @@ class _PatientHomeState extends State<PatientHome> {
           switch(index){
             case 0: titleArg = "Prediction";
             break;
-            case 1: titleArg = "Provider";
+            case 1: titleArg = "Patient";
             break;
             case 2:
             case 3:
