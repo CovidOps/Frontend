@@ -168,83 +168,84 @@ class _AudioState extends State<Audio> {
 
   @override
   Widget build(BuildContext context) {
+    Widget buttonGroup = Row(
+      children: [
+        Expanded(child: Container(), flex: 1,),
+        Container(
+          margin: const EdgeInsets.all(3),
+          padding: const EdgeInsets.all(3),
+          height: 80,
+          alignment: Alignment.center,
+          /*decoration: BoxDecoration(
+                      color: Color(0xFFFAF0E6),
+                      border: Border.all(
+                        color: Colors.indigo,
+                        width: 3,
+                      ),
+                    ),*/
+          child:ElevatedButton(
+            onPressed: getRecorderFn(),
+            //color: Colors.white,
+            //disabledColor: Colors.grey,
+            child: Text(_mRecorder!.isRecording ? 'Stop' : 'Record'),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.all(3),
+          padding: const EdgeInsets.all(3),
+          height: 80,
+          alignment: Alignment.center,
+          /*decoration: BoxDecoration(
+                      color: Color(0xFFFAF0E6),
+                      border: Border.all(
+                        color: Colors.indigo,
+                        width: 3,
+                      ),
+                    ),*/
+          child: ElevatedButton(
+            onPressed: getPlaybackFn(),
+            //color: Colors.white,
+            //disabledColor: Colors.grey,
+            child: Text(_mPlayer!.isPlaying ? 'Stop' : 'Play'),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.all(3),
+          padding: const EdgeInsets.all(3),
+          height: 80,
+          alignment: Alignment.center,
+          /*decoration: BoxDecoration(
+                      color: Color(0xFFFAF0E6),
+                      border: Border.all(
+                        color: Colors.indigo,
+                        width: 3,
+                      ),
+                    ),*/
+          child: ElevatedButton(
+            onPressed: submitFn(),
+            //color: Colors.white,
+            //disabledColor: Colors.grey,
+            child: Text(_mPlayer!.isPlaying ? 'Wait' : 'Submit'),
+          ),
+        ),
+        Expanded(child: Container(), flex: 1,)
+      ],
+    );
     return Stack(
       children: [
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/cough.png"),
+              image: AssetImage("assets/images/audio.png"),
               fit: BoxFit.fill,
               colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4),BlendMode.dstATop),
             ),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Expanded(child: Container(), flex: 1,),
-              Row(
-                children: [
-                  Expanded(child: Container(), flex: 1,),
-                  Container(
-                    margin: const EdgeInsets.all(3),
-                    padding: const EdgeInsets.all(3),
-                    height: 80,
-                    alignment: Alignment.center,
-                    /*decoration: BoxDecoration(
-                      color: Color(0xFFFAF0E6),
-                      border: Border.all(
-                        color: Colors.indigo,
-                        width: 3,
-                      ),
-                    ),*/
-                    child:ElevatedButton(
-                        onPressed: getRecorderFn(),
-                        //color: Colors.white,
-                        //disabledColor: Colors.grey,
-                        child: Text(_mRecorder!.isRecording ? 'Stop' : 'Record'),
-                      ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(3),
-                    padding: const EdgeInsets.all(3),
-                    height: 80,
-                    alignment: Alignment.center,
-                    /*decoration: BoxDecoration(
-                      color: Color(0xFFFAF0E6),
-                      border: Border.all(
-                        color: Colors.indigo,
-                        width: 3,
-                      ),
-                    ),*/
-                    child: ElevatedButton(
-                        onPressed: getPlaybackFn(),
-                        //color: Colors.white,
-                        //disabledColor: Colors.grey,
-                        child: Text(_mPlayer!.isPlaying ? 'Stop' : 'Play'),
-                      ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(3),
-                    padding: const EdgeInsets.all(3),
-                    height: 80,
-                    alignment: Alignment.center,
-                    /*decoration: BoxDecoration(
-                      color: Color(0xFFFAF0E6),
-                      border: Border.all(
-                        color: Colors.indigo,
-                        width: 3,
-                      ),
-                    ),*/
-                    child: ElevatedButton(
-                        onPressed: submitFn(),
-                        //color: Colors.white,
-                        //disabledColor: Colors.grey,
-                        child: Text(_mPlayer!.isPlaying ? 'Wait' : 'Submit'),
-                      ),
-                  ),
-                  Expanded(child: Container(), flex: 1,)
-                ],
-              ),
-              Expanded(child: Container(), flex: 1,)
+              Opacity(opacity: 0.0, child: buttonGroup),
+              Opacity(opacity: 1.0, child: buttonGroup),
             ],
           ),
         ),

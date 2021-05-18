@@ -28,26 +28,41 @@ class _MyRequestsState extends State<MyRequests> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<MyRequestModel>>(
-      future: _future,
-      builder: (context, snapshot) {
-          if(snapshot.hasData){
-            return Stack(
-              children: [
-                ListScreen(
-                  list: snapshot.data!,
-                  shareAddress: _shareAddress,
-                  deleteRequest: _showMyDialog,
-                ),
-                (isLoading ?
-                CustomProgressIndicator()
-                    : Container()
-                )
-              ],
-            );
-          }
-          return CustomProgressIndicator();
-        },
+    return Stack(
+      children: [
+        Align(
+          alignment: Alignment.center,
+          child: Opacity(
+              opacity: 0.2,
+              child: Padding(
+                padding: const EdgeInsets.all(50.0),
+                child: ClipRRect(
+                    //borderRadius: BorderRadius.circular(30.0),
+                    child: Image.asset("assets/images/back2.png", fit: BoxFit.cover,)),
+              )),
+        ),
+        FutureBuilder<List<MyRequestModel>>(
+          future: _future,
+          builder: (context, snapshot) {
+              if(snapshot.hasData){
+                return Stack(
+                  children: [
+                    ListScreen(
+                      list: snapshot.data!,
+                      shareAddress: _shareAddress,
+                      deleteRequest: _showMyDialog,
+                    ),
+                    (isLoading ?
+                    CustomProgressIndicator()
+                        : Container()
+                    )
+                  ],
+                );
+              }
+              return CustomProgressIndicator();
+            },
+        ),
+      ],
     );
   }
 

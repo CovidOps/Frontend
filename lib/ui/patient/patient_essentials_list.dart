@@ -105,23 +105,38 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
       appBar: AppBar(
         title: Text(widget.model.proper),
       ),
-      body: FutureBuilder<List<Provider>>(
-        future: _future,
-        builder: (context, snapshot){
-          if(snapshot.hasData){
-            return Stack(
-              children: [
-                ListScreen(
-                  list: Helper.sortListProvider(snapshot.data!),
-                  createRequest: _createRequest,
-                  showMap: _showMap,
-                ),
-                (isLoading?CustomProgressIndicator():Container()),
-              ],
-            );
-          }
-          return CustomProgressIndicator();
-        },
+      body: Stack(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Opacity(
+                opacity: 0.2,
+                child: Padding(
+                  padding: const EdgeInsets.all(50.0),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(30.0),
+                      child: Image.asset("assets/images/back1.jpg", fit: BoxFit.cover,)),
+                )),
+          ),
+          FutureBuilder<List<Provider>>(
+            future: _future,
+            builder: (context, snapshot){
+              if(snapshot.hasData){
+                return Stack(
+                  children: [
+                    ListScreen(
+                      list: Helper.sortListProvider(snapshot.data!),
+                      createRequest: _createRequest,
+                      showMap: _showMap,
+                    ),
+                    (isLoading?CustomProgressIndicator():Container()),
+                  ],
+                );
+              }
+              return CustomProgressIndicator();
+            },
+          ),
+        ],
       )
     );
   }
