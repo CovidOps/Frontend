@@ -255,7 +255,7 @@ class _AudioState extends State<Audio> {
               image: AssetImage("assets/images/audio.png"),
               fit: BoxFit.fill,
               colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.4), BlendMode.dstATop),
+                  Colors.black.withOpacity(0.3), BlendMode.dstATop),
             ),
           ),
           child: Column(

@@ -385,7 +385,7 @@ class MyTextPage extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   margin: EdgeInsets.all(20.0),
                   padding: EdgeInsets.all(12.0),
-                  child: Text('''If you would like to contact us to understand more about this Policy or wish to contact us concerning any matter relating to individual rights and your Personal Information, you may send an email to aman.19je0108@mech.iitism.ac.in. This document was last updated on May 5, 2021 CovidOps''',
+                  child: Text('''If you would like to contact us to understand more about this Policy or wish to contact us concerning any matter relating to individual rights and your Personal Information, you may send an email to covidops2021@gmail.com. This document was last updated on May 5, 2021 CovidOps''',
                     maxLines: 20,
                     textAlign: TextAlign.left,
                     style: TextStyle(color:Colors.black,fontSize:Helper.textSize),),

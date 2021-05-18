@@ -103,7 +103,7 @@ class _ImagePageState extends State<ImagePage> {
                 image: AssetImage("assets/images/imagepred.jpg"),
                 fit: BoxFit.fill,
                 colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.6), BlendMode.dstATop),
+                    Colors.black.withOpacity(0.3), BlendMode.dstATop),
               ),
 
             ),
