@@ -13,7 +13,7 @@ class Splash extends StatelessWidget {
         builder: (context, snapshot){
           int status = Helper.getLoginStatus();
 
-          Future.delayed(const Duration(milliseconds: 500), () {
+          Future.delayed(const Duration(milliseconds: 2000), () {
             if(status == Helper.TYPE_LOGOUT){
               //Go to login
               Navigator.of(context).pushReplacement(
@@ -32,7 +32,9 @@ class Splash extends StatelessWidget {
             }
           });
           //return CustomProgressIndicator();
-          return Container();
+          return Center(
+            child: Image.asset("assets/images/logo.png", fit: BoxFit.fitWidth,),
+          );
         }
       ),
     );

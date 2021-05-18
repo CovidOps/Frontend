@@ -201,9 +201,10 @@ class ListScreen extends StatelessWidget {
                       RowWidget(Icons.eco, "Essential: ${Helper.argToProper(list[index].essential)}"),
 
                       (list[index].sought_approval && (!list[index].approved)
-                          ? ElevatedButton(
+                          ? TextButton.icon(
                           onPressed: () => shareAddress(list[index].id),
-                          child: Text("Share Address"))
+                          label: Text("Share Address"),
+                          icon: Icon(Icons.share),)
                           : Container()),
                     ],
                   ),

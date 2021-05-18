@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:covigenix/ui/custom_widgets/dialog.dart';
 import 'package:covigenix/ui/custom_widgets/icons.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
@@ -38,6 +39,21 @@ class _ProviderRequestsIndivState extends State<ProviderRequestsIndiv> {
     } else {
       throw Exception("Failed to fetch list of requests.");
     }
+  }
+
+  void _showConfirmation({required String requestId}) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return CustomDialog(
+          title: "Confirm Action",
+          body: "Are you sure you want to request this patient's address?",
+          yesTitle: "Yes",
+          yesFunction: () => _getApproval(requestId: requestId),
+        );
+      },
+    );
   }
 
   void _getApproval({required String requestId}) async {
@@ -86,7 +102,7 @@ class _ProviderRequestsIndivState extends State<ProviderRequestsIndiv> {
                 children: [
                   ListScreen(
                     list: Helper.sortListPatient(snapshot.data!),
-                    getApproval: _getApproval,
+                    getApproval: _showConfirmation,
                   ),
                   (isLoading ? CustomProgressIndicator() : Container()),
                 ],
@@ -125,8 +141,9 @@ class ListScreen extends StatelessWidget {
                       //RowWidget(Icons.phone, list[index].phone),
                       RowWidget(Icons.api_rounded, "Address: ${list[index].address}"),
                       (list[index].address == "Not available"
-                          ? IconButton(
+                          ? TextButton.icon(
                               icon: Icon(Icons.open_in_new),
+                              label: Text('Get Address'),
                               onPressed: () => getApproval(
                                 requestId: list[index].requestId,
                               ),
