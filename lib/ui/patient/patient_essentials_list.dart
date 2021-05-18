@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:covigenix/ui/custom_widgets/dialog.dart';
 import 'package:covigenix/ui/custom_widgets/icons.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:map_launcher/map_launcher.dart';
@@ -48,6 +49,20 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
     }
   }
 
+  void _showConfirmationDialog({required String providerId, required String providerName, required String providerPhone}) async{
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return CustomDialog(
+          title: "Confirm Request",
+          body: "Are you sure you want to send a request for ${widget.model.proper} to this provider?",
+          yesTitle: "Confirm",
+          yesFunction: () => _createRequest(providerId: providerId, providerName: providerName, providerPhone: providerPhone),
+        );
+      },
+    );
+  }
   void _createRequest({required String providerId, required String providerName, required String providerPhone}) async{
     setState(() {
       isLoading = true;
@@ -126,7 +141,7 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
                   children: [
                     ListScreen(
                       list: Helper.sortListProvider(snapshot.data!),
-                      createRequest: _createRequest,
+                      createRequest: _showConfirmationDialog,
                       showMap: _showMap,
                     ),
                     (isLoading?CustomProgressIndicator():Container()),
@@ -162,8 +177,8 @@ class ListScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      RowWidget(Icons.account_circle, list[index].name),
-                      RowWidget(Icons.business_outlined, list[index].area),
+                      RowWidget(Icons.account_circle, "Provider: ${list[index].name}"),
+                      RowWidget(Icons.business_outlined, "Area: ${list[index].area}"),
                       //RowWidget(Icons.phone, list[index].phone),
                       Padding(
                         padding: const EdgeInsets.all(8.0),

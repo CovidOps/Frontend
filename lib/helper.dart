@@ -108,11 +108,12 @@ class Helper{
     box.write(USER, map);
   }
 
-  static HashMap<int, String> createMap(){
-    HashMap<int, String> map = HashMap();
-    map.putIfAbsent(0, () => "Remdesivir");
-    map.putIfAbsent(1, () => "Oxygen");
-    return map;
+  static String argToProper(String arg){
+    for(EssentialGridModel e in essentialsList){
+      if(e.arg == arg)
+        return e.proper;
+    }
+    return "Item";
   }
 
   static void goodToast(String message){

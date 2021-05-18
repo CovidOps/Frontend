@@ -120,10 +120,10 @@ class ListScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      RowWidget(Icons.account_circle, list[index].name),
-                      RowWidget(Icons.business_outlined, list[index].area),
+                      RowWidget(Icons.account_circle, "Name: ${list[index].name}"),
+                      RowWidget(Icons.business_outlined, "Area: ${list[index].area}"),
                       //RowWidget(Icons.phone, list[index].phone),
-                      RowWidget(Icons.api_rounded, list[index].address),
+                      RowWidget(Icons.api_rounded, "Address: ${list[index].address}"),
                       (list[index].address == "Not available"
                           ? IconButton(
                               icon: Icon(Icons.open_in_new),

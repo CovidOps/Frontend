@@ -110,7 +110,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: Center(child: Text('Register', style: TextStyle(fontSize: 24),)),
       ),
       body: Stack(
         children: [

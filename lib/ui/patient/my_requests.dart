@@ -49,7 +49,7 @@ class _MyRequestsState extends State<MyRequests> {
                   children: [
                     ListScreen(
                       list: snapshot.data!,
-                      shareAddress: _shareAddress,
+                      shareAddress: _showShareDialog,
                       deleteRequest: _showMyDialog,
                     ),
                     (isLoading ?
@@ -90,6 +90,21 @@ class _MyRequestsState extends State<MyRequests> {
     }
     else
       throw Exception('Failed to create patient');
+  }
+
+  void _showShareDialog(String reqId) async{
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return CustomDialog(
+          title: "Confirm Share",
+          body: "Are you sure you want to share your address with the given provider?",
+          yesTitle: "Confirm",
+          yesFunction: () => _shareAddress(reqId),
+        );
+      },
+    );
   }
 
   void _shareAddress(String reqId) async{
@@ -183,7 +198,7 @@ class ListScreen extends StatelessWidget {
                     children: [
                       RowWidget(Icons.account_balance_rounded, "Provider: ${list[index].provider_name}"),
                       //RowWidget(Icons.phone, "Phone: ${list[index].provider_phone}"),
-                      RowWidget(Icons.eco, "Essential: ${list[index].essential}"),
+                      RowWidget(Icons.eco, "Essential: ${Helper.argToProper(list[index].essential)}"),
 
                       (list[index].sought_approval && (!list[index].approved)
                           ? ElevatedButton(

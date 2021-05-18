@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/custom_widgets/button.dart';
+import 'package:covigenix/ui/custom_widgets/dialog.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/model/generic_response.dart';
 import 'package:flutter/material.dart';
@@ -57,10 +58,25 @@ class _AddCommunityState extends State<AddCommunity> {
     }
   }
 
+  void showConfirmationDialog(BuildContext context, String item, String details) async{
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return CustomDialog(
+          title: "Confirm Post",
+          body: "Are you sure you want to create a post with the given details?",
+          yesTitle: "Confirm",
+          yesFunction: () => createPost(context, item, details),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Create Community Post"),),
+      appBar: AppBar(title: Center(child: Text('Create Community Post', style: TextStyle(fontSize: 24),)),),
       body: Stack(
         children: [
           Form(
@@ -142,7 +158,7 @@ class _AddCommunityState extends State<AddCommunity> {
                 ),
                 CustomButton('Create Post', () {
                   if(_patientKey.currentState!.validate()){
-                    createPost(
+                    showConfirmationDialog(
                       context,
                       item.text,
                       description.text,
