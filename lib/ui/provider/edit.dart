@@ -71,20 +71,6 @@ class _EditState extends State<Edit> {
                 child: screen,
               ),
               CustomButton('Update', () => _editEssentials(context)),
-              /*Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-                child: ElevatedButton(
-                  child: Text('Update'),
-                  style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
-                    padding: EdgeInsets.all(16),
-                  ),
-                  onPressed: () {
-                    _editEssentials(context);
-                  },
-                ),
-              ),*/
             ],
         ),
         (isLoading?CustomProgressIndicator():Container()),

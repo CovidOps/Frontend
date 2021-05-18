@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/custom_widgets/button.dart';
 import 'package:covigenix/ui/custom_widgets/essential_checklist.dart';
+import 'package:covigenix/ui/custom_widgets/formality_hypertext.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
   late String initialPhone, getLatitude, getLongitude;
   late Position? _currentPosition;
   bool isLoading = false;
-  late  bool _checkbox;
+  bool _checkbox = false;
 
   EssentialChecklist screen = EssentialChecklist();
 
@@ -130,7 +131,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
 
   @override
   Widget build(BuildContext context) {
-    _checkbox = false;
+    //_checkbox = false;
     return Scaffold(
         appBar: AppBar(
           title: Text('Register'),
@@ -139,7 +140,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
           children: [
             Form(
               key: _registerProviderKey,
-              child: ListView(
+              child: Column(
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -189,55 +190,20 @@ class _RegisterProviderState extends State<RegisterProvider> {
                       },
                     ),
                   ),
-                  Container(
+                  Expanded(
                     child: screen,
                   ),
                   CustomButton('Get Location', getLocation),
-                  /*Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-                    child: ElevatedButton(
-                      child: Text('Get Location', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                      style: ElevatedButton.styleFrom(
-                        primary: Theme
-                            .of(context)
-                            .primaryColor,
-                        padding: EdgeInsets.all(16),
-                      ),
-                      onPressed: getLocation,
-                    ),
-                  ),*/
                   CustomButton('Register', () => register(context)),
-                  /*Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width,
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
-                    child: ElevatedButton(
-                      child: Text('Register'),
-                      style: ElevatedButton.styleFrom(
-                        primary: Theme
-                            .of(context)
-                            .primaryColor,
-                        padding: EdgeInsets.all(16),
-                      ),
-                      onPressed: () {
-                        register(context);
-                      },
-                    ),
-                  ),*/
                   Container(
                     child: CheckboxListTile(
                       controlAffinity: ListTileControlAffinity.leading,
-                      title: Text('By Clicking, I accept all Terms and Conditions, Privacy Policies and Disclaimer'),
-                      value: timeDilation != 1.0,
+                      title: HyperText(),
+                      value: _checkbox,
                       onChanged: (bool? value) {
-                        _checkbox = !_checkbox;
-                        setState(() { timeDilation = value! ? 10.0 : 1.0; });
+                        setState(() {
+                          _checkbox = value!;
+                        });
                       },
                       //secondary: const Icon(Icons.hourglass_empty),
                     ),

@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:covigenix/ui/custom_widgets/button.dart';
+import 'package:covigenix/ui/custom_widgets/formality_hypertext.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/patient/patient.dart';
 import 'package:covigenix/helper.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
@@ -19,7 +21,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
   //final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   late String initialPhone, getLatitude, getLongitude;
   late Position? _currentPosition;
-  late  bool _checkbox;
+  bool _checkbox = false;
   bool isLoading = false;
 
   TextEditingController name = TextEditingController(),
@@ -106,7 +108,6 @@ class _RegisterPatientState extends State<RegisterPatient> {
 
   @override
   Widget build(BuildContext context) {
-    _checkbox = false;
     return Scaffold(
       appBar: AppBar(
         title: Text('Register'),
@@ -188,11 +189,12 @@ class _RegisterPatientState extends State<RegisterPatient> {
                 Container(
                   child: CheckboxListTile(
                     controlAffinity: ListTileControlAffinity.leading,
-                    title: Text('By clicking, I accept the Terms and Conditions, Privacy Policy and Disclaimer.'),
-                    value: timeDilation != 1.0,
+                    title: HyperText(),
+                    value: _checkbox,
                     onChanged: (bool? value) {
-                      _checkbox = !_checkbox;
-                      setState(() { timeDilation = value! ? 10.0 : 1.0; });
+                      setState(() {
+                        _checkbox = value!;
+                      });
                     },
                     //secondary: const Icon(Icons.hourglass_empty),
                   ),
