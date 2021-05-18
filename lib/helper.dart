@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Helper{
   static const String BASE_URL = "covigenix-test-deploy.herokuapp.com";
@@ -163,6 +164,16 @@ class Helper{
       return dist1.compareTo(dist2);
     });
     return arg;
+  }
+
+  static void call(String number) async{
+    String _url = 'tel:$number';
+    bool launchable = await canLaunch(_url);
+    if(launchable){
+      await launch(_url);
+    }else{
+      Helper.goodToast('Found no app to launch for calling.');
+    }
   }
 }
 

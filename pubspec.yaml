@@ -42,6 +42,7 @@ dependencies:
   image_picker: ^0.7.5
   permission_handler: ^6.0.1
   flutter_sound: ^8.1.1
+  url_launcher: ^6.0.3
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +77,10 @@ flutter:
     - assets/images/Remdevisir.jpg
     - assets/images/logo.png
     - assets/images/imagepred.jpg
+    - assets/images/akash.png
+    - assets/images/aman.png
+    - assets/images/gunjan.png
+    - assets/images/kunal.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
