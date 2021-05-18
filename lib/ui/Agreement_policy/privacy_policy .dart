@@ -395,6 +395,7 @@ class MyTextPage extends StatelessWidget {
 
 
                 Container(
+                  height:70,
                   alignment: Alignment.center,
                   margin: EdgeInsets.all(20.0),
                   padding: EdgeInsets.all(12.0),
@@ -402,7 +403,7 @@ class MyTextPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     image:DecorationImage(
                       image:AssetImage("assets/images/logo.png"),
-
+                      fit:BoxFit.fitHeight
                     ),
                   ),
                 ),

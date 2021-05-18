@@ -6,6 +6,7 @@ import 'package:covigenix/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
 
 class RegisterPatient extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
   //final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   late String initialPhone, getLatitude, getLongitude;
   late Position? _currentPosition;
+  late  bool _checkbox;
   bool isLoading = false;
 
   TextEditingController name = TextEditingController(),
@@ -61,6 +63,10 @@ class _RegisterPatientState extends State<RegisterPatient> {
         Helper.goodToast("Please obtain location.");
         return;
       }
+      if(_checkbox==false){
+        Helper.goodToast("Please accept to Terms and Conditions");
+        return;
+      }
       createPatient(name.text, initialPhone, area.text, address.text, _currentPosition!.longitude, _currentPosition!.latitude);
     }
   }
@@ -99,6 +105,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
 
   @override
   Widget build(BuildContext context) {
+    _checkbox = false;
     return Scaffold(
       appBar: AppBar(
         title: Text('Register'),
@@ -176,20 +183,6 @@ class _RegisterPatientState extends State<RegisterPatient> {
                   ),
                 ),
                 Container(
-                  child: Text(
-                    getLatitude,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                ),
-                Container(
-                  child: Text(
-                    getLongitude,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                ),
-                Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.symmetric(vertical: 8, horizontal: 25),
                   child: ElevatedButton(
@@ -215,6 +208,32 @@ class _RegisterPatientState extends State<RegisterPatient> {
                     },
                   ),
                 ),
+                Container(
+                  child: CheckboxListTile(
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title: Text('By Clicking, I accept all Terms and Conditions, Privacy Policies and Disclaimer'),
+                    value: timeDilation != 1.0,
+                    onChanged: (bool? value) {
+                      _checkbox = !_checkbox;
+                      setState(() { timeDilation = value! ? 10.0 : 1.0; });
+                    },
+                    secondary: const Icon(Icons.hourglass_empty),
+                  ),
+                ),
+
+                Container(
+                  height:70,
+                  margin: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(12.0),
+                  decoration: BoxDecoration(
+                    image:DecorationImage(
+                        image:AssetImage("assets/images/logo.png",),
+                        fit:BoxFit.fitHeight
+
+                    ),
+                  ),
+                ),
+
               ],
             ),
           ),

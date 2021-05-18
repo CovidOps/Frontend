@@ -7,6 +7,7 @@ import 'package:covigenix/ui/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
 
 class RegisterProvider extends StatefulWidget {
   @override
@@ -20,6 +21,8 @@ class _RegisterProviderState extends State<RegisterProvider> {
   late String initialPhone, getLatitude, getLongitude;
   late Position? _currentPosition;
   bool isLoading = false;
+  late  bool _checkbox;
+
   EssentialChecklist screen = EssentialChecklist();
 
   TextEditingController name = TextEditingController(),
@@ -63,6 +66,10 @@ class _RegisterProviderState extends State<RegisterProvider> {
     if (_registerProviderKey.currentState!.validate()) {
       if (_currentPosition == null) {
         Helper.goodToast("Please obtain location.");
+        return;
+      }
+      if(_checkbox==false){
+        Helper.goodToast("Please accept to Terms and Conditions");
         return;
       }
       List<String> essentials = List<String>.empty(growable: true);
@@ -122,6 +129,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
 
   @override
   Widget build(BuildContext context) {
+    _checkbox = false;
     return Scaffold(
         appBar: AppBar(
           title: Text('Register'),
@@ -184,20 +192,6 @@ class _RegisterProviderState extends State<RegisterProvider> {
                     child: screen,
                   ),
                   Container(
-                    child: Text(
-                      getLatitude,
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  ),
-                  Container(
-                    child: Text(
-                      getLongitude,
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  ),
-                  Container(
                     width: MediaQuery
                         .of(context)
                         .size
@@ -231,6 +225,30 @@ class _RegisterProviderState extends State<RegisterProvider> {
                       onPressed: () {
                         register(context);
                       },
+                    ),
+                  ),
+                  Container(
+                    child: CheckboxListTile(
+                      controlAffinity: ListTileControlAffinity.leading,
+                      title: Text('By Clicking, I accept all Terms and Conditions, Privacy Policies and Disclaimer'),
+                      value: timeDilation != 1.0,
+                      onChanged: (bool? value) {
+                        _checkbox = !_checkbox;
+                        setState(() { timeDilation = value! ? 10.0 : 1.0; });
+                      },
+                      secondary: const Icon(Icons.hourglass_empty),
+                    ),
+                  ),
+                  Container(
+                    height:70,
+                    margin: EdgeInsets.all(20.0),
+                    padding: EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      image:DecorationImage(
+                          image:AssetImage("assets/images/logo.png",),
+                          fit:BoxFit.fitHeight
+
+                      ),
                     ),
                   ),
                 ],
