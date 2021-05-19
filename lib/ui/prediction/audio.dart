@@ -177,27 +177,29 @@ class _AudioState extends State<Audio> {
         isLoading = false;
       });
 
-    try {
-      print(response.body);
-      PredictionResponse res =
-          PredictionResponse.fromJson(jsonDecode(response.body));
-      if (res.status == 500) {
-        Helper.goodToast(
-            'There was some error in prediction. Please try again later.');
-      } else {
-        if(res.status ==200){
-          var pred = double.parse('res.prediction');
-          pred = (1-pred)*0.75;
-          pred = pred*100;
-          res.prediction = pred.toStringAsFixed(2);
-          showResults(res.prediction);
+      try {
+        print(response.body);
+        PredictionResponse res =
+        PredictionResponse.fromJson(jsonDecode(response.body));
+        if (res.status == 500) {
+          Helper.goodToast(
+              'There was some error in prediction. Please try again later.');
+        } else {
+          if (res.status == 200) {
+            var pred = double.parse('res.prediction');
+            pred = (1 - pred) * 0.75;
+            pred = pred * 100;
+            res.prediction = pred.toStringAsFixed(2);
+            showResults(res.prediction);
+          }
+          else
+            Helper.goodToast(
+                'There was some error in prediction. Please try again later.');
         }
-        else
-        Helper.goodToast('There was some error in prediction. Please try again later.');
+      } catch (Exception) {
+        Helper.goodToast('There was an error');
       }
-    } catch (Exception) {
-      Helper.goodToast('There was an error');
-    }
+    });
   }
 
 // ----------------------------- UI --------------------------------------------

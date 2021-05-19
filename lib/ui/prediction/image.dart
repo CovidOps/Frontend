@@ -60,7 +60,7 @@ class _ImagePageState extends State<ImagePage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('You have ${pred} chances of being Infected Covid 19'),
+                Text('You have $pred chances of being Infected Covid 19'),
               ],
             ),
           ),
@@ -96,8 +96,8 @@ class _ImagePageState extends State<ImagePage> {
     File f = File(_image!.path);
 
     //var bytes = await _image!.readAsBytes();
-    img.Image image_temp = img.decodeImage(f.readAsBytesSync())!;
-    img.Image resized_img = img.copyResize(image_temp, width:224, height:224);
+    img.Image imageTemp = img.decodeImage(f.readAsBytesSync())!;
+    img.Image resizedImg = img.copyResize(imageTemp, width: 224, height: 224);
     print("Resizing done");
     //Uri uri = Uri.https(Helper.MODEL_BASE_URL, "image");
     Uri uri = Uri.http(Helper.MODEL_BASE_URL, "image");
@@ -109,7 +109,7 @@ class _ImagePageState extends State<ImagePage> {
       print(fileName);
       final request = http.MultipartRequest('POST', uri)
         ..files.add(
-            http.MultipartFile.fromBytes('file', img.encodeJpg(resized_img),
+            http.MultipartFile.fromBytes('file', img.encodeJpg(resizedImg),
                 filename: fileName,
                 contentType: MediaType("image", "jpeg")
             ));
@@ -145,7 +145,8 @@ class _ImagePageState extends State<ImagePage> {
       } catch (Exception) {
         Helper.goodToast('There was an error');
       }
-    }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
