@@ -77,8 +77,8 @@ class _ProviderServicesState extends State<ProviderServices> {
           "Home","Community","My Requests"
         ],
         initialSelectedTab: "Home",
-        tabIconColor: Colors.blue,
-        tabSelectedColor: Colors.yellow,
+        tabIconColor: Colors.orange,
+        tabSelectedColor: Colors.green,
         onTabItemSelected: (int value){
                _onItemTapped(value);
         },

@@ -21,9 +21,9 @@ class _LoginScreenState extends State<LoginScreen>{
             gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 colors: [
-                  Colors.blue,
-                  Colors.blue,
-                  Colors.blue
+                  Colors.green,
+                  Colors.green,
+                  Colors.green,
                 ]
             )
         ),

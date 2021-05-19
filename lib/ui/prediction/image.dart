@@ -47,6 +47,32 @@ class _ImagePageState extends State<ImagePage> {
       },
     );
   }
+  void showResults(String pred) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Results"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('You have ${pred} chances of being Infected Covid 19'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Future _pickImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -86,7 +112,15 @@ class _ImagePageState extends State<ImagePage> {
       if(res.status == 500){
         Helper.goodToast('There was some error in prediction. Please try again later.');
       }else{
-        Helper.goodToast('Your prediction: ${res.prediction}');
+           if(res.status ==200){
+              var pred = double.parse('res.prediction');
+              pred = 1-pred;
+              pred = pred*100;
+              res.prediction = pred.toStringAsFixed(2);
+              showResults(res.prediction);
+           }
+           else
+           Helper.goodToast('There was some error in prediction. Please try again later.');
       }
     }catch(Exception){
       Helper.goodToast('There was an error');
