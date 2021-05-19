@@ -181,9 +181,10 @@ class ListScreen extends StatelessWidget {
                       RowWidget(Icons.business_outlined, "Area: ${list[index].area}"),
                       //RowWidget(Icons.phone, list[index].phone),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          child: Text('Create Request'),
+                        padding: const EdgeInsets.all(4.0),
+                        child: TextButton.icon(
+                          label: Text('Create Request'),
+                          icon: Icon(Icons.add),
                           onPressed: () => createRequest(
                             providerId: list[index].providerId,
                             providerPhone: list[index].phone,
@@ -192,19 +193,13 @@ class ListScreen extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
+                        padding: const EdgeInsets.all(4.0),
+                        child: TextButton.icon(
                           onPressed: () => showMap(list[index].coordinates),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('Open in Maps'),
-                              SizedBox(width: 4,),
-                              Icon(Icons.open_in_new),
-                            ],
+                          icon: Icon(Icons.open_in_new),
+                          label: Text('Show On Map'),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),

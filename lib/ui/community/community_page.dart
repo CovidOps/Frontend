@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/custom_widgets/dialog.dart';
 import 'package:covigenix/ui/custom_widgets/icons.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/custom_widgets/row_widget.dart';
@@ -51,6 +52,21 @@ class _PageState extends State<Page> {
       Helper.goodToast('There was an error');
       throw Exception("Failed to fetch list");
     }
+  }
+
+  Future<void> _showMyDialog(String reqId) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return CustomDialog(
+          title: "Confirm Delete",
+          body: "Are you sure you want to delete this request?",
+          yesTitle: "Delete",
+          yesFunction: () => _deleteRequest(reqId),
+        );
+      },
+    );
   }
 
   void _deleteRequest(String reqId) async {
@@ -111,7 +127,7 @@ class _PageState extends State<Page> {
                   ListScreen(
                     //TODO: Sort
                     list: Helper.sortCommunityPosts(snapshot.data!),
-                    deletePost: _deleteRequest,
+                    deletePost: _showMyDialog,
                   ),
                   (isLoading ? CustomProgressIndicator() : Container()),
                 ],
@@ -156,15 +172,9 @@ class ListScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CallIcon(list[index].phone),
-                    (list[index].personId == ownId
-                        ? DeleteIcon(() => deletePost(list[index].postId))
-                        : Container()),
-                  ],
-                ),
+                (list[index].personId == ownId
+                    ? DeleteIcon(() => deletePost(list[index].postId))
+                    : CallIcon(list[index].phone))
               ],
             ),
           );

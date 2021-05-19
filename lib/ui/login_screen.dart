@@ -69,14 +69,11 @@ class _LoginScreenState extends State<LoginScreen>{
                             children: <Widget>[
                               Container(
                                 padding: EdgeInsets.all(5.0),
-                                decoration: BoxDecoration(
-                                    border: Border(bottom: BorderSide(color: Colors.grey))
-                                ),
                                 child: TextField(
                                   decoration: InputDecoration(
                                       hintText: "Phone number",
                                       hintStyle: TextStyle(color: Colors.grey),
-                                      border: InputBorder.none
+                                      //border: InputBorder.none
                                   ),
                                   maxLength: 10,
                                   keyboardType: TextInputType.number,

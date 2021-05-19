@@ -45,7 +45,7 @@ class _PatientServicesState extends State<PatientServices> {
           _onItemTapped(value);
         },
         icons: [
-          Icons.home,Icons.business,Icons.school
+          Icons.home,Icons.people,Icons.request_page
         ],
         textStyle: TextStyle(color: Colors.red),
       ),
