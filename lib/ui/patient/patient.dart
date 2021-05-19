@@ -21,6 +21,9 @@ class _PatientHomeState extends State<PatientHome> {
   int navIndex = 0;
   String titleArg = "Prediction";
 
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

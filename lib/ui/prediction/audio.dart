@@ -124,6 +124,32 @@ class _AudioState extends State<Audio> {
     AudioPlayer audioPlayer = AudioPlayer();
     await audioPlayer.play(_current.path, isLocal: true);
   }
+  void showResults(String pred) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Results"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('You have ${pred} chances of being Infected Covid 19'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 //-----------------------------API----------------------------------------------
   void predictAudio() async {
@@ -151,20 +177,27 @@ class _AudioState extends State<Audio> {
         isLoading = false;
       });
 
-      try {
-        print(response.body);
-        PredictionResponse res =
-        PredictionResponse.fromJson(jsonDecode(response.body));
-        if (res.status == 500) {
-          Helper.goodToast(
-              'There was some error in prediction. Please try again later.');
-        } else {
-          Helper.goodToast('Your prediction: ${res.prediction}');
+    try {
+      print(response.body);
+      PredictionResponse res =
+          PredictionResponse.fromJson(jsonDecode(response.body));
+      if (res.status == 500) {
+        Helper.goodToast(
+            'There was some error in prediction. Please try again later.');
+      } else {
+        if(res.status ==200){
+          var pred = double.parse('res.prediction');
+          pred = (1-pred)*0.75;
+          pred = pred*100;
+          res.prediction = pred.toStringAsFixed(2);
+          showResults(res.prediction);
         }
-      } catch (Exception) {
-        Helper.goodToast('There was an error');
+        else
+        Helper.goodToast('There was some error in prediction. Please try again later.');
       }
-    });
+    } catch (Exception) {
+      Helper.goodToast('There was an error');
+    }
   }
 
 // ----------------------------- UI --------------------------------------------
@@ -202,7 +235,7 @@ class _AudioState extends State<Audio> {
       },
     );
   }
-  
+
   Widget _buildText(RecordingStatus status) {
     var icon = Icon(Icons.power_settings_new_sharp);
     switch (_currentStatus) {

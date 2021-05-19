@@ -33,7 +33,7 @@ class SideNav extends StatelessWidget {
               selected: selectedIndex==0
           ),
 
-          //Divider(color: Colors.grey.shade400,),
+          Divider(color: Colors.grey.shade400,),
 
           _navItem(context, Icons.apps, 'Services',
               onTap: () {_navItemClicked(context, 1);},
@@ -63,6 +63,7 @@ class SideNav extends StatelessWidget {
               onTap: () {_navItemClicked(context, 7);},
               selected: selectedIndex==7
           ),
+          Text('Version 0.1.1')
           //Divider(color: Colors.grey.shade400,),
 
           /*_navItem(context, Icons.logout, 'Log Out',
@@ -84,6 +85,7 @@ class SideNav extends StatelessWidget {
       onTap: () => {onTap!()},
     ),
   );
+
 
   _navItemClicked(BuildContext context, int index) {
     setIndex(index);

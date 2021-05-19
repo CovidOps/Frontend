@@ -72,7 +72,7 @@ class _EditState extends State<Edit> {
                 child: screen,
               ),
 
-              CustomButton('Update', () => _editEssentials(context)),
+              CustomButton('Update', () => _editEssentials(context),),
               SizedBox(height:50),
             ],
         ),

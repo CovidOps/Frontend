@@ -23,7 +23,7 @@ class _ImagePageState extends State<ImagePage> {
   final picker = ImagePicker();
   bool isLoading = false;
 
-  void showInstructions() async {
+  void showInstructions() async{
     await showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -33,17 +33,42 @@ class _ImagePageState extends State<ImagePage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text(
-                    "1. Please ensure high image quality.\n2. Have a plain background behind the image.\n3. Upload photo without flashlight"),
+                Text("1. Please ensure high image quality.\n2. Have a plain background behind the image.\n3. Capture/Upload photo without flashlight"),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
               child: Text('OK'),
-              onPressed: () async {
+              onPressed: () {
                 Navigator.of(context).pop();
                 _pickImage();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void showResults(String pred) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Results"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('You have ${pred} chances of being Infected Covid 19'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -80,13 +105,14 @@ class _ImagePageState extends State<ImagePage> {
       ..files.add(await http.MultipartFile.fromPath(
           'file', _image!.path, filename: "${Helper.getId()}.$ext"));*/
     Future.delayed(Duration(milliseconds: 2000)).then((value) async {
-    String fileName = "${Helper.getId()}-${Random().nextInt(100)+1}.jpg";
-    print(fileName);
+      String fileName = "${Helper.getId()}-${Random().nextInt(100) + 1}.jpg";
+      print(fileName);
       final request = http.MultipartRequest('POST', uri)
-        ..files.add(http.MultipartFile.fromBytes('file', img.encodeJpg(resized_img),
-            filename: fileName,
-          contentType: MediaType("image", "jpeg")
-        ));
+        ..files.add(
+            http.MultipartFile.fromBytes('file', img.encodeJpg(resized_img),
+                filename: fileName,
+                contentType: MediaType("image", "jpeg")
+            ));
 
       http.StreamedResponse res = await request.send();
       print("Got res");
@@ -99,22 +125,27 @@ class _ImagePageState extends State<ImagePage> {
 
       try {
         print(response.body);
-        PredictionResponse res =
-            PredictionResponse.fromJson(jsonDecode(response.body));
+        PredictionResponse res = PredictionResponse.fromJson(
+            jsonDecode(response.body));
         if (res.status == 500) {
           Helper.goodToast(
               'There was some error in prediction. Please try again later.');
         } else {
-          Helper.goodToast('Your prediction: ${res.prediction}');
+          if (res.status == 200) {
+            var pred = double.parse('res.prediction');
+            pred = 1 - pred;
+            pred = pred * 100;
+            res.prediction = pred.toStringAsFixed(2);
+            showResults(res.prediction);
+          }
+          else
+            Helper.goodToast(
+                'There was some error in prediction. Please try again later.');
         }
       } catch (Exception) {
         Helper.goodToast('There was an error');
-      } finally {
-        print("Completed");
       }
-    });
-    return;
-  }
+    }
 
   @override
   Widget build(BuildContext context) {
