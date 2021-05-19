@@ -1,17 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' as io;
+import 'package:audioplayers/audioplayers.dart';
 import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/model/prediction_response.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter_sound/flutter_sound.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 
-typedef _Fn = void Function();
+import 'package:get_storage/get_storage.dart';
+import 'package:http/http.dart' as http;
 
 class Audio extends StatefulWidget {
   @override
@@ -19,94 +18,111 @@ class Audio extends StatefulWidget {
 }
 
 class _AudioState extends State<Audio> {
-  FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
-  FlutterSoundRecorder? _mRecorder = FlutterSoundRecorder();
-  bool _mPlayerIsInited = false;
-  bool _mRecorderIsInited = false;
-  bool _mplaybackReady = false;
+  late FlutterAudioRecorder _recorder;
+  late Recording _current;
+  RecordingStatus _currentStatus = RecordingStatus.Unset;
   bool isLoading = false;
-  String _mPath = '${Helper.getId()}.wav';
 
   @override
   void initState() {
-    _mPlayer!.openAudioSession().then((value) {
-      setState(() {
-        _mPlayerIsInited = true;
-      });
-    });
-
-    openTheRecorder().then((value) {
-      setState(() {
-        _mRecorderIsInited = true;
-      });
-    });
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _mPlayer!.closeAudioSession();
-    _mPlayer = null;
+// ----------------------  Here is the code for recording and playback -------
 
-    _mRecorder!.closeAudioSession();
-    _mRecorder = null;
-    super.dispose();
-  }
+  _init() async {
+    print("initting!");
+    try {
+      if (await FlutterAudioRecorder.hasPermissions) {
+        String customPath = '/flutter_audio_recorder_';
+        io.Directory appDocDirectory;
+//        io.Directory appDocDirectory = await getApplicationDocumentsDirectory();
+        if (io.Platform.isIOS) {
+          appDocDirectory = await getApplicationDocumentsDirectory();
+        } else {
+          appDocDirectory = await getExternalStorageDirectory();
+        }
 
-  Future<void> openTheRecorder() async {
-    if (!kIsWeb) {
-      var status = await Permission.microphone.request();
-      if (status != PermissionStatus.granted) {
-        throw RecordingPermissionException('Microphone permission not granted');
+        // can add extension like ".mp4" ".wav" ".m4a" ".aac"
+        customPath = appDocDirectory.path +
+            customPath +
+            DateTime.now().millisecondsSinceEpoch.toString();
+
+        // .wav <---> AudioFormat.WAV
+        // .mp4 .m4a .aac <---> AudioFormat.AAC
+        // AudioFormat is optional, if given value, will overwrite path extension when there is conflicts.
+        _recorder =
+            FlutterAudioRecorder(customPath, audioFormat: AudioFormat.WAV);
+
+        await _recorder.initialized;
+        // after initialization
+        var current = await _recorder.current(channel: 0);
+        print(current);
+        // should be "Initialized", if all working fine
+        setState(() {
+          _current = current;
+          _currentStatus = current.status;
+          print(_currentStatus);
+        });
+      } else {
+        Scaffold.of(context).showSnackBar(
+            new SnackBar(content: new Text("You must accept permissions")));
       }
+    } catch (e) {
+      print(e);
     }
-    await _mRecorder!.openAudioSession();
-    _mRecorderIsInited = true;
   }
-
-  // ----------------------  Here is the code for recording and playback -------
-
-  void record() {
-    _mRecorder!
-        .startRecorder(
-      toFile: _mPath,
-      //codec: kIsWeb ? Codec.opusWebM : Codec.aacADTS,
-    )
-        .then((value) {
-      setState(() {});
-    });
-  }
-
-  void stopRecorder() async {
-    await _mRecorder!.stopRecorder().then((value) {
+  _start() async {
+    try {
+      await _recorder.start();
+      var recording = await _recorder.current(channel: 0);
       setState(() {
-        //var url = value;
-        _mplaybackReady = true;
+        _current = recording;
       });
+
+      const tick = const Duration(milliseconds: 50);
+      new Timer.periodic(tick, (Timer t) async {
+        if (_currentStatus == RecordingStatus.Stopped) {
+          t.cancel();
+        }
+
+        var current = await _recorder.current(channel: 0);
+        // print(current.status);
+        setState(() {
+          _current = current;
+          _currentStatus = _current.status;
+        });
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  _resume() async {
+    await _recorder.resume();
+    setState(() {});
+  }
+
+  _pause() async {
+    await _recorder.pause();
+    setState(() {});
+  }
+
+  _stop() async {
+    var result = await _recorder.stop();
+    print("Stop recording: ${result.path}");
+    print("Stop recording: ${result.duration}");
+    io.File file = io.File(result.path);
+    print("File length: ${await file.length()}");
+    setState(() {
+      _current = result;
+      _currentStatus = _current.status;
     });
   }
 
-  void play() {
-    assert(_mPlayerIsInited &&
-        _mplaybackReady &&
-        _mRecorder!.isStopped &&
-        _mPlayer!.isStopped);
-    _mPlayer!
-        .startPlayer(
-            fromURI: _mPath,
-            //codec: kIsWeb ? Codec.opusWebM : Codec.aacADTS,
-            whenFinished: () {
-              setState(() {});
-            })
-        .then((value) {
-      setState(() {});
-    });
-  }
-
-  void stopPlayer() {
-    _mPlayer!.stopPlayer().then((value) {
-      setState(() {});
-    });
+  void onPlayAudio() async {
+    AudioPlayer audioPlayer = AudioPlayer();
+    await audioPlayer.play(_current.path, isLocal: true);
   }
 
 //-----------------------------API----------------------------------------------
@@ -114,71 +130,112 @@ class _AudioState extends State<Audio> {
     setState(() {
       isLoading = true;
     });
-    var tempDir = await getTemporaryDirectory();
-    var fout = File('${tempDir.path}/${Helper.getId()}.wav');
+
+    var fout = io.File(_current.path!);
     var len = await fout.length();
     print(len);
 
-    Uri uri = Uri.https(Helper.MODEL_BASE_URL, "audio");
-    final request = http.MultipartRequest('POST', uri)
-      ..files.add(await http.MultipartFile.fromPath('file', fout.path,
-          filename: "${Helper.getId()}.wav"));
+    Future.delayed(Duration(milliseconds: 2000)).then((value) async {
+      //Uri uri = Uri.https(Helper.MODEL_BASE_URL, "audio");
+      Uri uri = Uri.http(Helper.MODEL_BASE_URL, "audio");
+      final request = http.MultipartRequest('POST', uri)
+        ..files.add(await http.MultipartFile.fromPath('file', fout.path,
+          //filename: "${Helper.getId()}.wav"
+        ));
 
-    http.Response response =
-        await http.Response.fromStream(await request.send());
-    print("response code ${response.statusCode}");
+      http.Response response =
+      await http.Response.fromStream(await request.send());
+      print("response code ${response.statusCode}");
 
-    setState(() {
-      isLoading = false;
-    });
+      setState(() {
+        isLoading = false;
+      });
 
-    try {
-      print(response.body);
-      PredictionResponse res =
-          PredictionResponse.fromJson(jsonDecode(response.body));
-      if (res.status == 500) {
-        Helper.goodToast(
-            'There was some error in prediction. Please try again later.');
-      } else {
-        Helper.goodToast('Your prediction: ${res.prediction}');
+      try {
+        print(response.body);
+        PredictionResponse res =
+        PredictionResponse.fromJson(jsonDecode(response.body));
+        if (res.status == 500) {
+          Helper.goodToast(
+              'There was some error in prediction. Please try again later.');
+        } else {
+          Helper.goodToast('Your prediction: ${res.prediction}');
+        }
+      } catch (Exception) {
+        Helper.goodToast('There was an error');
       }
-    } catch (Exception) {
-      Helper.goodToast('There was an error');
-    }
+    });
   }
 
 // ----------------------------- UI --------------------------------------------
 
-  _Fn? getRecorderFn() {
-    if (!_mRecorderIsInited || !_mPlayer!.isStopped) {
-      return null;
-    }
-    return _mRecorder!.isStopped ? record : stopRecorder;
+  void showInstructions() async {
+    print("Dialog!");
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Instructions"),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  "1. Upload your cough audio for a minimum duration of 3 seconds.\n"
+                      "2. Please ensure you are in a quiet surrounding.\n"
+                      "3. DON'T upload ambiguous audio as it may produce wrong results.\n"
+                      "4. Press the record button to start recording.",
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                _init();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
-
-  _Fn? getPlaybackFn() {
-    if (!_mPlayerIsInited || !_mplaybackReady || !_mRecorder!.isStopped) {
-      return null;
+  
+  Widget _buildText(RecordingStatus status) {
+    var icon = Icon(Icons.power_settings_new_sharp);
+    switch (_currentStatus) {
+      case RecordingStatus.Initialized:
+        {
+          icon = Icon(Icons.fiber_manual_record, color: Colors.red,);
+          break;
+        }
+      case RecordingStatus.Recording:
+        {
+          icon = Icon(Icons.pause);
+          break;
+        }
+      case RecordingStatus.Paused:
+        {
+          icon = Icon(Icons.fiber_manual_record, color: Colors.red,);
+          break;
+        }
+      case RecordingStatus.Stopped:
+        {
+          icon = Icon(Icons.power_settings_new_sharp);
+          break;
+        }
+      default:
+        break;
     }
-    return _mPlayer!.isStopped ? play : stopPlayer;
-  }
-
-  _Fn? submitFn() {
-    if (!_mPlayerIsInited ||
-        !_mplaybackReady ||
-        !_mRecorder!.isStopped ||
-        !_mPlayer!.isStopped) {
-      return null;
-    }
-
-    return (_mRecorder!.isStopped && _mPlayer!.isStopped)
-        ? predictAudio
-        : () => {};
+    return icon;
   }
 
   @override
   Widget build(BuildContext context) {
     Widget buttonGroup = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
           child: Container(),
@@ -186,59 +243,73 @@ class _AudioState extends State<Audio> {
         ),
         Container(
           margin: const EdgeInsets.all(3),
-          padding: const EdgeInsets.all(3),
+          padding: const EdgeInsets.all(2),
           height: 80,
           alignment: Alignment.center,
-          /*decoration: BoxDecoration(
-                      color: Color(0xFFFAF0E6),
-                      border: Border.all(
-                        color: Colors.indigo,
-                        width: 3,
-                      ),
-                    ),*/
-          child: ElevatedButton(
-            onPressed: getRecorderFn(),
-            //color: Colors.white,
-            //disabledColor: Colors.grey,
-            child: Text(_mRecorder!.isRecording ? 'Stop' : 'Record'),
+          child: IconButton(
+            onPressed: () {
+              switch (_currentStatus) {
+                case RecordingStatus.Initialized:
+                  {
+                    _start();
+                    break;
+                  }
+                case RecordingStatus.Recording:
+                  {
+                    _pause();
+                    break;
+                  }
+                case RecordingStatus.Paused:
+                  {
+                    _resume();
+                    break;
+                  }
+                case RecordingStatus.Stopped:
+                  {
+                    showInstructions();
+                    break;
+                  }
+                default:
+                  {
+                    showInstructions();
+                    break;
+                  }
+              }
+            },
+            icon: _buildText(_currentStatus),
           ),
         ),
         Container(
           margin: const EdgeInsets.all(3),
-          padding: const EdgeInsets.all(3),
+          padding: const EdgeInsets.all(2),
           height: 80,
           alignment: Alignment.center,
-          /*decoration: BoxDecoration(
-                      color: Color(0xFFFAF0E6),
-                      border: Border.all(
-                        color: Colors.indigo,
-                        width: 3,
-                      ),
-                    ),*/
-          child: ElevatedButton(
-            onPressed: getPlaybackFn(),
-            //color: Colors.white,
-            //disabledColor: Colors.grey,
-            child: Text(_mPlayer!.isPlaying ? 'Stop' : 'Play'),
+          child: IconButton(
+            onPressed:
+            _currentStatus != RecordingStatus.Unset ? _stop : null,
+            icon: Icon(Icons.stop, color: Colors.red),
           ),
         ),
         Container(
           margin: const EdgeInsets.all(3),
-          padding: const EdgeInsets.all(3),
+          padding: const EdgeInsets.all(2),
           height: 80,
           alignment: Alignment.center,
-          /*decoration: BoxDecoration(
-                      color: Color(0xFFFAF0E6),
-                      border: Border.all(
-                        color: Colors.indigo,
-                        width: 3,
-                      ),
-                    ),*/
-          child: ElevatedButton(
-            onPressed: submitFn(),
-            //color: Colors.white,
-            //disabledColor: Colors.grey,
-            child: Text(_mPlayer!.isPlaying ? 'Wait' : 'Submit'),
+          child: IconButton(
+            onPressed: onPlayAudio,
+            icon: Icon(Icons.play_arrow, color: Colors.black),
+            disabledColor: Colors.grey,
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.all(3),
+          padding: const EdgeInsets.all(2),
+          height: 80,
+          alignment: Alignment.center,
+          child: IconButton(
+            onPressed: _currentStatus == RecordingStatus.Stopped ? predictAudio: null,
+            icon: Icon(Icons.check, color: Colors.green,),
+            disabledColor: Colors.grey,
           ),
         ),
         Expanded(
@@ -262,19 +333,7 @@ class _AudioState extends State<Audio> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Opacity(opacity: 0.0, child: Container()),
-              Opacity(
-                  opacity: 1.0,
-                  child: Column(
-                    children: [
-                      buttonGroup,
-                      Container(
-                        width: 270,
-                          child: Text(
-                              "Instructions:\n1. Upload your cough audio for a minimum duration of 3 seconds.\n2. Please ensure you are in a quiet surrounding.\n3. DON'T upload ambiguous audio as it may produce wrong results.",
-                            style: TextStyle(fontSize: 12),
-                          ))
-                    ],
-                  )),
+              Opacity(opacity: 1.0, child: buttonGroup),
             ],
           ),
         ),

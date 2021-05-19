@@ -29,7 +29,11 @@ dependencies:
   # shared_preferences: ^2.0.5
   # localstorage: 3.0.1+4
   get_storage:
+  image:
   http: ^0.13.3
+  flutter_audio_recorder:
+  audioplayers: 
+  http_parser: 4.0.0
   map_launcher: ^2.0.0
   flutter:
     sdk: flutter
@@ -39,10 +43,12 @@ dependencies:
   cupertino_icons: ^1.0.0
   firebase_auth: ^1.1.4
   firebase_core: ^1.1.1
+  #firebase_auth: ^0.20.0
+  #firebase_core: ^0.7.0
   pinput: ^0.2.6
   image_picker: ^0.7.5
   permission_handler: ^6.0.1
-  flutter_sound: ^8.1.1
+  #flutter_sound: ^8.1.1
   url_launcher: ^6.0.3
 
 dev_dependencies:
@@ -65,17 +71,12 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/images/Oxygen.jpg
-    - assets/images/cough.png
     - assets/images/remedivir.jpg
     - assets/images/oxygen_tank.jpg
     - assets/images/fabiflu.jpg
-    - assets/images/contact.jpg
-    - assets/images/xray.jpg
     - assets/images/otp.png
     - assets/images/PLasma.jpg
     - assets/images/contact_us.png
-    - assets/images/Remdevisir.jpg
     - assets/images/logo.png
     - assets/images/imagepred.jpg
     - assets/images/akash.png
@@ -86,7 +87,6 @@ flutter:
     - assets/images/back2.png
     - assets/images/back3.png
     - assets/images/audio.png
-    - assets/images/profile.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

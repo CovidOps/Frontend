@@ -10,7 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class Helper{
   static const String BASE_URL = "covigenix-test-deploy.herokuapp.com";
-  static const String MODEL_BASE_URL = "sheltered-brook-16215.herokuapp.com";
+  //static const String MODEL_BASE_URL = "sheltered-brook-16215.herokuapp.com";
+  static const String MODEL_BASE_URL = "192.168.1.6:5000";
   static const String appName = "CovidOps";
 
   static const String LOGIN_STATUS = "LoginStatus";
