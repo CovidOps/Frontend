@@ -69,15 +69,23 @@ class _LoginScreenState extends State<LoginScreen>{
                             children: <Widget>[
                               Container(
                                 padding: EdgeInsets.all(5.0),
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                      hintText: "Phone number",
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      //border: InputBorder.none
+                                child: Theme(
+                                  data: ThemeData(
+                                    primarySwatch: Colors.green,
                                   ),
-                                  maxLength: 10,
-                                  keyboardType: TextInputType.number,
-                                  controller: _controller,
+                                  child: TextField(
+                                    //cursorColor: Colors.green,
+                                    decoration: InputDecoration(
+                                        hintText: "Phone number",
+                                        hintStyle: TextStyle(color: Colors.grey),
+                                        //focusColor: Colors.green,
+                                        //hoverColor: Colors.green,
+                                        //border: InputBorder.none
+                                    ),
+                                    maxLength: 10,
+                                    keyboardType: TextInputType.number,
+                                    controller: _controller,
+                                  ),
                                 ),
                               ),
                             ],
@@ -90,7 +98,8 @@ class _LoginScreenState extends State<LoginScreen>{
                           margin: EdgeInsets.symmetric(horizontal: 50),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
-                              color: Colors.blue
+                              //color: Colors.blue
+                              color: Colors.green
                           ),
                           child: Center(
                             child:TextButton(
@@ -110,7 +119,8 @@ class _LoginScreenState extends State<LoginScreen>{
                       margin: EdgeInsets.symmetric(horizontal: 50),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
-                          color: Colors.blue
+                          //color: Colors.blue
+                          color: Colors.green
                       ),
                       child: Center(
                         child:TextButton(
