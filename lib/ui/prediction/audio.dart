@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 
 import 'package:get_storage/get_storage.dart';
+import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:http/http.dart' as http;
 
 class Audio extends StatefulWidget {
@@ -134,6 +135,12 @@ class _AudioState extends State<Audio> {
         return PredictionContent(pred);
       },
     );
+    // await showDialog<void>(
+    //     context: context,
+    //     builder: (_) {
+    //           return PredictionContent(pred)
+    //     }
+    //     });
   }
 
 //-----------------------------API----------------------------------------------

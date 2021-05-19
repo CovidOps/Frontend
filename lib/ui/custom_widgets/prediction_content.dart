@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:giffy_dialog/giffy_dialog.dart';
 class PredictionContent extends StatelessWidget {
   double pred;
+
   PredictionContent(this.pred);
 
   @override
   Widget build(BuildContext context) {
     Widget contentWidget = Text('');
-    if(pred<10.00){
+    if (pred < 10.00) {
       contentWidget = RichText(
         text: TextSpan(children: [
           TextSpan(
@@ -23,7 +25,7 @@ class PredictionContent extends StatelessWidget {
           ),
         ]),
       );
-    }else if(pred>85.00){
+    } else if (pred > 85.00) {
       contentWidget = RichText(
         text: TextSpan(children: [
           TextSpan(
@@ -40,7 +42,7 @@ class PredictionContent extends StatelessWidget {
           ),
         ]),
       );
-    }else{
+    } else {
       contentWidget = Text('You have ${pred.toStringAsFixed(2)}% chances of being infected with COVID-19.');
     }
     return AlertDialog(
@@ -61,5 +63,22 @@ class PredictionContent extends StatelessWidget {
         ),
       ],
     );
+    // return FlareGiffyDialog(
+    //     flarePath: 'images/assets/giff.gif',
+    //     flareAnimation: 'loading',
+    //     title: Text(
+    //       'Results',
+    //       textAlign: TextAlign.center,
+    //       style: TextStyle(
+    //           fontSize: 22.0, fontWeight: FontWeight.w600),
+    //     ),
+    //     entryAnimation: EntryAnimation.BOTTOM_LEFT,
+    //     description: contentWidget,
+    //     onOkButtonPressed: () {
+    //       Navigator.of(context).pop();
+    //     }
+    // );
   }
 }
+
+
