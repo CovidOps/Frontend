@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io' as io;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/custom_widgets/prediction_content.dart';
 import 'package:covigenix/ui/custom_widgets/progress.dart';
 import 'package:covigenix/ui/model/prediction_response.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -124,29 +125,13 @@ class _AudioState extends State<Audio> {
     AudioPlayer audioPlayer = AudioPlayer();
     await audioPlayer.play(_current.path, isLocal: true);
   }
-  void showResults(String pred) async {
+
+  void showResults(double pred) async {
     await showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Results"),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('You have ${pred} chances of being Infected Covid 19'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
+        return PredictionContent(pred);
       },
     );
   }
@@ -186,15 +171,18 @@ class _AudioState extends State<Audio> {
               'There was some error in prediction. Please try again later.');
         } else {
           if (res.status == 200) {
-            var pred = double.parse('res.prediction');
+            var pred = double.parse(res.prediction);
             pred = (1 - pred) * 0.75;
             pred = pred * 100;
-            res.prediction = pred.toStringAsFixed(2);
-            showResults(res.prediction);
+            //res.prediction = pred.toStringAsFixed(2);
+            showResults(pred);
+          }else if(res.status == 300){
+            Helper.goodToast('Your file was not captured. Please click the submit button again to upload.');
           }
-          else
+          else {
             Helper.goodToast(
                 'There was some error in prediction. Please try again later.');
+          }
         }
       } catch (Exception) {
         Helper.goodToast('There was an error');
