@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/custom_widgets/button.dart';
 import 'package:covigenix/ui/custom_widgets/prediction_content.dart';
-import 'package:covigenix/ui/custom_widgets/progress.dart';
+import 'package:covigenix/ui/custom_widgets/prediction_progress.dart';
 import 'package:covigenix/ui/model/prediction_response.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -24,6 +24,7 @@ class _ImagePageState extends State<ImagePage> {
   PickedFile? _image = null;
   final picker = ImagePicker();
   bool isLoading = false;
+  BuildContext? waitingContext = null;
 
   void showInstructions() async{
     await showDialog<void>(
@@ -35,7 +36,11 @@ class _ImagePageState extends State<ImagePage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text("1. Please ensure high image quality.\n2. Have a plain background behind the image.\n3. Capture/Upload photo without flashlight"),
+                Text("1. Please ensure high image quality.\n"
+                    "2. The selected image should contain only the X-Ray.\n"
+                    "3. Upload photo without flashlight",
+                  style: TextStyle(fontSize: 13),
+                ),
               ],
             ),
           ),
@@ -63,6 +68,19 @@ class _ImagePageState extends State<ImagePage> {
     );
   }
 
+  void showWaiting() async{
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context){
+        waitingContext = context;
+        return AlertDialog(
+          content: PredictionProgressIndicator(),
+        );
+      }
+    );
+  }
+
   void _pickImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     if (pickedFile == null) {
@@ -79,9 +97,10 @@ class _ImagePageState extends State<ImagePage> {
       return;
     }
 
-    setState(() {
+    /*setState(() {
       isLoading = true;
-    });
+    });*/
+    showWaiting();
 
     File f = File(_image!.path);
 
@@ -109,9 +128,14 @@ class _ImagePageState extends State<ImagePage> {
       http.Response response = await http.Response.fromStream(res);
       print("response code ${response.statusCode}");
 
-      setState(() {
+      /*setState(() {
         isLoading = false;
-      });
+      });*/
+
+      if(waitingContext!=null){
+        Navigator.pop(waitingContext!);
+        waitingContext = null;
+      }
 
       try {
         print(response.body);
@@ -144,6 +168,10 @@ class _ImagePageState extends State<ImagePage> {
           }
         }
       } catch (Exception) {
+        if(waitingContext!=null){
+          Navigator.pop(waitingContext!);
+          waitingContext = null;
+        }
         Helper.goodToast('There was an error');
       }
     });
@@ -181,7 +209,7 @@ class _ImagePageState extends State<ImagePage> {
             ],
           ),
         ),
-        (isLoading ? CustomProgressIndicator() : Container()),
+        //(isLoading ? PredictionProgressIndicator() : Container()),
       ],
     );
   }

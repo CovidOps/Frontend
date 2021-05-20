@@ -4,6 +4,7 @@ import 'package:covigenix/ui/Agreement_policy/contact_us.dart';
 import 'package:covigenix/ui/Agreement_policy/disclaimer.dart';
 import 'package:covigenix/ui/Agreement_policy/privacy_policy%20.dart';
 import 'package:covigenix/ui/Agreement_policy/t%20_and_c.dart';
+import 'package:covigenix/ui/custom_widgets/dialog.dart';
 import 'package:covigenix/ui/custom_widgets/sidenav.dart';
 import 'package:covigenix/ui/patient/patient_profile.dart';
 import 'package:covigenix/ui/patient/patient_services.dart';
@@ -36,13 +37,7 @@ class _PatientHomeState extends State<PatientHome> {
                   icon: const Icon(Icons.logout),
                   tooltip: 'Log Out',
                   onPressed: () {
-                    Helper.logOut();
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (BuildContext context) => Splash()),
-                    );
-                    /*Scaffold.of(context).showSnackBar(
-                        const SnackBar(content: Text('Log out')));*/
+                    _showDialogConfirmation();
                   },
                 );
               }
@@ -84,6 +79,27 @@ class _PatientHomeState extends State<PatientHome> {
           return Container();
         },
       )
+    );
+  }
+
+  void _showDialogConfirmation()  async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return CustomDialog(
+            title: "Confirm Action",
+            body: "Are you sure you want to log out?",
+            yesTitle: "Yes",
+            yesFunction: () {
+              Helper.logOut();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (BuildContext context) => Splash()),
+              );
+            }
+        );
+      },
     );
   }
 }

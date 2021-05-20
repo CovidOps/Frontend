@@ -1,8 +1,10 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'package:covigenix/ui/model/community_post_model.dart';
 import 'package:covigenix/ui/model/patient_model.dart';
 import 'package:covigenix/ui/model/provider_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
@@ -174,13 +176,18 @@ class Helper{
   static final List<EssentialGridModel> essentialsList = [
     EssentialGridModel("remdesivir", "Remdesivir",Image.asset("assets/images/remedivir.jpg"),"assets/images/remedivir.jpg"),
     EssentialGridModel("oxygen", "Medical Oxygen",Image.asset("assets/images/oxygen_tank.jpg"),"assets/images/oxygen_tank.jpg"),
-    EssentialGridModel("plasma", "Plasma",Image.asset("assets/images/PLasma.jpg"),"assets/images/PLasma.jpg"),
+    EssentialGridModel("hospital", "Hospital Facility",Image.asset("assets/images/hospital.jpg"),"assets/images/hospital.jpg"),
     EssentialGridModel("fabiflu","Fabiflu",Image.asset("assets/images/fabliflu.png"),"assets/images/fabiflu.jpg"),
     EssentialGridModel("icu","ICU Beds",Image.asset("assets/images/icu.jpg"),"assets/images/icu.jpg"),
     EssentialGridModel("ambulance","Ambulance",Image.asset("assets/images/ambulance.jpg"),"assets/images/ambulance.jpg")
   ];
 
-
+  static Future<List<HospitalListModel>> getHospitalsFromJson() async{
+    List<HospitalListModel> res = List<HospitalListModel>.empty(growable: true);
+    String json = await rootBundle.loadString("hospitals_data.json");
+    res = (jsonDecode(json) as Iterable).map<HospitalListModel>((modelJson) => HospitalListModel.fromJson(modelJson)).toList();
+    return res;
+  }
 
   static List<Patient> sortListPatient(List<Patient> arg){
     double startLat = getLatitude(), startLong = getLongitude();
@@ -221,12 +228,52 @@ class Helper{
       Helper.goodToast('Found no app to launch for calling.');
     }
   }
-}
 
+  static List<String> getStates(){
+    List<String> res = List.empty(growable: true);
+    for(String item in
+      ['Andhra Pradesh',
+        'Assam',
+        'Bihar',
+        'Chandigarh',
+        'Delhi',
+        'Gujarat',
+        'Jharkhand',
+        'Karnataka',
+        'Kerala',
+        'Madhya Pradesh',
+        'Maharashtra',
+        'Meghalaya',
+        'Odisha',
+        'Rajasthan',
+        'Tamil Nadu',
+        'Telangana',
+        'Uttar Pradesh',
+        'Uttarakhand',
+        'West Bengal'
+      ]){
+      res.add(item);
+    }
+    return res;
+  }
+}
 
 class EssentialGridModel{
   final String arg, proper,path;
   final Image image;
   bool checked = false;
   EssentialGridModel(this.arg, this.proper, this.image,this.path);
+}
+
+class HospitalListModel{
+  final String Name, City, State, Area;
+  HospitalListModel(this.Name, this.City, this.State, this.Area);
+  factory HospitalListModel.fromJson(Map<String, dynamic> json){
+    return HospitalListModel(
+      json["Name"],
+      json["City"],
+      json["State"],
+      json["Area"],
+    );
+  }
 }

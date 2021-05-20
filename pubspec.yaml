@@ -71,7 +71,7 @@ flutter:
     - assets/images/fabiflu.jpg
     - assets/images/otp.png
     - assets/images/giff.gif
-    - assets/images/PLasma.jpg
+    - assets/images/hospital.jpg
     - assets/images/contact_us.png
     - assets/images/logo.png
     - assets/images/imagepred.jpg
@@ -85,6 +85,7 @@ flutter:
     - assets/images/audio.png
     - assets/images/icu.jpg
     - assets/images/ambulance.jpg
+    - hospitals_data.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

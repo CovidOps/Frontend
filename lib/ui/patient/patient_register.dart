@@ -63,7 +63,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
   void register(BuildContext context) {
     if (_registerPatientKey.currentState!.validate()) {
       if(_currentPosition == null){
-        Helper.goodToast("Please obtain location.");
+        Helper.goodToast("Please click on 'Get Location' to register.");
         return;
       }
       if(_checkbox==false){
@@ -124,7 +124,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
                     controller: name,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: "Name",
+                      hintText: "Full Name (e.g. John Doe)",
                       contentPadding: EdgeInsets.all(16),
                     ),
                     validator: (value) {
@@ -154,12 +154,12 @@ class _RegisterPatientState extends State<RegisterPatient> {
                     controller: area,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: "Area",
+                      hintText: "City and State (e.g. Patna, Bihar)",
                       contentPadding: EdgeInsets.all(16),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return "Enter a valid area.";
+                        return "Enter a valid 'city, state'.";
                       } else {
                         return null;
                       }
@@ -172,7 +172,7 @@ class _RegisterPatientState extends State<RegisterPatient> {
                     controller: address,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: "Address",
+                      hintText: "Complete Address",
                       contentPadding: EdgeInsets.all(16),
                     ),
                     validator: (value) {

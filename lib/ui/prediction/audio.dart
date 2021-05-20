@@ -4,14 +4,13 @@ import 'dart:io' as io;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/custom_widgets/prediction_content.dart';
-import 'package:covigenix/ui/custom_widgets/progress.dart';
+import 'package:covigenix/ui/custom_widgets/prediction_progress.dart';
 import 'package:covigenix/ui/model/prediction_response.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 
 import 'package:get_storage/get_storage.dart';
-import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:http/http.dart' as http;
 
 class Audio extends StatefulWidget {
@@ -24,6 +23,7 @@ class _AudioState extends State<Audio> {
   late Recording _current;
   RecordingStatus _currentStatus = RecordingStatus.Unset;
   bool isLoading = false;
+  BuildContext? waitingContext = null;
 
   @override
   void initState() {
@@ -33,7 +33,6 @@ class _AudioState extends State<Audio> {
 // ----------------------  Here is the code for recording and playback -------
 
   _init() async {
-    print("initting!");
     try {
       if (await FlutterAudioRecorder.hasPermissions) {
         String customPath = '/flutter_audio_recorder_';
@@ -143,11 +142,25 @@ class _AudioState extends State<Audio> {
     //     });
   }
 
+  void showWaiting() async{
+    await showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context){
+          waitingContext = context;
+          return AlertDialog(
+            content: PredictionProgressIndicator(),
+          );
+        }
+    );
+  }
+
 //-----------------------------API----------------------------------------------
   void predictAudio() async {
-    setState(() {
+    /*setState(() {
       isLoading = true;
-    });
+    });*/
+    showWaiting();
 
     var fout = io.File(_current.path!);
     var len = await fout.length();
@@ -165,9 +178,13 @@ class _AudioState extends State<Audio> {
       await http.Response.fromStream(await request.send());
       print("response code ${response.statusCode}");
 
-      setState(() {
+      /*setState(() {
         isLoading = false;
-      });
+      });*/
+      if(waitingContext!=null){
+        Navigator.pop(waitingContext!);
+        waitingContext = null;
+      }
 
       try {
         print(response.body);
@@ -192,6 +209,10 @@ class _AudioState extends State<Audio> {
           }
         }
       } catch (Exception) {
+        if(waitingContext!=null){
+          Navigator.pop(waitingContext!);
+          waitingContext = null;
+        }
         Helper.goodToast('There was an error');
       }
     });
@@ -200,7 +221,6 @@ class _AudioState extends State<Audio> {
 // ----------------------------- UI --------------------------------------------
 
   void showInstructions() async {
-    print("Dialog!");
     await showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -215,6 +235,7 @@ class _AudioState extends State<Audio> {
                       "2. Please ensure you are in a quiet surrounding.\n"
                       "3. DON'T upload ambiguous audio as it may produce wrong results.\n"
                       "4. Press the record button to start recording.",
+                  style: TextStyle(fontSize: 13),
                 ),
               ],
             ),
@@ -400,7 +421,7 @@ class _AudioState extends State<Audio> {
             ],
           ),
         ),
-        (isLoading ? CustomProgressIndicator() : Container()),
+        //(isLoading ? CustomProgressIndicator() : Container()),
       ],
     );
   }

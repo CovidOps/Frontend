@@ -80,7 +80,7 @@ class _ProviderRequestsIndivState extends State<ProviderRequestsIndiv> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.model.proper),
+        title: Center(child: Text(widget.model.proper, style: TextStyle(fontSize: 24),)),
       ),
       body: Stack(children: [
         Align(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/patient/patient_essentials_list.dart';
+import 'package:covigenix/ui/patient/patient_hardcoded_list.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -28,6 +29,9 @@ class PatientEssentialsHome extends StatelessWidget {
         }else{
           Helper.goodToast('Opening web links is not supported on your phone');
         }
+      }else if(model.arg == "hospital") {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => PatientHardcodedList()));
       }else{
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => PatientEssentialsList(model)));

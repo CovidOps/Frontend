@@ -9,7 +9,6 @@ import 'package:covigenix/ui/provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
 
 class RegisterProvider extends StatefulWidget {
   @override
@@ -19,7 +18,6 @@ class RegisterProvider extends StatefulWidget {
 class _RegisterProviderState extends State<RegisterProvider> {
   final GlobalKey<FormState> _registerProviderKey = GlobalKey<FormState>();
 
-  //final Geolocator geolocator = Geolocator();
   late String initialPhone, getLatitude, getLongitude;
   late Position? _currentPosition;
   bool isLoading = false;
@@ -67,13 +65,14 @@ class _RegisterProviderState extends State<RegisterProvider> {
   void register(BuildContext context) {
     if (_registerProviderKey.currentState!.validate()) {
       if (_currentPosition == null) {
-        Helper.goodToast("Please obtain location.");
+        Helper.goodToast("Please click on 'Get Location' to register.");
         return;
       }
       if(_checkbox==false){
         Helper.goodToast("Please accept to Terms and Conditions");
         return;
       }
+
       List<String> essentials = List<String>.empty(growable: true);
       screen.status.forEach((key, value) {
         if (value == true) essentials.add(key);
@@ -148,7 +147,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
                       controller: name,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: "Name",
+                        hintText: "Full Name (e.g. John Doe)",
                         contentPadding: EdgeInsets.all(16),
                       ),
                       validator: (value) {
@@ -178,12 +177,12 @@ class _RegisterProviderState extends State<RegisterProvider> {
                       controller: area,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: "Area",
+                        hintText: "City and State (e.g. Patna, Bihar)",
                         contentPadding: EdgeInsets.all(16),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Enter a valid area.";
+                          return "Enter a valid 'city, state'.";
                         } else {
                           return null;
                         }

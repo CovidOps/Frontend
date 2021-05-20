@@ -38,10 +38,6 @@ class _ProviderHomeState extends State<ProviderHome> {
                   onPressed: () {
                     _showDialogConfirmation();
                    // Helper.logOut();
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (BuildContext context) => Splash()),
-                    );
                   },
                 );
               }
@@ -92,9 +88,15 @@ class _ProviderHomeState extends State<ProviderHome> {
       builder: (BuildContext context) {
         return CustomDialog(
           title: "Confirm Action",
-          body: "Are you sure you want to log out",
+          body: "Are you sure you want to log out?",
           yesTitle: "Yes",
-          yesFunction: () => Helper.logOut(),
+          yesFunction: () {
+            Helper.logOut();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (BuildContext context) => Splash()),
+            );
+          }
         );
       },
     );

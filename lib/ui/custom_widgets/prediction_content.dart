@@ -63,21 +63,6 @@ class PredictionContent extends StatelessWidget {
         ),
       ],
     );
-    // return FlareGiffyDialog(
-    //     flarePath: 'images/assets/giff.gif',
-    //     flareAnimation: 'loading',
-    //     title: Text(
-    //       'Results',
-    //       textAlign: TextAlign.center,
-    //       style: TextStyle(
-    //           fontSize: 22.0, fontWeight: FontWeight.w600),
-    //     ),
-    //     entryAnimation: EntryAnimation.BOTTOM_LEFT,
-    //     description: contentWidget,
-    //     onOkButtonPressed: () {
-    //       Navigator.of(context).pop();
-    //     }
-    // );
   }
 }
 
