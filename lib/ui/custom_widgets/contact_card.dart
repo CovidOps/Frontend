@@ -33,7 +33,7 @@ class ContactCard extends StatelessWidget {
                     )),
               ),
               Center(child: Text(name, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0),)),
-              GestureDetector(child: Center(child: Text(numberMail, textAlign: TextAlign.center, style: TextStyle(fontSize: 12.0),)), onTap: () => onTap(),),
+              GestureDetector(child: Center(child: Text(numberMail, textAlign: TextAlign.center, style: TextStyle(fontSize: 12.0,color:Colors.blue),)), onTap: () => onTap(),),
               Center(child: Text(description, textAlign: TextAlign.center, style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12.0),)),
             ],
           )),
