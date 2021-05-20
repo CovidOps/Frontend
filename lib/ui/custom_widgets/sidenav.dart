@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../helper.dart';
 class SideNav extends StatelessWidget {
 
   final int selectedIndex;
@@ -67,6 +69,10 @@ class SideNav extends StatelessWidget {
             _navItem(context, Icons.person_outline, 'My Profile',
                 onTap: () {_navItemClicked(context, 7);},
                 selected: selectedIndex==7
+            ),
+            _navItem(context, Icons.bug_report, 'Report a Bug',
+                onTap: () => Helper.openMailer(),
+                selected: false
             ),
             Expanded(child:Container(), flex: 1),
             Padding(

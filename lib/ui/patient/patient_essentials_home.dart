@@ -12,23 +12,11 @@ class PatientEssentialsHome extends StatelessWidget {
   void _onEssentialClick(BuildContext context, EssentialGridModel model){
     Future.delayed(const Duration(milliseconds: 500), () async{
       if(model.arg == "oxygen"){
-        if(await canLaunch(Helper.OXYGEN_URL)){
-          await launch(Helper.OXYGEN_URL);
-        }else{
-          Helper.goodToast('Opening web links is not supported on your phone');
-        }
+        Helper.openExternal(Helper.OXYGEN_URL);
       } else if(model.arg == "ambulance"){
-        if(await canLaunch(Helper.AMBULANCE_URL)){
-          await launch(Helper.AMBULANCE_URL);
-        }else{
-          Helper.goodToast('Opening web links is not supported on your phone');
-        }
+        Helper.openExternal(Helper.AMBULANCE_URL);
       } else if(model.arg == "icu"){
-        if(await canLaunch(Helper.ICU_URL)){
-          await launch(Helper.ICU_URL);
-        }else{
-          Helper.goodToast('Opening web links is not supported on your phone');
-        }
+        Helper.openExternal(Helper.ICU_URL);
       }else if(model.arg == "hospital") {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => PatientHardcodedList()));

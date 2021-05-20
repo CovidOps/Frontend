@@ -17,6 +17,7 @@ class Helper{
   static const String OXYGEN_URL = "https://www.covidfightclub.org/?search_key=&city_id=&medicine_id=4&type=1";
   static const String ICU_URL = "https://www.covidfightclub.org/?search_key=&city_id=&medicine_id=10&type=1";
   static const String AMBULANCE_URL = "https://www.covidfightclub.org/?search_key=&city_id=&medicine_id=1&type=1";
+  static const String MAILER_URL = "mailto:covidops2021@gmail.com?subject=Report%20a%20Bug";
   static const String appName = "CovidOps";
 
   static const String LOGIN_STATUS = "LoginStatus";
@@ -255,6 +256,22 @@ class Helper{
       res.add(item);
     }
     return res;
+  }
+
+  static void openMailer() async{
+    if(await canLaunch(MAILER_URL)){
+      await launch(MAILER_URL);
+    }else{
+      Helper.goodToast('E-mail client was not found on your device.');
+    }
+  }
+
+  static void openExternal(String url) async{
+    if(await canLaunch(url)){
+      await launch(url);
+    }else{
+      Helper.goodToast('Opening web links is not supported on your phone');
+    }
   }
 }
 
