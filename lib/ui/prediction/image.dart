@@ -71,10 +71,14 @@ class _ImagePageState extends State<ImagePage> {
     setState(() {
       _image = pickedFile;
     });
-    _upload();
   }
 
   void _upload() async {
+    if(_image == null){
+      Helper.goodToast('Please select an image.');
+      return;
+    }
+
     setState(() {
       isLoading = true;
     });
@@ -167,8 +171,12 @@ class _ImagePageState extends State<ImagePage> {
                           ? Image.network(_image!.path)
                           : Image.file(File(_image!.path))),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(bottom:16.0),
                 child: CustomButton('Select Image', showInstructions),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom:16.0),
+                child: CustomButton('Submit Image', _upload),
               ),
             ],
           ),

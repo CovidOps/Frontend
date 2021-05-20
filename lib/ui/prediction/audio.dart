@@ -234,7 +234,7 @@ class _AudioState extends State<Audio> {
   }
 
   Widget _buildText(RecordingStatus status) {
-    var icon = Icon(Icons.power_settings_new_sharp);
+    var icon = Icon(Icons.power_settings_new, color: Colors.green.shade800);
     switch (_currentStatus) {
       case RecordingStatus.Initialized:
         {
@@ -253,13 +253,42 @@ class _AudioState extends State<Audio> {
         }
       case RecordingStatus.Stopped:
         {
-          icon = Icon(Icons.power_settings_new_sharp);
+          icon = Icon(Icons.power_settings_new, color: Colors.green.shade800,);
           break;
         }
       default:
         break;
     }
     return icon;
+  }
+
+  String _buildToolTip(RecordingStatus status){
+    String res = "Initialize";
+    switch (_currentStatus) {
+      case RecordingStatus.Initialized:
+        {
+          res = "Record";
+          break;
+        }
+      case RecordingStatus.Recording:
+        {
+          res = "Pause";
+          break;
+        }
+      case RecordingStatus.Paused:
+        {
+          res = "Resume";
+          break;
+        }
+      case RecordingStatus.Stopped:
+        {
+          res = "Initialize";
+          break;
+        }
+      default:
+        break;
+    }
+    return res;
   }
 
   @override
@@ -307,6 +336,7 @@ class _AudioState extends State<Audio> {
               }
             },
             icon: _buildText(_currentStatus),
+            tooltip: _buildToolTip(_currentStatus),
           ),
         ),
         Container(
@@ -317,7 +347,8 @@ class _AudioState extends State<Audio> {
           child: IconButton(
             onPressed:
             _currentStatus != RecordingStatus.Unset ? _stop : null,
-            icon: Icon(Icons.stop, color: Colors.red),
+            icon: Icon(Icons.stop, color: _currentStatus != RecordingStatus.Unset ? Colors.red : Colors.grey),
+            tooltip: "Stop",
           ),
         ),
         Container(
@@ -329,6 +360,7 @@ class _AudioState extends State<Audio> {
             onPressed: onPlayAudio,
             icon: Icon(Icons.play_arrow, color: Colors.black),
             disabledColor: Colors.grey,
+            tooltip: "Play",
           ),
         ),
         Container(
@@ -338,8 +370,9 @@ class _AudioState extends State<Audio> {
           alignment: Alignment.center,
           child: IconButton(
             onPressed: _currentStatus == RecordingStatus.Stopped ? predictAudio: null,
-            icon: Icon(Icons.check, color: Colors.green,),
+            icon: Icon(Icons.check, color: _currentStatus == RecordingStatus.Stopped ? Colors.green: Colors.grey,),
             disabledColor: Colors.grey,
+            tooltip: "Submit",
           ),
         ),
         Expanded(
