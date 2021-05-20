@@ -24,14 +24,14 @@ dependencies:
   geolocator: ^7.0.3
   giffy_dialog: ^1.8.0
   motion_tab_bar: ^0.1.5
-  simple_animations: ^1.3.3
+  simple_animations: ^3.1.1
   fluttertoast: ^8.0.7
   get_storage:
   image:
   http: ^0.13.3
   flutter_audio_recorder:
   audioplayers:
-  http_parser: 4.0.0
+  http_parser: ^4.0.0
   map_launcher: ^2.0.0
   flutter:
     sdk: flutter
@@ -41,10 +41,12 @@ dependencies:
   cupertino_icons: ^1.0.0
   firebase_auth: ^1.1.4
   firebase_core: ^1.1.1
-  pinput: ^0.2.6
+  pinput: ^1.2.0
   image_picker: ^0.7.5
-  permission_handler: ^6.0.1
+  permission_handler: ^7.1.0
   url_launcher: ^6.0.3
+  version: ^2.0.0
+  package_info: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -85,7 +87,8 @@ flutter:
     - assets/images/audio.png
     - assets/images/icu.jpg
     - assets/images/ambulance.jpg
-    - hospitals_data.json
+    - assets/hospitals_data.json
+    - assets/sample.wav
 
   # To add assets to your application, add an assets section, like this:
   # assets:

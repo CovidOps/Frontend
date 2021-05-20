@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io' as io;
+import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:covigenix/helper.dart';
 import 'package:covigenix/ui/custom_widgets/prediction_content.dart';
@@ -24,6 +25,7 @@ class _AudioState extends State<Audio> {
   RecordingStatus _currentStatus = RecordingStatus.Unset;
   bool isLoading = false;
   BuildContext? waitingContext = null;
+  AudioPlayer player = AudioPlayer();
 
   @override
   void initState() {
@@ -124,6 +126,12 @@ class _AudioState extends State<Audio> {
   void onPlayAudio() async {
     AudioPlayer audioPlayer = AudioPlayer();
     await audioPlayer.play(_current.path, isLocal: true);
+  }
+
+  void playSample() async{
+    AudioCache cache = AudioCache(fixedPlayer: player);
+    io.File file = await cache.fetchToMemory('sample.wav');
+    await player.play(file.path);
   }
 
   void showResults(double pred) async {
@@ -314,6 +322,16 @@ class _AudioState extends State<Audio> {
 
   @override
   Widget build(BuildContext context) {
+    Widget audioRow = Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text('Sample Audio'),
+        IconButton(
+          icon: Icon(Icons.volume_up),
+          onPressed: playSample,
+        ),
+      ],
+    );
     Widget buttonGroup = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -416,8 +434,15 @@ class _AudioState extends State<Audio> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Opacity(opacity: 0.0, child: Container()),
-              Opacity(opacity: 1.0, child: buttonGroup),
+              Expanded(
+                child: Column(children:[
+                    Opacity(opacity: 1.0, child: audioRow,),
+                    Opacity(opacity: 0.0, child: audioRow,),
+                  ], mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+              ),
+              Expanded(
+                child: buttonGroup,
+              )
             ],
           ),
         ),

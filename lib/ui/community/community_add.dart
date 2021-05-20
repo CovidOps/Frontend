@@ -76,7 +76,8 @@ class _AddCommunityState extends State<AddCommunity> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Center(child: Text('Create Community Post', style: TextStyle(fontSize: 24),)),),
+      //appBar: AppBar(title: Center(child: Text('Create Community Post', style: TextStyle(fontSize: 24),)),),
+      appBar: AppBar(title: Text('Create Community Post')),
       body: Stack(
         children: [
           Form(

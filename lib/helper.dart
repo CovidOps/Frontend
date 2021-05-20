@@ -185,7 +185,7 @@ class Helper{
 
   static Future<List<HospitalListModel>> getHospitalsFromJson() async{
     List<HospitalListModel> res = List<HospitalListModel>.empty(growable: true);
-    String json = await rootBundle.loadString("hospitals_data.json");
+    String json = await rootBundle.loadString("assets/hospitals_data.json");
     res = (jsonDecode(json) as Iterable).map<HospitalListModel>((modelJson) => HospitalListModel.fromJson(modelJson)).toList();
     return res;
   }
