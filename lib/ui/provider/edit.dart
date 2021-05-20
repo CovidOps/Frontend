@@ -25,6 +25,7 @@ class _EditState extends State<Edit> {
 
     List<String> essentials = List<String>.empty(growable: true);
     screen.status.forEach((key, value) {if(value == true) essentials.add(key);});
+    Helper.editEssentials(essentials: essentials);
 
     final response = await http.put(
       Uri.https(Helper.BASE_URL, "provider/${Helper.getId()}"),

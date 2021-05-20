@@ -85,12 +85,12 @@ class _RegisterProviderState extends State<RegisterProvider> {
 
       createProvider(
           name.text, initialPhone, area.text, _currentPosition!.longitude,
-          _currentPosition!.latitude);
+          _currentPosition!.latitude, essentials);
     }
   }
 
   void createProvider(String name, String phone, String area, double longi,
-      double lati) async {
+      double lati, List<String> essentials) async {
     setState(() {
       isLoading = true;
     });
@@ -122,7 +122,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
       Response res = Response.fromJson(jsonDecode(response.body));
       Helper.goodToast(res.message!);
       if (res.code == 200) {
-        goToProviderHome(context, res.id!);
+        goToProviderHome(context, res.id!, essentials);
       }
     } else {
       throw Exception('Failed to create Service provider');
@@ -229,7 +229,7 @@ class _RegisterProviderState extends State<RegisterProvider> {
     );
   }
 
-  void goToProviderHome(BuildContext context, String id) {
+  void goToProviderHome(BuildContext context, String id, List<String> essentials) {
     Future.delayed(const Duration(milliseconds: 500), () {
       Helper.setProfile(
           loginStatus: Helper.TYPE_PATIENT,
@@ -238,7 +238,8 @@ class _RegisterProviderState extends State<RegisterProvider> {
           phone: initialPhone,
           area: area.text,
           longi: _currentPosition!.longitude,
-          lati: _currentPosition!.latitude
+          lati: _currentPosition!.latitude,
+        essentials: essentials,
       );
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => ProviderHome()));

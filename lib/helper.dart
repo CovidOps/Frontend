@@ -22,7 +22,7 @@ class Helper{
   static const int TYPE_REQUEST = 0, TYPE_AVAILABILITY = 1;
 
   static const String ID = "id", NAME = "name", PHONE = "phone", AREA = "area", LATITUDE = "latitude", LONGITUDE = "longitude", ADDRESS = "address";
-  static const String LS_KEY = "Local.json", USER = "User";
+  static const String LS_KEY = "Local.json", USER = "User", ESSENTIALS = "essentials";
 
   static const double textSize = 16, headSize = 24;
 
@@ -31,7 +31,7 @@ class Helper{
     //return new LocalStorage(LS_KEY).getItem(LOGIN_STATUS) ?? -1;
   }
 
-  static void setProfile({int loginStatus = -1, String id = "", String name = "", String phone = "", String area = "", double lati = 0.0, double longi = 0.0, String address = ""}){
+  static void setProfile({int loginStatus = -1, String id = "", String name = "", String phone = "", String area = "", double lati = 0.0, double longi = 0.0, String address = "", List<String>? essentials}){
     /*final LocalStorage localStorage = new LocalStorage(LS_KEY);
     Map<String, dynamic> map = (localStorage.getItem(USER) ?? Map<String, dynamic>());*/
     final GetStorage box = GetStorage();
@@ -44,6 +44,9 @@ class Helper{
     if(longi != 0.0) map[LONGITUDE] = longi;
     if(lati != 0.0) map[LATITUDE] = lati;
     if(address != "") map[ADDRESS] = address;
+    if(essentials != null){
+      map[ESSENTIALS] = essentials;
+    }
     //localStorage.setItem(USER, map);
     box.write(USER, map);
   }
@@ -89,6 +92,15 @@ class Helper{
     return (GetStorage().read(USER) as Map<String, dynamic>? ?? Map<String, dynamic>())[ADDRESS] ?? "";
   }
 
+  static List<String> getEssentials(){
+    var list = (GetStorage().read(USER) as Map<String, dynamic>? ?? Map<String, dynamic>())[ESSENTIALS];
+    var res = List<String>.empty(growable: true);
+    for(String item in list){
+      res.add(item);
+    }
+    return res;
+  }
+
   static void setCoordinates(double longi, double lati){
     //final LocalStorage localStorage = new LocalStorage(LS_KEY);
     //Map<String, dynamic> map = (localStorage.getItem(USER) ?? Map<String, dynamic>());
@@ -112,6 +124,13 @@ class Helper{
     box.write(USER, map);
   }
 
+  static void editEssentials({required List<String> essentials}){
+    final GetStorage box = GetStorage();
+    Map<String, dynamic> map = (box.read(USER) ?? Map<String, dynamic>());
+    map[ESSENTIALS] = essentials;
+    box.write(USER, map);
+  }
+
   static String argToProper(String arg){
     for(EssentialGridModel e in essentialsList){
       if(e.arg == arg)
@@ -130,6 +149,26 @@ class Helper{
       textColor: Colors.white,
       fontSize: 16.0,
     );
+  }
+
+  static List<EssentialGridModel> getEssentialsListForMap(){
+    final GetStorage box = GetStorage();
+    Map<String, dynamic> map = (box.read(USER) ?? Map<String, dynamic>());
+    int type = (map[LOGIN_STATUS] ?? TYPE_LOGOUT);
+    if(type==TYPE_LOGOUT){
+      return essentialsList;
+    }
+    List<String> essentials = getEssentials();
+    List<EssentialGridModel> res = essentialsList;
+    for(String item in essentials){
+      for(int i = 0; i<res.length; i++){
+        if(res[i].arg == item){
+          res[i].checked = true;
+          break;
+        }
+      }
+    }
+    return res;
   }
 
   static final List<EssentialGridModel> essentialsList = [

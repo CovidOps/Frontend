@@ -275,7 +275,9 @@ class _OTPScreenState extends State<OTPScreen> {
             phone: phone,
             area: res.area!,
             longi: res.location![0],
-            lati: res.location![1]);
+            lati: res.location![1],
+          essentials: res.essentials!
+        );
 
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (BuildContext context) => ProviderHome()),
@@ -298,11 +300,19 @@ class Response {
   String message;
   String? id, name, area, address;
   List<double>? location;
+  List<String>? essentials;
 
   Response(this.code, this.message,
-      {this.id, this.name, this.area, this.address, this.location});
+      {this.id, this.name, this.area, this.address, this.location, this.essentials});
 
   factory Response.fromJson(Map<String, dynamic> json) {
+    List<String> ess = List<String>.empty(growable: true);
+    if(json["essentials"] != null){
+      //int len = json["location"].length;
+      for(String item in json["essentials"]){
+        ess.add(item);
+      }
+    }
     return Response(
       json["code"],
       json["message"],
@@ -313,6 +323,7 @@ class Response {
       location: (json["location"] == null
           ? null
           : <double>[json["location"][0], json["location"][1]]),
+      essentials: ess,
     );
   }
 }

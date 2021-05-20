@@ -19,7 +19,7 @@ class _EssentialChecklistState extends State<EssentialChecklist> {
   @override
   void initState() {
     super.initState();
-    list = Helper.essentialsList;
+    list = Helper.getEssentialsListForMap();
     for(EssentialGridModel e in list){
       widget.status[e.arg] = e.checked;
     }
