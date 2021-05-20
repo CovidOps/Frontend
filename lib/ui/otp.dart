@@ -43,7 +43,9 @@ class _OTPScreenState extends State<OTPScreen> {
     return Scaffold(
       key: _scaffoldkey,
       appBar: AppBar(
-        title: Text('OTP Verification'),
+        title: Center(child: Text('OTP Verification', style: TextStyle(fontSize: 24),)),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.green,
       ),
       body: Stack(
         children: [

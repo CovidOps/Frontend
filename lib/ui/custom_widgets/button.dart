@@ -3,8 +3,9 @@ class CustomButton extends StatelessWidget {
 
   final String text;
   final void Function() onPressed;
+  final MaterialColor color;
 
-  CustomButton(this.text, this.onPressed);
+  CustomButton(this.text, this.onPressed, {this.color = Colors.blue});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class CustomButton extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
-          color: Colors.orange
+          color: color
       ),
       child: Center(
           child:TextButton(

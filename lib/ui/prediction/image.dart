@@ -85,8 +85,8 @@ class _ImagePageState extends State<ImagePage> {
     img.Image imageTemp = img.decodeImage(f.readAsBytesSync())!;
     img.Image resizedImg = img.copyResize(imageTemp, width: 224, height: 224);
     print("Resizing done");
-    //Uri uri = Uri.https(Helper.MODEL_BASE_URL, "image");
-    Uri uri = Uri.http(Helper.MODEL_BASE_URL, "image");
+    Uri uri = Uri.https(Helper.MODEL_BASE_URL, "image");
+    //Uri uri = Uri.http(Helper.MODEL_BASE_URL, "image");
     /*final request = http.MultipartRequest('POST', uri)
       ..files.add(await http.MultipartFile.fromPath(
           'file', _image!.path, filename: "${Helper.getId()}.$ext"));*/

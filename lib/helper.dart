@@ -10,8 +10,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 class Helper{
   static const String BASE_URL = "covigenix-test-deploy.herokuapp.com";
-  //static const String MODEL_BASE_URL = "sheltered-brook-16215.herokuapp.com";
-  static const String MODEL_BASE_URL = "192.168.1.6:5000";
+  static const String MODEL_BASE_URL = "sheltered-brook-16215.herokuapp.com";
+  //static const String MODEL_BASE_URL = "192.168.1.6:5000";
+  static const String OXYGEN_URL = "https://www.covidfightclub.org/?search_key=&city_id=&medicine_id=4&type=1";
+  static const String ICU_URL = "https://www.covidfightclub.org/?search_key=&city_id=&medicine_id=10&type=1";
+  static const String AMBULANCE_URL = "https://www.covidfightclub.org/?search_key=&city_id=&medicine_id=1&type=1";
   static const String appName = "CovidOps";
 
   static const String LOGIN_STATUS = "LoginStatus";
@@ -133,7 +136,9 @@ class Helper{
     EssentialGridModel("remdesivir", "Remdesivir",Image.asset("assets/images/remedivir.jpg"),"assets/images/remedivir.jpg"),
     EssentialGridModel("oxygen", "Medical Oxygen",Image.asset("assets/images/oxygen_tank.jpg"),"assets/images/oxygen_tank.jpg"),
     EssentialGridModel("plasma", "Plasma",Image.asset("assets/images/PLasma.jpg"),"assets/images/PLasma.jpg"),
-    EssentialGridModel("fabiflu","Fabiflu",Image.asset("assets/images/fabliflu.png"),"assets/images/fabiflu.jpg")
+    EssentialGridModel("fabiflu","Fabiflu",Image.asset("assets/images/fabliflu.png"),"assets/images/fabiflu.jpg"),
+    EssentialGridModel("icu","ICU Beds",Image.asset("assets/images/icu.jpg"),"assets/images/icu.jpg"),
+    EssentialGridModel("ambulance","Ambulance",Image.asset("assets/images/ambulance.jpg"),"assets/images/ambulance.jpg")
   ];
 
 
