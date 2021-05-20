@@ -1,4 +1,5 @@
 import 'package:covigenix/helper.dart';
+import 'package:covigenix/ui/custom_widgets/dialog.dart';
 import 'package:covigenix/ui/custom_widgets/sidenav.dart';
 import 'package:covigenix/ui/prediction/prediction.dart';
 import 'package:covigenix/ui/provider/provider_profile.dart';
@@ -35,7 +36,8 @@ class _ProviderHomeState extends State<ProviderHome> {
                   icon: const Icon(Icons.logout),
                   tooltip: 'Log Out',
                   onPressed: () {
-                    Helper.logOut();
+                    _showDialogConfirmation();
+                   // Helper.logOut();
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (BuildContext context) => Splash()),
@@ -83,4 +85,19 @@ class _ProviderHomeState extends State<ProviderHome> {
       )
     );
   }
-}
+  void _showDialogConfirmation()  async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return CustomDialog(
+          title: "Confirm Action",
+          body: "Are you sure you want to log out",
+          yesTitle: "Yes",
+          yesFunction: () => Helper.logOut(),
+        );
+      },
+    );
+  }
+
+  }
