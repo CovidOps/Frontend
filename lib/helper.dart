@@ -162,7 +162,9 @@ class Helper{
       return essentialsList;
     }
     List<String> essentials = getEssentials();
-    List<EssentialGridModel> res = essentialsList;
+    List<EssentialGridModel> res = List.from(essentialsList);
+    for(int i=0; i<res.length; i++)
+      res[i].checked = false;
     for(String item in essentials){
       for(int i = 0; i<res.length; i++){
         if(res[i].arg == item){
@@ -280,6 +282,11 @@ class EssentialGridModel{
   final Image image;
   bool checked = false;
   EssentialGridModel(this.arg, this.proper, this.image,this.path);
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "{$arg = $checked}";
+  }
 }
 
 class HospitalListModel{

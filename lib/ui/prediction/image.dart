@@ -97,23 +97,16 @@ class _ImagePageState extends State<ImagePage> {
       return;
     }
 
-    /*setState(() {
-      isLoading = true;
-    });*/
     showWaiting();
 
     File f = File(_image!.path);
 
-    //var bytes = await _image!.readAsBytes();
     img.Image imageTemp = img.decodeImage(f.readAsBytesSync())!;
     img.Image resizedImg = img.copyResize(imageTemp, width: 224, height: 224);
     print("Resizing done");
     Uri uri = Uri.https(Helper.MODEL_BASE_URL, "image");
-    //Uri uri = Uri.http(Helper.MODEL_BASE_URL, "image");
-    /*final request = http.MultipartRequest('POST', uri)
-      ..files.add(await http.MultipartFile.fromPath(
-          'file', _image!.path, filename: "${Helper.getId()}.$ext"));*/
-    Future.delayed(Duration(milliseconds: 2000)).then((value) async {
+
+    Future.delayed(Duration(milliseconds: 500)).then((value) async {
       String fileName = "${Helper.getId()}-${Random().nextInt(100) + 1}.jpg";
       print(fileName);
       final request = http.MultipartRequest('POST', uri)
