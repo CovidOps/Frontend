@@ -33,7 +33,9 @@ class _ProviderRequestsIndivState extends State<ProviderRequestsIndiv> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-
+    setState(() {
+      isLoading = false;
+    });
     if (response.statusCode == 200) {
       return ListResponse.fromJson(jsonDecode(response.body)).requests;
     } else {
@@ -57,16 +59,25 @@ class _ProviderRequestsIndivState extends State<ProviderRequestsIndiv> {
   }
 
   void _getApproval({required String requestId}) async {
+    setState(() {
+      isLoading = true;
+    });
     final response = await http.get(
       Uri.https(Helper.BASE_URL, "request/approval/$requestId"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-
+    setState(() {
+      isLoading = false;
+    });
     if (response.statusCode == 200) {
       GenericResponse res = GenericResponse.fromJson(jsonDecode(response.body));
       Helper.goodToast(res.message);
+      setState(() {
+        isLoading = true;
+        _future = _fetchList();
+      });
     }
   }
 
@@ -95,22 +106,30 @@ class _ProviderRequestsIndivState extends State<ProviderRequestsIndiv> {
                     child: Image.asset("assets/images/back1.jpg", fit: BoxFit.cover,)),
               )),
         ),
-        FutureBuilder<List<Patient>>(
-          future: _future,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Stack(
-                children: [
-                  ListScreen(
-                    list: Helper.sortListPatient(snapshot.data!),
-                    getApproval: _showConfirmation,
-                  ),
-                  (isLoading ? CustomProgressIndicator() : Container()),
-                ],
-              );
-            }
-            return CustomProgressIndicator();
+        RefreshIndicator(
+          onRefresh: () {
+            setState(() {
+              _future = _fetchList();
+            });
+            return _future!;
           },
+          child: FutureBuilder<List<Patient>>(
+            future: _future,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Stack(
+                  children: [
+                    ListScreen(
+                      list: Helper.sortListPatient(snapshot.data!),
+                      getApproval: _showConfirmation,
+                    ),
+                    (isLoading ? CustomProgressIndicator() : Container()),
+                  ],
+                );
+              }
+              return CustomProgressIndicator();
+            },
+          ),
         ),
       ]),
     );
@@ -128,6 +147,7 @@ class ListScreen extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(10),
       child: ListView.builder(
+        physics: AlwaysScrollableScrollPhysics(),
         itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
@@ -160,6 +180,39 @@ class ListScreen extends StatelessWidget {
         },
       ),
     );
+    /*return ListView.builder(
+      physics: AlwaysScrollableScrollPhysics(),
+      itemCount: list.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Card(
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    RowWidget(Icons.account_circle, "Name: ${list[index].name}"),
+                    RowWidget(Icons.business_outlined, "Area: ${list[index].area}"),
+                    //RowWidget(Icons.phone, list[index].phone),
+                    RowWidget(Icons.api_rounded, "Address: ${list[index].address}"),
+                    (list[index].address == "Not available"
+                        ? TextButton.icon(
+                      icon: Icon(Icons.open_in_new),
+                      label: Text('Get Address'),
+                      onPressed: () => getApproval(
+                        requestId: list[index].requestId,
+                      ),
+                    )
+                        : Container()),
+                  ],
+                ),
+              ),
+              CallIcon(list[index].phone),
+            ],
+          ),
+        );
+      },
+    );*/
   }
 }
 

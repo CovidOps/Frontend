@@ -23,14 +23,15 @@ class _PageState extends State<Page> {
 
   _PageState(this.type);
 
+  //Set isLoading true during assignment setstate, not inside fetcher function.
   Future<List<CommunityPost>>? _futureList;
   bool isLoading = false;
 
   //API calls
   Future<List<CommunityPost>> fetchList() async {
-    setState(() {
+    /*setState(() {
       isLoading = true;
-    });
+    });*/
 
     final response = await http.post(
       Uri.https(Helper.BASE_URL, "community/$type/nearby"),
@@ -90,6 +91,7 @@ class _PageState extends State<Page> {
       Helper.goodToast(res.message);
 
       setState(() {
+        isLoading = true;
         _futureList = fetchList();
       });
     } else {
@@ -100,6 +102,7 @@ class _PageState extends State<Page> {
   @override
   void initState() {
     super.initState();
+    isLoading = true;
     _futureList = fetchList();
   }
 
@@ -118,23 +121,30 @@ class _PageState extends State<Page> {
                     child: Image.asset("assets/images/back3.png", fit: BoxFit.cover,)),
               )),
         ),
-        FutureBuilder<List<CommunityPost>>(
-          future: _futureList,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Stack(
-                children: [
-                  ListScreen(
-                    //TODO: Sort
-                    list: Helper.sortCommunityPosts(snapshot.data!),
-                    deletePost: _showMyDialog,
-                  ),
-                  (isLoading ? CustomProgressIndicator() : Container()),
-                ],
-              );
-            }
-            return CustomProgressIndicator();
+        RefreshIndicator(
+          onRefresh: () {
+            setState(() {
+              _futureList = fetchList();
+            });
+            return _futureList!;
           },
+          child: FutureBuilder<List<CommunityPost>>(
+            future: _futureList,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Stack(
+                  children: [
+                    ListScreen(
+                      list: Helper.sortCommunityPosts(snapshot.data!),
+                      deletePost: _showMyDialog,
+                    ),
+                    (isLoading ? CustomProgressIndicator() : Container()),
+                  ],
+                );
+              }
+              return CustomProgressIndicator();
+            },
+          ),
         ),
       ],
     );

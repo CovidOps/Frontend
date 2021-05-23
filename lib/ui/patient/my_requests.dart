@@ -17,12 +17,14 @@ class MyRequests extends StatefulWidget {
 
 class _MyRequestsState extends State<MyRequests> {
 
+  //Set isLoading true during assignment setstate, not inside fetcher function.
   Future<List<MyRequestModel>>? _future;
   bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    isLoading = true;
     _future = getMyRequests(Helper.getId());
   }
 
@@ -41,26 +43,34 @@ class _MyRequestsState extends State<MyRequests> {
                     child: Image.asset("assets/images/back2.png", fit: BoxFit.cover,)),
               )),
         ),
-        FutureBuilder<List<MyRequestModel>>(
-          future: _future,
-          builder: (context, snapshot) {
-              if(snapshot.hasData){
-                return Stack(
-                  children: [
-                    ListScreen(
-                      list: snapshot.data!,
-                      shareAddress: _showShareDialog,
-                      deleteRequest: _showMyDialog,
-                    ),
-                    (isLoading ?
-                    CustomProgressIndicator()
-                        : Container()
-                    )
-                  ],
-                );
-              }
-              return CustomProgressIndicator();
-            },
+        RefreshIndicator(
+          onRefresh: () {
+            setState(() {
+              _future = getMyRequests(Helper.getId());
+            });
+            return _future!;
+          },
+          child: FutureBuilder<List<MyRequestModel>>(
+            future: _future,
+            builder: (context, snapshot) {
+                if(snapshot.hasData){
+                  return Stack(
+                    children: [
+                      ListScreen(
+                        list: snapshot.data!,
+                        shareAddress: _showShareDialog,
+                        deleteRequest: _showMyDialog,
+                      ),
+                      (isLoading ?
+                      CustomProgressIndicator()
+                          : Container()
+                      )
+                    ],
+                  );
+                }
+                return CustomProgressIndicator();
+              },
+          ),
         ),
       ],
     );
@@ -68,9 +78,9 @@ class _MyRequestsState extends State<MyRequests> {
 
   //API Calls
   Future<List<MyRequestModel>> getMyRequests(String id) async{
-    setState(() {
+    /*setState(() {
       isLoading = true;
-    });
+    });*/
 
     final response = await http.get(
       Uri.https(Helper.BASE_URL, "request/patient/$id"),
@@ -128,6 +138,7 @@ class _MyRequestsState extends State<MyRequests> {
       Helper.goodToast(res.message);
 
       setState(() {
+        isLoading = true;
         _future = getMyRequests(Helper.getId());
       });
     }
@@ -169,6 +180,7 @@ class _MyRequestsState extends State<MyRequests> {
       Helper.goodToast(res.message);
 
       setState(() {
+        isLoading = true;
         _future = getMyRequests(Helper.getId());
       });
     }

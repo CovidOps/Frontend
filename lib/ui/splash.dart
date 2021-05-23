@@ -25,7 +25,7 @@ class _SplashState extends State<Splash> {
       body:FutureBuilder<Version>(
         //future: _latest,
         future: _latest,
-        builder: (context, snapshot){
+        builder: (buildContext, snapshot){
           if(snapshot.hasError){
             print(snapshot.error);
             _showMessageDialog(context,

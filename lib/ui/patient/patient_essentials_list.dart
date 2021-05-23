@@ -20,14 +20,16 @@ class PatientEssentialsList extends StatefulWidget {
 }
 
 class _PatientEssentialsListState extends State<PatientEssentialsList> {
+
+  //Set isLoading true during assignment setstate, not inside fetcher function.
   Future<List<Provider>>? _future;
   bool isLoading = false;
 
   //API Calls
   Future<List<Provider>> _fetchList(String arg) async{
-    setState(() {
+    /*setState(() {
       isLoading = true;
-    });
+    });*/
     final response = await http.post(
       Uri.https(Helper.BASE_URL, "request/$arg/nearby"),
       headers: <String, String>{
@@ -111,6 +113,7 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
   @override
   void initState() {
     super.initState();
+    isLoading = true;
     _future = _fetchList(widget.model.arg);
   }
 
@@ -134,23 +137,31 @@ class _PatientEssentialsListState extends State<PatientEssentialsList> {
                       child: Image.asset("assets/images/back1.jpg", fit: BoxFit.cover,)),
                 )),
           ),
-          FutureBuilder<List<Provider>>(
-            future: _future,
-            builder: (context, snapshot){
-              if(snapshot.hasData){
-                return Stack(
-                  children: [
-                    ListScreen(
-                      list: Helper.sortListProvider(snapshot.data!),
-                      createRequest: _showConfirmationDialog,
-                      showMap: _showMap,
-                    ),
-                    (isLoading?CustomProgressIndicator():Container()),
-                  ],
-                );
-              }
-              return CustomProgressIndicator();
+          RefreshIndicator(
+            onRefresh: () {
+              setState(() {
+                _future = _fetchList(widget.model.arg);
+              });
+              return _future!;
             },
+            child: FutureBuilder<List<Provider>>(
+              future: _future,
+              builder: (context, snapshot){
+                if(snapshot.hasData){
+                  return Stack(
+                    children: [
+                      ListScreen(
+                        list: Helper.sortListProvider(snapshot.data!),
+                        createRequest: _showConfirmationDialog,
+                        showMap: _showMap,
+                      ),
+                      (isLoading?CustomProgressIndicator():Container()),
+                    ],
+                  );
+                }
+                return CustomProgressIndicator();
+              },
+            ),
           ),
         ],
       )
