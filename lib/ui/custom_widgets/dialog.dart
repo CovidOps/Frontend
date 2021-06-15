@@ -14,31 +14,6 @@ class CustomDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return AlertDialog(
-    //   title: Text(title),
-    //   content: SingleChildScrollView(
-    //     child: ListBody(
-    //       children: <Widget>[
-    //         Text(body),
-    //       ],
-    //     ),
-    //   ),
-    //   actions: <Widget>[
-    //     TextButton(
-    //       child: Text(noTitle),
-    //       onPressed: () {
-    //         Navigator.of(context).pop();
-    //       },
-    //     ),
-    //     TextButton(
-    //       child: Text(yesTitle),
-    //       onPressed: () {
-    //         Navigator.of(context).pop();
-    //         yesFunction();
-    //       },
-    //     ),
-    //   ],
-    // );
     return AssetGiffyDialog(
       image: Image.asset('assets/images/giff.gif',  fit: BoxFit.fill),
       title: Text(title,
