@@ -37,11 +37,6 @@ class _ProviderHomeState extends State<ProviderHome> {
                   tooltip: 'Log Out',
                   onPressed: () {
                     _showDialogConfirmation();
-//<<<<<<< Updated upstream
-                   // Helper.logOut();
-//======
-
-//>>>>>>> Stashed changes
                   },
                 );
               }
@@ -94,7 +89,6 @@ class _ProviderHomeState extends State<ProviderHome> {
           title: "Confirm Action",
           body: "Are you sure you want to log out?",
           yesTitle: "Yes",
-//<<<<<<< Updated upstream
           yesFunction: () {
             Helper.logOut();
             Navigator.pushReplacement(
@@ -102,8 +96,6 @@ class _ProviderHomeState extends State<ProviderHome> {
               MaterialPageRoute(builder: (BuildContext context) => Splash()),
             );
           }
-//=======
-
         );
       },
     );
