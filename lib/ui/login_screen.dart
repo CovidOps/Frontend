@@ -114,25 +114,6 @@ class _LoginScreenState extends State<LoginScreen>{
                         )),
                         SizedBox(height: 20,),
                         SizedBox(height: 20,),
-                    FadeAnimation(1.6, Container(
-                      height: 50,
-                      margin: EdgeInsets.symmetric(horizontal: 50),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          //color: Colors.blue
-                          color: Colors.green
-                      ),
-                      child: Center(
-                        child:TextButton(
-                          onPressed: (){
-                                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                   builder: (context) => OTPScreen(_controller.text, Helper.TYPE_PROVIDER)));
-                          },
-                          child: Text("Login as a Service Provider", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                        )
-                      )
-
-                    )),
                         Container(
                           margin: EdgeInsets.all(20.0),
                           padding: EdgeInsets.all(12.0),
