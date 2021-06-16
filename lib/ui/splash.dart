@@ -58,7 +58,7 @@ class _SplashState extends State<Splash> {
     });
 
     final response = await http.get(
-      Uri.https(Helper.BASE_URL, "version"),
+      Uri.https(Helper.BASE_URL, "version/"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

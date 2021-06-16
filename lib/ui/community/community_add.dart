@@ -21,6 +21,7 @@ class _AddCommunityState extends State<AddCommunity> {
 
   TextEditingController item = TextEditingController(), description = TextEditingController();
 
+  bool _checkbox = false;
   bool isLoading = false;
 
   void createPost(BuildContext context, String item, String details) async{
@@ -82,7 +83,7 @@ class _AddCommunityState extends State<AddCommunity> {
         children: [
           Form(
             key: _patientKey,
-            child: ListView(
+            child: Column(
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -166,6 +167,17 @@ class _AddCommunityState extends State<AddCommunity> {
                     );
                   }
                 }),
+                Expanded(child: Container()),
+                Container(
+                  child: ListTile(
+                    title: Text(
+                        "Precautionary Note - Any liability arising directly or indirectly by use or sharing of any "
+                        "kind of information between users or by availing the mentioned facilities is solely the users' responsibility"
+                    ),
+                    leading: Icon(Icons.lightbulb, color: Colors.amberAccent,),
+                    //secondary: const Icon(Icons.hourglass_empty),
+                  ),
+                ),
               ],
             ),
           ),

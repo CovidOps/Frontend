@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen>{
                                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                                     builder: (context) => OTPScreen(_controller.text, Helper.TYPE_PATIENT)));
                               },
-                              child: Text("Login as a Patient", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                              child: Text("Login", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                             )
                           ),
 

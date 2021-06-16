@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "794203862520-3ca9bi69tsdgq0eijvj89j6h48ck3bdo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.covigenix",
+            "certificate_hash": "93e2acab018ab9a4b84d5cceaa95463e772b3821"
+          }
+        },
+        {
           "client_id": "794203862520-5ehjgl1dim58rcdmc9jfncjsvvlkqr4o.apps.googleusercontent.com",
           "client_type": 3
         }
