@@ -18,7 +18,6 @@ class _PatientServicesState extends State<PatientServices> {
   static final List<Widget> _widgetOptions = <Widget>[
     PatientEssentialsHome(),
     Community(),
-    MyRequests(),
     //PatientProfile(),
   ];
 
@@ -36,7 +35,7 @@ class _PatientServicesState extends State<PatientServices> {
       ),
       bottomNavigationBar: MotionTabBar(
         labels: [
-          "Home","Community","My Requests"
+          "Home","Community"
         ],
         initialSelectedTab: "Home",
         tabIconColor: Colors.blue,
